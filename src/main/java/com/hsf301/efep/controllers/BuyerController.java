@@ -21,5 +21,4 @@ public class BuyerController {
     public String wishlist(AddToWishListRequest request, HttpServletRequest httpServletRequest, Model model, HttpSession session) {
         return buyerService.addToWishList(request, httpServletRequest, session, model);
     }
-
 }
