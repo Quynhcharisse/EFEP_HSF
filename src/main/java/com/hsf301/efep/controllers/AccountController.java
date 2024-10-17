@@ -1,5 +1,6 @@
 package com.hsf301.efep.controllers;
 
+import com.hsf301.efep.models.entity_requests.LoginRequest;
 import com.hsf301.efep.serivces.AccountService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class AccountController {
 
     @PostMapping("/login")
     public String login(LoginRequest request, HttpSession session, Model model) {
-
+        return accountService.login(request, session, model);
     }
+
 }
