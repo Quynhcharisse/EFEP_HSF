@@ -11,4 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BuyerController {
 
     private final BuyerService buyerService;
+
 }
