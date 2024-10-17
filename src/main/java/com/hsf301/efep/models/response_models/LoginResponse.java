@@ -1,4 +1,4 @@
-package com.hsf301.efep.models.entity_responses;
+package com.hsf301.efep.models.response_models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

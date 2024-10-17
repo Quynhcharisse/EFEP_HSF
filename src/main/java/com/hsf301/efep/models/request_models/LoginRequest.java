@@ -1,4 +1,4 @@
-package com.hsf301.efep.models.entity_requests;
+package com.hsf301.efep.models.request_models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
