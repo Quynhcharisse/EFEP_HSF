@@ -1,6 +1,6 @@
 package com.hsf301.efep.controllers;
 
-import com.hsf301.efep.models.entity_requests.LoginRequest;
+import com.hsf301.efep.models.request_models.LoginRequest;
 import com.hsf301.efep.serivces.AccountService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
