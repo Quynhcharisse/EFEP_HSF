@@ -1,7 +1,10 @@
 package com.hsf301.efep.service_implementors;
 
 import com.hsf301.efep.enums.PageName;
+import com.hsf301.efep.models.request_models.ChangePasswordRequest;
 import com.hsf301.efep.models.request_models.LoginRequest;
+import com.hsf301.efep.models.request_models.UpdateProfileRequest;
+import com.hsf301.efep.models.request_models.ViewProfileRequest;
 import com.hsf301.efep.models.response_models.LoginResponse;
 import com.hsf301.efep.repositories.AccountRepo;
 import com.hsf301.efep.serivces.AccountService;
@@ -26,6 +29,26 @@ public class AccountServiceImpl implements AccountService{
             return PageName.LOGIN_SUCCESSFUL_PAGE;
         }
         return PageName.LOGIN_FAILED_PAGE;
+    }
+
+    @Override
+    public String logout(HttpSession session) {
+        return "";
+    }
+
+    @Override
+    public String viewProfile(ViewProfileRequest request, Model model) {
+        return "";
+    }
+
+    @Override
+    public String updateProfile(UpdateProfileRequest request, HttpSession session, Model model) {
+        return "";
+    }
+
+    @Override
+    public String changePassword(ChangePasswordRequest request, HttpSession session, Model model) {
+        return "";
     }
 
     private LoginResponse loginLogic(LoginRequest request) {
