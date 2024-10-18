@@ -7,5 +7,5 @@ import org.springframework.ui.Model;
 
 public interface BuyerService {
 
-    String addToWishList(AddToWishListRequest request, HttpServletRequest httpServletRequest, HttpSession session, Model model);
+//    String addToWishList(AddToWishListRequest request, HttpServletRequest httpServletRequest, HttpSession session, Model model);
 }
