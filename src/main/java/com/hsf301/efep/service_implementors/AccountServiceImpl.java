@@ -1,6 +1,7 @@
 package com.hsf301.efep.service_implementors;
 
 import com.hsf301.efep.enums.PageName;
+import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.request_models.LoginRequest;
 import com.hsf301.efep.models.response_models.LoginResponse;
 import com.hsf301.efep.repositories.AccountRepo;

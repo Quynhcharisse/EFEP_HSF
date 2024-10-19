@@ -1,16 +1,13 @@
 package com.hsf301.efep.controllers;
 
-import com.hsf301.efep.models.request_models.ChangePasswordRequest;
 import com.hsf301.efep.models.request_models.LoginRequest;
-import com.hsf301.efep.models.request_models.UpdateProfileRequest;
-import com.hsf301.efep.models.request_models.ViewProfileRequest;
 import com.hsf301.efep.serivces.AccountService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,40 +16,9 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    //-------------LOGIN--------------//
     @PostMapping("/login")
     public String login(LoginRequest request, HttpSession session, Model model) {
         return accountService.login(request, session, model);
     }
 
-    //----------------LOGOUT----------------//
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session){
-      return accountService.logout(session);
-    }
-
-    //-------------VIEW PROFILE--------------//
-
-    @GetMapping("/view/profile")
-    @Operation(hidden = true)
-    public String viewProfile(@ModelAttribute ViewProfileRequest request, Model model) {
-        return accountService.viewProfile(request, model);
-    }
-    
-    //-------------UPDATE PROFILE--------------//
-
-    @PutMapping("/update/profile")
-    @Operation(hidden = true)
-    public String updateProfile(UpdateProfileRequest request, HttpSession session, Model model) {
-        return accountService.updateProfile(request, session, model);
-    }
-    
-    //-------------CHANGE PASSWORD--------------//
-
-    @PostMapping("/change/password")
-    @Operation(hidden = true)
-    public String changePassword(ChangePasswordRequest request, HttpSession session, Model model) {
-        return accountService.changePassword(request, session, model);
-    }
 }
