@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class LoginResponse {
+
     private String status;
+
     private String message;
+
+    private String type;
 }

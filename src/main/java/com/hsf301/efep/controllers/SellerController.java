@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/seller")
 public class SellerController {
 
-    private final ShopService sellerService;
+//    private final ShopService sellerService;
 
 }
