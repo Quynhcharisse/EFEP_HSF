@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class AddToWishListRequest {
+public class ViewOrderDetailRequest {
 
-    private Integer accountId;
+    private int accountId;
 
-    private Integer flowerId;
-
+    private int orderId;
 }

@@ -1,9 +1,6 @@
 package com.hsf301.efep.controllers;
 
-import com.hsf301.efep.models.request_models.ChangePasswordRequest;
-import com.hsf301.efep.models.request_models.LoginRequest;
-import com.hsf301.efep.models.request_models.UpdateProfileRequest;
-import com.hsf301.efep.models.request_models.ViewProfileRequest;
+import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.serivces.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountService accountService;
+
+    //-------------REGISTER--------------//
+    @PostMapping("/register")
+    public String register(RegisterRequest request, Model model) {
+        return accountService.register(request, model);
+    }
 
     //-------------LOGIN--------------//
     @PostMapping("/login")
@@ -34,7 +37,7 @@ public class AccountController {
 
     //-------------VIEW PROFILE--------------//
 
-    @GetMapping("/view/profile")
+    @GetMapping("/profile")
     @Operation(hidden = true)
     public String viewProfile(@ModelAttribute ViewProfileRequest request, Model model) {
         return accountService.viewProfile(request, model);

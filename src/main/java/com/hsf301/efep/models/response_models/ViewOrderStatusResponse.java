@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginResponse {
+public class ViewOrderStatusResponse {
 
     private String status;
 
     private String message;
 
     private String type;
+
+    private String orderStatus;
 }

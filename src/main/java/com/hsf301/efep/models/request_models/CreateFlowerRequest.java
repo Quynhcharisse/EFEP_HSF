@@ -9,10 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddToWishListRequest {
+public class CreateFlowerRequest {
 
-    private Integer accountId;
+    private int accountId;
 
-    private Integer flowerId;
+    private String name;
+
+    private Float price;
+
+    private String description;
+
+    private Integer flowerAmount;
+
+    private Integer quantity;
 
 }
