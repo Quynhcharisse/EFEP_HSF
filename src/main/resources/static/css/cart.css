@@ -1,0 +1,116 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+
+/* Background style */
+body {
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Cart container */
+.cart-container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.cart-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #e1603a;
+}
+
+/* Table styles */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.cart-table th,
+.cart-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+}
+
+/* Summary section */
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.cart-summary p {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.btn-checkout {
+  background-color: #e1603a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-checkout:hover {
+  background-color: #45a049;
+}
+
+/* Remove button */
+.btn-remove {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-remove:hover {
+  background-color: #c0392b;
+}
+
+/* Continue shopping link */
+.continue-shopping {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.continue-shopping a {
+  text-decoration: none;
+  color: #e1603a;
+  font-weight: bold;
+}
+
+.continue-shopping a:hover {
+  text-decoration: underline;
+}
