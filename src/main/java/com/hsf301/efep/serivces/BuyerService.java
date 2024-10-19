@@ -1,9 +1,6 @@
 package com.hsf301.efep.serivces;
 
-import com.hsf301.efep.models.request_models.AddToWishListRequest;
-import com.hsf301.efep.models.request_models.DeleteWishlistItemRequest;
-import com.hsf301.efep.models.request_models.DeleteWishlistRequest;
-import com.hsf301.efep.models.request_models.UpdateWishlistRequest;
+import com.hsf301.efep.models.request_models.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
@@ -19,4 +16,14 @@ public interface BuyerService {
     String deleteWishlist(DeleteWishlistRequest request, HttpSession session, Model model);
 
     String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model);
+
+    String viewSlideBar(Model model);
+
+    String viewOrderStatus(HttpSession session, Model model);
+
+    String viewOrderHistory(HttpSession session, Model model);
+
+    String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model);
+
+    String cancelOrder(CancelOrderRequest request, HttpSession session, Model model);
 }

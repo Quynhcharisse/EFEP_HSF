@@ -9,11 +9,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginResponse {
-
+public class UpdateProfileResponse {
+    
     private String status;
 
     private String message;
 
     private String type;
+
+    private int id;
+
+    private String name;
+
+    private String phone;
+
+    private String avatar;
+
+    private String background;
 }

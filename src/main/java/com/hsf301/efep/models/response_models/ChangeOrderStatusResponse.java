@@ -6,14 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class LoginResponse {
+public class ChangeOrderStatusResponse {
 
     private String status;
 
     private String message;
 
     private String type;
+
+    private ChangedStatus order;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ChangedStatus {
+        private int id;
+        private String status;
+    }
 }

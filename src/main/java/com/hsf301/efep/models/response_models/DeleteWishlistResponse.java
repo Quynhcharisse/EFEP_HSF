@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginResponse {
+public class DeleteWishlistResponse {
 
     private String status;
 

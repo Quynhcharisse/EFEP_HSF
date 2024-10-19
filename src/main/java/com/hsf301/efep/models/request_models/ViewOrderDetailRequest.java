@@ -6,17 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ChangePasswordRequest {
+public class ViewOrderDetailRequest {
 
-    private int id;
+    private int accountId;
 
-    private String currentPassword;
-
-    private String newPassword;
-
-    private String confirmPassword;
-
+    private int orderId;
 }

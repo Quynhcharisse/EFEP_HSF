@@ -9,14 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChangePasswordRequest {
+public class CreateFlowerRequest {
 
-    private int id;
+    private int accountId;
 
-    private String currentPassword;
+    private String name;
 
-    private String newPassword;
+    private Float price;
 
-    private String confirmPassword;
+    private String description;
+
+    private Integer flowerAmount;
+
+    private Integer quantity;
 
 }

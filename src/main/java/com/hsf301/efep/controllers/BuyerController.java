@@ -1,9 +1,6 @@
 package com.hsf301.efep.controllers;
 
-import com.hsf301.efep.models.request_models.AddToWishListRequest;
-import com.hsf301.efep.models.request_models.DeleteWishlistItemRequest;
-import com.hsf301.efep.models.request_models.DeleteWishlistRequest;
-import com.hsf301.efep.models.request_models.UpdateWishlistRequest;
+import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.serivces.BuyerService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class BuyerController {
 
     private final BuyerService buyerService;
+
+    //-----------------------VIEW SLIDE BAR-------------------//
+
+    @GetMapping("/slide/bar")
+    public String viewSlideBar(Model model){
+        return buyerService.viewSlideBar(model);
+    }
+
 
     //-------------------------VIEW WISHLIST------------------//
 
@@ -57,6 +62,40 @@ public class BuyerController {
     @Operation(hidden = true)
     public String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model) {
         return buyerService.deleteWishlistItem(request, session, model);
+    }
+
+
+
+    //-------------------------VIEW ORDER HISTORY---------------------//
+
+    @GetMapping("/order-history")
+    @Operation(hidden = true)
+    public String viewOrderHistory(HttpSession session, Model model) {
+        return buyerService.viewOrderHistory(session, model);
+    }
+
+    //-------------------------VIEW ORDER STATUS---------------------//
+
+    @GetMapping("/order/status")
+    @Operation(hidden = true)
+    public String viewOrderStatus(HttpSession session, Model model) {
+        return buyerService.viewOrderStatus(session, model);
+    }
+
+    //-------------------------VIEW ORDER DETAIL---------------------//
+
+    @GetMapping("/order/detail")
+    @Operation(hidden = true)
+    public String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model) {
+        return buyerService.viewOrderDetail(request, session, model);
+    }
+
+    //-------------------------CANCEL ORDER-------------------------//
+
+    @PutMapping("/order")
+    @Operation(hidden = true)
+    public String cancelOrder(CancelOrderRequest request, HttpSession session, Model model) {
+        return buyerService.cancelOrder(request, session, model);
     }
 
 }

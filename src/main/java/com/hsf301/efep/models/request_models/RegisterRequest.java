@@ -9,13 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChangePasswordRequest {
+public class RegisterRequest {
 
-    private int id;
+    private String name;
 
-    private String currentPassword;
+    private String email;
 
-    private String newPassword;
+    private String phone;
+
+    private String avatar;
+
+    private String background;
+
+    private String password;
 
     private String confirmPassword;
 
