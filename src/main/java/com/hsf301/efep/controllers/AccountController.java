@@ -4,6 +4,7 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.serivces.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +19,13 @@ public class AccountController {
 
     //-------------REGISTER--------------//
     @PostMapping("/register")
-    public String register(RegisterRequest request, Model model) {
+    public String register(@ModelAttribute RegisterRequest request, Model model) {
         return accountService.register(request, model);
     }
 
     //-------------LOGIN--------------//
     @PostMapping("/login")
-    public String login(LoginRequest request, HttpSession session, Model model) {
+    public String login( @ModelAttribute LoginRequest request, HttpSession session, Model model) {
         return accountService.login(request, session, model);
     }
 
