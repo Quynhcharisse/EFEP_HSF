@@ -20,8 +20,4 @@ public class ViewProfileResponse {
 
     private String phone;
 
-    private String avatar;
-
-    private String background;
-
 }

@@ -17,10 +17,6 @@ public class RegisterRequest {
 
     private String phone;
 
-    private String avatar;
-
-    private String background;
-
     private String password;
 
     private String confirmPassword;

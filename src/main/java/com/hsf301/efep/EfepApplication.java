@@ -34,7 +34,7 @@ public class EfepApplication {
 				Account customer = accountRepo.save(Account.builder()
 								.email("test@gmail.com")
 								.password("123")
-								.role(Role.ACCOUNT_BUYER)
+								.role(Role.BUYER)
 						.build());
 
 
@@ -42,8 +42,6 @@ public class EfepApplication {
 								.account(customer)
 								.name("test")
 								.phone("0987654321")
-								.avatar("")
-								.background("")
 								.createdDate(LocalDate.now())
 						.build());
 			}
