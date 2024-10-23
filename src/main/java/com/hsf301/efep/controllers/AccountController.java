@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,16 +41,16 @@ public class AccountController {
 
     @GetMapping("/profile")
     @Operation(hidden = true)
-    public String viewProfile(@ModelAttribute ViewProfileRequest request, Model model) {
-        return accountService.viewProfile(request, model);
+    public String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes, int userId) {
+        return accountService.viewProfile( model, session, redirectAttributes, userId);
     }
     
     //-------------UPDATE PROFILE--------------//
 
     @PutMapping("/update/profile")
     @Operation(hidden = true)
-    public String updateProfile(UpdateProfileRequest request, HttpSession session, Model model) {
-        return accountService.updateProfile(request, session, model);
+    public String updateProfile(UpdateProfileRequest request, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        return accountService.updateProfile(request, session, model, redirectAttributes);
     }
     
     //-------------CHANGE PASSWORD--------------//
