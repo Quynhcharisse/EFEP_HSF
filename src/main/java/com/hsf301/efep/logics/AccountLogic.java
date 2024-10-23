@@ -47,7 +47,7 @@ public class AccountLogic {
     //--------------------------------REGISTER----------------------------------//
 
     public static RegisterResponse registerLogic(RegisterRequest request, AccountRepo accountRepo, UserRepo userRepo, ShopRepo shopRepo) {
-        String error = RegisterValidation.validate(request);
+        String error = RegisterValidation.validate(request, accountRepo);
 
         if (error.isEmpty()) {
             // correct case here
