@@ -6,23 +6,14 @@ import jakarta.servlet.http.HttpSession;
 
 public class Cons {
 
-    public static final String BUYER = "buyer";
-    public static final String SELLER = "seller";
+    public final static String ORDER_STATUS_PROCESSING = "processing";
+    public final static String ORDER_STATUS_PACKED = "packed";
+    public final static String ORDER_STATUS_FINISHED = "finished";
+    public final static String ORDER_STATUS_CANCELLED = "cancelled";
 
-    public static boolean checkIfThisAccountIsBuyer(Account account) {
-        return account.getRole().equals(BUYER);
-    }
 
-    public static boolean checkIfThisAccountIsSeller(Account account) {
-        return account.getRole().equals(SELLER);
-    }
-
-    public static Account getCurrentLoggedAccount(HttpSession session) {
-        return session.getAttribute("acc") != null ? (Account) session.getAttribute("acc") : null;
-    }
-
-    public static Account getCurrentLoggedAccount(int id, AccountRepo accountRepo) {
-        return accountRepo.findById(id).orElse(null);
-    }
+    public final static String FLOWER_STATUS_AVAILABLE = "available";
+    public final static String FLOWER_STATUS_OUT_OF_STOCK = "out-of-stock";
+    public final static String FLOWER_STATUS_DELETED = "deleted";
 
 }
