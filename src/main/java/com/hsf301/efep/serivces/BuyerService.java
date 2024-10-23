@@ -17,8 +17,6 @@ public interface BuyerService {
 
     String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model);
 
-    String viewSlideBar(Model model);
-
     String viewOrderStatus(HttpSession session, Model model);
 
     String viewOrderHistory(HttpSession session, Model model);
@@ -26,4 +24,8 @@ public interface BuyerService {
     String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model);
 
     String cancelOrder(CancelOrderRequest request, HttpSession session, Model model);
+
+    String viewSlideBar(Model model);
+
+    void viewFlowerTopList(int top, Model model);
 }

@@ -18,16 +18,21 @@ import org.springframework.ui.Model;
 public class BuyerServiceImpl implements BuyerService {
 
 
-    //-------------------------------------------------VIEW SLIDE BAR-------------------------//
-
-    @Override
+    //----------------------------------VIEW SLIDE BAR----------------------------------------//
     public String viewSlideBar(Model model) {
         ViewSlideBarResponse response = BuyerLogic.viewSlideBar();
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_SLIDE_BAR : FailPageFor.VIEW_SLIDE_BAR;
     }
 
-    //--------------------------------VIEW WISHLIST----------------------------------//
+    //---------------------------------VIEW FLOWER TOP LIST----------------------------------//
+
+    @Override
+    public void viewFlowerTopList(int top, Model model) {
+
+    }
+
+    //-----------------------------------VIEW WISHLIST---------------------------------------//
     @Override
     public String viewWishlist(HttpSession session, Model model) {
         ViewWishlistResponse response = BuyerLogic.viewWishlistLogic();

@@ -17,15 +17,16 @@ public class BuyerController {
 
     private final BuyerService buyerService;
 
-    //-----------------------VIEW SLIDE BAR-------------------//
+    //-----------------------------VIEW SLIDE BAR-----------------------------//
 
-    @GetMapping("/slide/bar")
-    public String viewSlideBar(Model model){
-        return buyerService.viewSlideBar(model);
-    }
+    //Mac dinh chay song song voi home page ==> khong can controller cho thymleaf
+
+    //-------------------------VIEW FLOWER TOP LIST---------------------------//
+
+    //Mac dinh chay song song voi home page ==> khong can controller cho thymleaf
 
 
-    //-------------------------VIEW WISHLIST------------------//
+    //-------------------------------VIEW WISHLIST------------------------------//
 
     @GetMapping("/wishlist")
     @Operation(hidden = true)
@@ -33,7 +34,7 @@ public class BuyerController {
         return buyerService.viewWishlist(session, model);
     }
 
-    //-------------------------ADD TO WISHLIST------------------//
+    //-------------------------------ADD TO WISHLIST------------------------------//
 
     @PostMapping("/wishlist")
     public String addToWishlist(AddToWishListRequest request, HttpServletRequest httpServletRequest, Model model, HttpSession session) {
@@ -97,5 +98,9 @@ public class BuyerController {
     public String cancelOrder(CancelOrderRequest request, HttpSession session, Model model) {
         return buyerService.cancelOrder(request, session, model);
     }
+
+
+
+
 
 }
