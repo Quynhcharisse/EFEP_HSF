@@ -275,6 +275,35 @@ public class BuyerLogic {
 
     }
 
+    //----------------------------CREATE ORDER------------------------//
+
+    public CreateOrderResponse createOrderLogic(CreateOrderRequest request) {
+        String error =  CreateOrderValidation.validate(request);
+        if (error.isEmpty()) {
+            // correct case here
+
+
+            //end of correct case
+
+            return CreateOrderResponse.builder()
+                    .status("200")
+                    .message("")
+                    .type("msg")
+                    .build();
+        }
+
+        // fail case here
+
+
+        //end of fail case
+        return CreateOrderResponse.builder()
+                .status("400")
+                .message("")
+                .type("err")
+                .build();
+    }
+
+
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     public ViewOrderHistoryResponse viewOrderHistoryLogic() {
