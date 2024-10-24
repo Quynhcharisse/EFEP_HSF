@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface OrderRepo extends CrudRepository<Order, Integer> {
-    List<Order> finAllBy_User_Id(int id);
+    List<Order> findAllByUser_Id(int id);
 }

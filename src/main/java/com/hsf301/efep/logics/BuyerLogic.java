@@ -7,6 +7,7 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.validations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,23 +18,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 // neu bo @Component==> bao loi
 public class BuyerLogic {
 
-    private AccountRepo accountRepo;
-    private FlowerRepo flowerRepo;
-    private WishlistItemRepo wishlistItemRepo;
-    private WishlistRepo wishlistRepo;
+    private final AccountRepo accountRepo;
+    private final FlowerRepo flowerRepo;
+    private final WishlistItemRepo wishlistItemRepo;
+    private final WishlistRepo wishlistRepo;
+    private final OrderRepo orderRepo;
 
     //-----------------------------------------------VIEW SLIDE BAR-----------------------------------------//
 
     public ViewSlideBarResponse viewSlideBar() {
-        String error = "";
-    private final WishlistRepo wishlistRepo;
-
-    private final OrderRepo orderRepo;
-
-    public  ViewSlideBarResponse viewSlideBar() {
         String error = "";
         if (!error.isEmpty()) {
             ViewSlideBarResponse.builder()
@@ -292,7 +289,7 @@ public class BuyerLogic {
     //----------------------------CREATE ORDER------------------------//
 
     public CreateOrderResponse createOrderLogic(CreateOrderRequest request) {
-        String error =  CreateOrderValidation.validate(request);
+        String error = CreateOrderValidation.validate(request);
         if (error.isEmpty()) {
             // correct case here
 
@@ -320,11 +317,9 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER HISTORY---------------------//
 
-    public ViewOrderHistoryResponse viewOrderHistoryLogic() {
-        String error = "";
     public ViewOrderHistoryResponse viewOrderHistoryLogic(int accountId) {
         Account account = Role.getCurrentLoggedAccount(accountId, accountRepo);
-        List<Order> orderList = orderRepo.finAllBy_User_Id(account.getUser().getId());
+        List<Order> orderList = orderRepo.findAllByUser_Id(account.getUser().getId());
         String error = ViewOrderHistoryValidation.validate(account, orderList);
         if (error.isEmpty()) {
             // correct case here
@@ -386,20 +381,14 @@ public class BuyerLogic {
 
         if (order != null) {
             // correct case here
-
-
             //end of correct case
-
             return ViewOrderStatusResponse.builder()
                     .status("200")
                     .message("View Order Status Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
-
-
         //end of fail case
         return ViewOrderStatusResponse.builder()
                 .status("400")
@@ -434,7 +423,7 @@ public class BuyerLogic {
                 .build();
     }
 
-    private List<ViewOrderDetailResponse.Detail> viewOrderDetailLists(List<OrderDetail> orderDetails){
+    private List<ViewOrderDetailResponse.Detail> viewOrderDetailLists(List<OrderDetail> orderDetails) {
         return orderDetails.stream()
                 .map(detail -> ViewOrderDetailResponse.Detail.builder()
                         .sellerName(detail.getFlower().getShop().getUser().getName())

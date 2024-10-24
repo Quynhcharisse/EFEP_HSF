@@ -19,7 +19,7 @@ public interface BuyerService {
 
     String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model);
 
-    String viewOrderStatus(HttpSession session, Model model);
+    String viewOrderStatus(HttpSession session, Model model, int orderId);
 
     String viewOrderHistory(HttpSession session, Model model, int accountId);
 
