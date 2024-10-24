@@ -76,8 +76,8 @@ public class BuyerServiceImpl implements BuyerService {
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @Override
-    public String viewOrderHistory(HttpSession session, Model model) {
-        ViewOrderHistoryResponse response = BuyerLogic.viewOrderHistoryLogic();
+    public String viewOrderHistory(HttpSession session, Model model, int accountId) {
+        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic(accountId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_HISTORY : FailPageFor.VIEW_ORDER_HISTORY;
     }
@@ -85,8 +85,8 @@ public class BuyerServiceImpl implements BuyerService {
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @Override
-    public String viewOrderStatus(HttpSession session, Model model) {
-        ViewOrderStatusResponse response = BuyerLogic.viewOrderStatusLogic();
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic(orderId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_STATUS : FailPageFor.VIEW_ORDER_STATUS;
     }
@@ -95,7 +95,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model) {
-        ViewOrderDetailBuyerResponse response = BuyerLogic.viewOrderDetailLogic(request);
+        ViewOrderDetailBuyerResponse response = buyerLogic.viewOrderDetailLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_DETAIL_BUYER : FailPageFor.VIEW_ORDER_DETAIL_BUYER;
     }
@@ -104,7 +104,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String cancelOrder(CancelOrderRequest request, HttpSession session, Model model) {
-        CancelOrderResponse response = BuyerLogic.cancelOrderLogic(request);
+        CancelOrderResponse response = buyerLogic.cancelOrderLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.CANCEL_ORDER : FailPageFor.CANCEL_ORDER;
     }

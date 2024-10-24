@@ -64,22 +64,20 @@ public class BuyerController {
         return buyerService.deleteWishlistItem(request, session, model);
     }
 
-
-
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @GetMapping("/order-history")
     @Operation(hidden = true)
-    public String viewOrderHistory(HttpSession session, Model model) {
-        return buyerService.viewOrderHistory(session, model);
+    public String viewOrderHistory(HttpSession session, Model model, int accountId) {
+        return buyerService.viewOrderHistory(session, model,accountId);
     }
 
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @GetMapping("/order/status")
     @Operation(hidden = true)
-    public String viewOrderStatus(HttpSession session, Model model) {
-        return buyerService.viewOrderStatus(session, model);
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        return buyerService.viewOrderStatus(session, model, orderId);
     }
 
     //-------------------------VIEW ORDER DETAIL---------------------//

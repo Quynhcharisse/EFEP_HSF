@@ -1,22 +1,20 @@
 package com.hsf301.efep.logics;
 
-import com.hsf301.efep.models.entity_models.Account;
-import com.hsf301.efep.models.entity_models.Flower;
-import com.hsf301.efep.models.entity_models.Wishlist;
-import com.hsf301.efep.models.entity_models.WishlistItem;
+import com.hsf301.efep.enums.Role;
+import com.hsf301.efep.enums.Status;
+import com.hsf301.efep.models.entity_models.*;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.repositories.AccountRepo;
-import com.hsf301.efep.repositories.FlowerRepo;
-import com.hsf301.efep.repositories.WishlistItemRepo;
-import com.hsf301.efep.repositories.WishlistRepo;
+import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.validations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -30,28 +28,30 @@ public class BuyerLogic {
 
     private final WishlistRepo wishlistRepo;
 
-    public static ViewSlideBarResponse viewSlideBar(){
-            String error = "";
-            if(!error.isEmpty()){
-                ViewSlideBarResponse.builder()
-                        .status("400")
-                        .message(error)
-                        .type("err")
-                        .build();
-            }
+    private final OrderRepo orderRepo;
 
-            return ViewSlideBarResponse.builder()
-                    .status("200")
-                    .message("Login successfully")
-                    .type("msg")
+    public  ViewSlideBarResponse viewSlideBar() {
+        String error = "";
+        if (!error.isEmpty()) {
+            ViewSlideBarResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .type("err")
                     .build();
         }
+
+        return ViewSlideBarResponse.builder()
+                .status("200")
+                .message("Login successfully")
+                .type("msg")
+                .build();
+    }
 
     //--------------------------------VIEW WISHLIST----------------------------------//
 
     public ViewWishlistResponse viewWishlistLogic(int accountId) {
         Account account = accountRepo.findById(accountId).orElse(null);
-        assert account !=null;
+        assert account != null;
         List<ViewWishlistResponse.WishlistItems> wishlistItems = viewWishlistItemList(accountId);
         // Trường hợp không có lỗi
         if (!wishlistItems.isEmpty()) {
@@ -59,7 +59,7 @@ public class BuyerLogic {
             float totalPrice = wishlistItems
                     .stream()
                     .map(items -> items.getPrice() * items.getQuantity())
-                    .reduce(0f,Float::sum);
+                    .reduce(0f, Float::sum);
             //end of correct case
             return ViewWishlistResponse.builder()
                     .status("200")
@@ -84,7 +84,8 @@ public class BuyerLogic {
                     .build();
         }
     }
-    private List<ViewWishlistResponse.WishlistItems> viewWishlistItemList(int accountId){
+
+    private List<ViewWishlistResponse.WishlistItems> viewWishlistItemList(int accountId) {
         Account account = accountRepo.findById(accountId).orElse(null);
         assert account != null;
         return account.getUser().getWishlist().getWishlistItemList().stream()
@@ -99,13 +100,13 @@ public class BuyerLogic {
     public AddToWishListResponse AddToWishListLogic(AddToWishListRequest request) {
         String error = AddToWishListValidation.validate(request);
         Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
-        assert flower !=null;
+        assert flower != null;
         Account account = accountRepo.findById(request.getAccountId()).orElse(null);
-        assert account !=null;
+        assert account != null;
         Wishlist wishlist = account.getUser().getWishlist();
         if (error.isEmpty()) {
             // correct case here
-            if(checkExistItem(request, wishlist)){
+            if (checkExistItem(request, wishlist)) {
                 WishlistItem wishlistItem = wishlistItemRepo.findByFlower_Id(request.getFlowerId()).orElse(null);
                 assert wishlistItem != null;
                 wishlistItem.setQuantity(wishlistItem.getQuantity() + 1);
@@ -138,7 +139,7 @@ public class BuyerLogic {
     }
 
 
-    private boolean checkExistItem(AddToWishListRequest request, Wishlist wishlist){
+    private boolean checkExistItem(AddToWishListRequest request, Wishlist wishlist) {
         return wishlist.getWishlistItemList()
                 .stream()
                 .anyMatch(wishlistItem -> Objects.equals(wishlistItem.getFlower().getId(), request.getFlowerId()));
@@ -156,12 +157,12 @@ public class BuyerLogic {
         assert wishlistItem != null;
         if (error.isEmpty()) {
             // correct case here
-            if("asc".equals(request.getRequest())){
-                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1 );
+            if ("asc".equals(request.getRequest())) {
+                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1);
             } else if ("desc".equals(request.getRequest())) {
-                if(wishlistItem.getQuantity() > 1){
-                    wishlistItem.setQuantity(wishlistItem.getQuantity() - 1 );
-                }else {
+                if (wishlistItem.getQuantity() > 1) {
+                    wishlistItem.setQuantity(wishlistItem.getQuantity() - 1);
+                } else {
                     wishlistItemRepo.delete(wishlistItem);
                 }
             }
@@ -223,7 +224,7 @@ public class BuyerLogic {
             Optional<WishlistItem> optionalWishlistItem = wishlist
                     .getWishlistItemList()
                     .stream()
-                    .filter(item -> Objects.equals(item.getId(),request.getWishlistItemId()))
+                    .filter(item -> Objects.equals(item.getId(), request.getWishlistItemId()))
                     .findFirst();
             WishlistItem wishlistItem = optionalWishlistItem.get();
             wishlist.getWishlistItemList().remove(wishlistItem);
@@ -248,52 +249,74 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER HISTORY---------------------//
 
-    public static ViewOrderHistoryResponse viewOrderHistoryLogic() {
-        String error = "";
+    public ViewOrderHistoryResponse viewOrderHistoryLogic(int accountId) {
+        Account account = Role.getCurrentLoggedAccount(accountId, accountRepo);
+        List<Order> orderList = orderRepo.finAllBy_User_Id(account.getUser().getId());
+        String error = ViewOrderHistoryValidation.validate(account, orderList);
         if (error.isEmpty()) {
             // correct case here
+            if (!orderList.isEmpty()) {
+                List<ViewOrderHistoryResponse.Order> orders = orderList.stream()
+                        .map(this::viewOrderList)
+                        .toList();
 
-
+                return ViewOrderHistoryResponse.builder()
+                        .status("200")
+                        .message("Orders found")
+                        .orderList(orders)
+                        .type("msg")
+                        .build();
+            }
             //end of correct case
-
-            return ViewOrderHistoryResponse.builder()
-                    .status("200")
-                    .message("View Order History Successfully")
-                    .type("msg")
-                    .build();
         }
-
         // fail case here
-
-
-        //end of fail case
         return ViewOrderHistoryResponse.builder()
-                .status("400")
-                .message("View Order History Failed")
+                .status("404")
+                .message("No orders found for User")
                 .type("err")
+                .build();
+        //end of fail case
+    }
+
+    private ViewOrderHistoryResponse.Order viewOrderList(Order order) {
+        String shopName = order.getOrderDetailList().stream()
+                .findFirst()
+                .map(detail -> detail.getFlower().getShop().getUser().getName())
+                .orElse("Unknown Seller");
+        return ViewOrderHistoryResponse.Order.builder()
+                .orderId(order.getId())
+                .shopName(shopName)
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus())
+                .detailList(viewOrderDetailList(order.getOrderDetailList()))
                 .build();
     }
 
+    private List<ViewOrderHistoryResponse.Detail> viewOrderDetailList(List<OrderDetail> orderDetails) {
+        return orderDetails.stream()
+                .map(detail -> ViewOrderHistoryResponse.Detail.builder()
+                        .flowerName(detail.getFlowerName())
+                        .price(detail.getPrice())
+                        .quantity(detail.getQuantity())
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
     //-------------------------VIEW ORDER STATUS---------------------//
 
-    public static ViewOrderStatusResponse viewOrderStatusLogic() {
-        String error = "";
-        if (error.isEmpty()) {
+    public ViewOrderStatusResponse viewOrderStatusLogic(int orderId) {
+        Order order = orderRepo.findById(orderId).orElse(null);
+
+        if (order != null) {
             // correct case here
-
-
             //end of correct case
-
             return ViewOrderStatusResponse.builder()
                     .status("200")
                     .message("View Order Status Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
-
-
         //end of fail case
         return ViewOrderStatusResponse.builder()
                 .status("400")
@@ -304,24 +327,22 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER DETAIL---------------------//
 
-    public static ViewOrderDetailBuyerResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
-        String error = ViewOrderDetailBuyerValidation.validate(request);
+    public ViewOrderDetailBuyerResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
+        Account account = Role.getCurrentLoggedAccount(request.getAccountId(), accountRepo);
+        Order order = orderRepo.findById(request.getOrderId()).orElse(null);
+        assert order != null;
+        String error = ViewOrderDetailBuyerValidation.validate(request, account, order);
         if (error.isEmpty()) {
             // correct case here
-
-
+            List<ViewOrderDetailResponse.Detail> detailList = viewOrderDetailLists(order.getOrderDetailList());
             //end of correct case
-
             return ViewOrderDetailBuyerResponse.builder()
                     .status("200")
                     .message("View Order Detail Buyer Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
-
-
         //end of fail case
         return ViewOrderDetailBuyerResponse.builder()
                 .status("400")
@@ -330,26 +351,34 @@ public class BuyerLogic {
                 .build();
     }
 
+    private List<ViewOrderDetailResponse.Detail> viewOrderDetailLists(List<OrderDetail> orderDetails){
+        return orderDetails.stream()
+                .map(detail -> ViewOrderDetailResponse.Detail.builder()
+                        .sellerName(detail.getFlower().getShop().getUser().getName())
+                        .flowerName(detail.getFlowerName())
+                        .quantity(detail.getQuantity())
+                        .price(detail.getPrice())
+                        .build())
+                .collect(Collectors.toList());
+    }
     //-------------------------CANCEL ORDER-------------------------//
 
-    public static CancelOrderResponse cancelOrderLogic(CancelOrderRequest request) {
-        String error = CancelOrderValidation.validate(request);
+    public CancelOrderResponse cancelOrderLogic(CancelOrderRequest request) {
+        String error = CancelOrderValidation.validate(request, orderRepo);
+
         if (error.isEmpty()) {
             // correct case here
-
-
+            Order order = orderRepo.findById(request.getOrderId()).orElse(null);
+            assert order != null;
+            Status.changeOrderStatus(order, Status.ORDER_STATUS_CANCELLED, orderRepo);
             //end of correct case
-
             return CancelOrderResponse.builder()
                     .status("200")
                     .message("Cancel Order Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
-
-
         //end of fail case
         return CancelOrderResponse.builder()
                 .status("400")
