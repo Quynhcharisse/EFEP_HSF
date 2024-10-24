@@ -64,10 +64,10 @@ public class AccountServiceImpl implements AccountService{
     //--------------------------------VIEW PROFILE----------------------------------//
 
     @Override
-    public String viewProfile(Model model, HttpSession session,  RedirectAttributes redirectAttributes, int userId) {
+    public String viewProfile(Model model, HttpSession session,  RedirectAttributes redirectAttributes) {
         Account account = Role.getCurrentLoggedAccount(session);
         assert account != null;
-        userId = account.getUser().getId();
+        int userId = account.getUser().getId();
         ViewProfileResponse response = AccountLogic.viewProfileLogic(userId ,userRepo);
         session.setAttribute("acc",account);
         redirectAttributes.addFlashAttribute("msg",response);

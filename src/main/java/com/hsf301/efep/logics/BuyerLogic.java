@@ -1,48 +1,33 @@
 package com.hsf301.efep.logics;
 
-import com.hsf301.efep.models.entity_models.Account;
-import com.hsf301.efep.models.entity_models.Flower;
-import com.hsf301.efep.models.entity_models.Wishlist;
-import com.hsf301.efep.models.entity_models.WishlistItem;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.repositories.AccountRepo;
-import com.hsf301.efep.repositories.FlowerRepo;
-import com.hsf301.efep.repositories.WishlistItemRepo;
-import com.hsf301.efep.repositories.WishlistRepo;
+import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.validations.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
 public class BuyerLogic {
-
-    private final AccountRepo accountRepo;
-
-    private final FlowerRepo flowerRepo;
-
-    private final WishlistItemRepo wishlistItemRepo;
-
-    private final WishlistRepo wishlistRepo;
-
     public static ViewSlideBarResponse viewSlideBar(){
             String error = "";
-            if(!error.isEmpty()){
-                ViewSlideBarResponse.builder()
-                        .status("400")
-                        .message(error)
-                        .type("err")
-                        .build();
-            }
 
+//            }    if(!error.isEmpty()){
+//            ViewSlideBarResponse.builder()
+//                    .status("400")
+//                    .message(error)
+//                    .type("err")
+//                    .build();
+
+        List<String> flowerImgageLinkList = new ArrayList<>();
+         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/648/original/spring-sale-banner-season-floral-discount-poster-with-flowers-vector.jpg");
+         flowerImgageLinkList.add("https://as2.ftcdn.net/v2/jpg/02/44/86/81/1000_F_244868120_ZDcYjdJ6NMJHumrT6FQQQDiiEkX9h427.jpg");
+         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/679/large_2x/summer-sale-promo-web-banner-multicolour-editable-floral-flower-frame-vector.jpg");
+         flowerImgageLinkList.add("https://as1.ftcdn.net/v2/jpg/02/40/86/86/1000_F_240868665_0HcnhSG2uUOvAvCdRrHnnTIDsCAGTUqK.jpg");
             return ViewSlideBarResponse.builder()
                     .status("200")
                     .message("Login successfully")
+                    .imageList(flowerImgageLinkList)
                     .type("msg")
                     .build();
         }

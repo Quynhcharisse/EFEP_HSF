@@ -11,7 +11,7 @@ public interface AccountService {
     
     String logout(HttpSession session);
 
-    String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes, int userId);
+    String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes);
     
     String updateProfile(UpdateProfileRequest request, HttpSession session, Model model, RedirectAttributes redirectAttributes);
 
