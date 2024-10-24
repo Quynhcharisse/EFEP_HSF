@@ -41,8 +41,8 @@ public class AccountController {
 
     @GetMapping("/profile")
     @Operation(hidden = true)
-    public String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes, int userId) {
-        return accountService.viewProfile( model, session, redirectAttributes, userId);
+        public String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        return accountService.viewProfile( model, session, redirectAttributes);
     }
     
     //-------------UPDATE PROFILE--------------//

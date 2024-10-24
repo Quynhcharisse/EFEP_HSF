@@ -2,22 +2,32 @@ package com.hsf301.efep.logics;
 
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
+import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.validations.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuyerLogic {
     public static ViewSlideBarResponse viewSlideBar(){
             String error = "";
-            if(!error.isEmpty()){
-                ViewSlideBarResponse.builder()
-                        .status("400")
-                        .message(error)
-                        .type("err")
-                        .build();
-            }
 
+//            }    if(!error.isEmpty()){
+//            ViewSlideBarResponse.builder()
+//                    .status("400")
+//                    .message(error)
+//                    .type("err")
+//                    .build();
+
+        List<String> flowerImgageLinkList = new ArrayList<>();
+         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/648/original/spring-sale-banner-season-floral-discount-poster-with-flowers-vector.jpg");
+         flowerImgageLinkList.add("https://as2.ftcdn.net/v2/jpg/02/44/86/81/1000_F_244868120_ZDcYjdJ6NMJHumrT6FQQQDiiEkX9h427.jpg");
+         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/679/large_2x/summer-sale-promo-web-banner-multicolour-editable-floral-flower-frame-vector.jpg");
+         flowerImgageLinkList.add("https://as1.ftcdn.net/v2/jpg/02/40/86/86/1000_F_240868665_0HcnhSG2uUOvAvCdRrHnnTIDsCAGTUqK.jpg");
             return ViewSlideBarResponse.builder()
                     .status("200")
                     .message("Login successfully")
+                    .imageList(flowerImgageLinkList)
                     .type("msg")
                     .build();
         }

@@ -8,8 +8,8 @@ public class SuccessPageFor {
 
     public static String LOGOUT = "logout";
 
-    public static String VIEW_PROFILE = "viewProfile";
-
+ //   public static String VIEW_PROFILE = "viewProfile";
+    public static String VIEW_PROFILE = "home";
     public static String CHANGE_PASSWORD = "login";
 
     public static String REGISTER = "login";
