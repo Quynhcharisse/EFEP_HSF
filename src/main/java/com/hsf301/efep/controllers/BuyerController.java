@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/buyer")
@@ -120,6 +122,13 @@ public class BuyerController {
     @PostMapping("/category/filter")
     public String filterCategory(FilterCategoryRequest request, Model model) {
         return buyerService.filterCategory(request, model);
+    }
+
+    //---------------------------GET PAYMENT PAGE RESULT----------------------------//
+
+    @PostMapping("/create/order")
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        return buyerService.createOrder(httpServletRequest, model, session, request);
     }
 
 

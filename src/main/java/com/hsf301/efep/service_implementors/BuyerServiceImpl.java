@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class BuyerServiceImpl implements BuyerService {
@@ -80,6 +82,17 @@ public class BuyerServiceImpl implements BuyerService {
         return response.getStatus().equals("200") ? SuccessPageFor.DELETE_WISHLIST_ITEM : FailPageFor.DELETE_WISHLIST_ITEM;
     }
 
+
+    //-------------------------CREATE ORDER-------------------------//
+
+
+    @Override
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        CreateOrderResponse response = buyerLogic.createOrderLogic(request);
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
+    }
+
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @Override
@@ -142,6 +155,7 @@ public class BuyerServiceImpl implements BuyerService {
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
     }
+
 
 
 }
