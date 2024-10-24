@@ -66,7 +66,6 @@ public class BuyerController {
     }
 
 
-
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @GetMapping("/order-history")
@@ -100,7 +99,28 @@ public class BuyerController {
     }
 
 
+    //-------------------------SEARCH FLOWER BY NAME-------------------------//
 
+    @PostMapping("/flower/search")
+    @Operation(hidden = true)
+    public String searchFlower(SearchFlowerRequest request, Model model) {
+        return buyerService.searchFlower(request, model);
+    }
+
+    //---------------------------VIEW CATEGORY------------------------------//
+
+    //    @GetMapping("/category")
+    //    @Operation(hidden = true)
+    //    public String viewCategory(HttpSession session, Model model) {
+    //        return buyerService.viewCategory(session, model);
+    //    }
+
+    //---------------------------FITER CATEGORY----------------------------//
+
+    @PostMapping("/category/filter")
+    public String filterCategory(FilterCategoryRequest request, Model model) {
+        return buyerService.filterCategory(request, model);
+    }
 
 
 }

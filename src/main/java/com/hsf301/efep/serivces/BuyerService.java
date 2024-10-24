@@ -27,5 +27,11 @@ public interface BuyerService {
 
     String viewSlideBar(Model model);
 
-    void viewFlowerTopList(int top, Model model);
+    String viewFlowerTopList(int top, Model model);
+
+    String viewCategory(Model model);
+
+    String filterCategory(FilterCategoryRequest request, Model model);
+
+    String searchFlower(SearchFlowerRequest request, Model model);
 }

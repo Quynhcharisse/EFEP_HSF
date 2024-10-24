@@ -1,16 +1,33 @@
 package com.hsf301.efep.logics;
 
+import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.models.entity_models.Flower;
+import com.hsf301.efep.models.entity_models.Wishlist;
+import com.hsf301.efep.models.entity_models.WishlistItem;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.repositories.CategoryRepo;
+import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.validations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+@Component
+// neu bo @Component==> bao loi
 public class BuyerLogic {
-    public static ViewSlideBarResponse viewSlideBar(){
-            String error = "";
+
+    private AccountRepo accountRepo;
+    private FlowerRepo flowerRepo;
+    private WishlistItemRepo wishlistItemRepo;
+    private WishlistRepo wishlistRepo;
+
+    //-----------------------------------------------VIEW SLIDE BAR-----------------------------------------//
+
+    public ViewSlideBarResponse viewSlideBar() {
+        String error = "";
 
 //            }    if(!error.isEmpty()){
 //            ViewSlideBarResponse.builder()
@@ -20,23 +37,49 @@ public class BuyerLogic {
 //                    .build();
 
         List<String> flowerImgageLinkList = new ArrayList<>();
-         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/648/original/spring-sale-banner-season-floral-discount-poster-with-flowers-vector.jpg");
-         flowerImgageLinkList.add("https://as2.ftcdn.net/v2/jpg/02/44/86/81/1000_F_244868120_ZDcYjdJ6NMJHumrT6FQQQDiiEkX9h427.jpg");
-         flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/679/large_2x/summer-sale-promo-web-banner-multicolour-editable-floral-flower-frame-vector.jpg");
-         flowerImgageLinkList.add("https://as1.ftcdn.net/v2/jpg/02/40/86/86/1000_F_240868665_0HcnhSG2uUOvAvCdRrHnnTIDsCAGTUqK.jpg");
-            return ViewSlideBarResponse.builder()
-                    .status("200")
-                    .message("Login successfully")
-                    .imageList(flowerImgageLinkList)
-                    .type("msg")
-                    .build();
-        }
+        flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/648/original/spring-sale-banner-season-floral-discount-poster-with-flowers-vector.jpg");
+        flowerImgageLinkList.add("https://as2.ftcdn.net/v2/jpg/02/44/86/81/1000_F_244868120_ZDcYjdJ6NMJHumrT6FQQQDiiEkX9h427.jpg");
+        flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/679/large_2x/summer-sale-promo-web-banner-multicolour-editable-floral-flower-frame-vector.jpg");
+        flowerImgageLinkList.add("https://as1.ftcdn.net/v2/jpg/02/40/86/86/1000_F_240868665_0HcnhSG2uUOvAvCdRrHnnTIDsCAGTUqK.jpg");
+        return ViewSlideBarResponse.builder()
+                .status("200")
+                .message("Login successfully")
+                .imageList(flowerImgageLinkList)
+                .type("msg")
+                .build();
+    }
 
-    //--------------------------------VIEW WISHLIST----------------------------------//
+    //-----------------------------------------------VIEW SLIDE BAR----------------------------------------------//
+
+
+    public ViewFlowerTopListResponse viewFlowerTopListLogic(int top) {
+        String error = "";
+        return ViewFlowerTopListResponse.builder()
+                .status("200")
+                .message("")
+                .flowerList(flowerRepo.findAll().stream().map(flower -> ViewFlowerTopListResponse.Flower.builder()
+                                        .id(flower.getId())
+                                        .name(flower.getName())
+                                        .price(flower.getPrice())
+                                        .imageList(flower.getFlowerImageList().stream()
+                                                .map(
+                                                        img -> ViewFlowerTopListResponse.Image.builder()
+                                                                .link(img.getLink())
+                                                                .build()
+                                                )
+                                                .toList()
+                                        )
+                                        .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+    //-----------------------------------------------VIEW WISHLIST------------------------------------------------//
 
     public ViewWishlistResponse viewWishlistLogic(int accountId) {
         Account account = accountRepo.findById(accountId).orElse(null);
-        assert account !=null;
+        assert account != null;
         List<ViewWishlistResponse.WishlistItems> wishlistItems = viewWishlistItemList(accountId);
         // Trường hợp không có lỗi
         if (!wishlistItems.isEmpty()) {
@@ -44,7 +87,7 @@ public class BuyerLogic {
             float totalPrice = wishlistItems
                     .stream()
                     .map(items -> items.getPrice() * items.getQuantity())
-                    .reduce(0f,Float::sum);
+                    .reduce(0f, Float::sum);
             //end of correct case
             return ViewWishlistResponse.builder()
                     .status("200")
@@ -69,7 +112,8 @@ public class BuyerLogic {
                     .build();
         }
     }
-    private List<ViewWishlistResponse.WishlistItems> viewWishlistItemList(int accountId){
+
+    private List<ViewWishlistResponse.WishlistItems> viewWishlistItemList(int accountId) {
         Account account = accountRepo.findById(accountId).orElse(null);
         assert account != null;
         return account.getUser().getWishlist().getWishlistItemList().stream()
@@ -84,13 +128,13 @@ public class BuyerLogic {
     public AddToWishListResponse AddToWishListLogic(AddToWishListRequest request) {
         String error = AddToWishListValidation.validate(request);
         Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
-        assert flower !=null;
+        assert flower != null;
         Account account = accountRepo.findById(request.getAccountId()).orElse(null);
-        assert account !=null;
+        assert account != null;
         Wishlist wishlist = account.getUser().getWishlist();
         if (error.isEmpty()) {
             // correct case here
-            if(checkExistItem(request, wishlist)){
+            if (checkExistItem(request, wishlist)) {
                 WishlistItem wishlistItem = wishlistItemRepo.findByFlower_Id(request.getFlowerId()).orElse(null);
                 assert wishlistItem != null;
                 wishlistItem.setQuantity(wishlistItem.getQuantity() + 1);
@@ -123,7 +167,7 @@ public class BuyerLogic {
     }
 
 
-    private boolean checkExistItem(AddToWishListRequest request, Wishlist wishlist){
+    private boolean checkExistItem(AddToWishListRequest request, Wishlist wishlist) {
         return wishlist.getWishlistItemList()
                 .stream()
                 .anyMatch(wishlistItem -> Objects.equals(wishlistItem.getFlower().getId(), request.getFlowerId()));
@@ -141,12 +185,12 @@ public class BuyerLogic {
         assert wishlistItem != null;
         if (error.isEmpty()) {
             // correct case here
-            if("asc".equals(request.getRequest())){
-                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1 );
+            if ("asc".equals(request.getRequest())) {
+                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1);
             } else if ("desc".equals(request.getRequest())) {
-                if(wishlistItem.getQuantity() > 1){
-                    wishlistItem.setQuantity(wishlistItem.getQuantity() - 1 );
-                }else {
+                if (wishlistItem.getQuantity() > 1) {
+                    wishlistItem.setQuantity(wishlistItem.getQuantity() - 1);
+                } else {
                     wishlistItemRepo.delete(wishlistItem);
                 }
             }
@@ -208,7 +252,7 @@ public class BuyerLogic {
             Optional<WishlistItem> optionalWishlistItem = wishlist
                     .getWishlistItemList()
                     .stream()
-                    .filter(item -> Objects.equals(item.getId(),request.getWishlistItemId()))
+                    .filter(item -> Objects.equals(item.getId(), request.getWishlistItemId()))
                     .findFirst();
             WishlistItem wishlistItem = optionalWishlistItem.get();
             wishlist.getWishlistItemList().remove(wishlistItem);
@@ -233,7 +277,7 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER HISTORY---------------------//
 
-    public static ViewOrderHistoryResponse viewOrderHistoryLogic() {
+    public ViewOrderHistoryResponse viewOrderHistoryLogic() {
         String error = "";
         if (error.isEmpty()) {
             // correct case here
@@ -261,7 +305,7 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER STATUS---------------------//
 
-    public static ViewOrderStatusResponse viewOrderStatusLogic() {
+    public ViewOrderStatusResponse viewOrderStatusLogic() {
         String error = "";
         if (error.isEmpty()) {
             // correct case here
@@ -289,7 +333,7 @@ public class BuyerLogic {
 
     //-------------------------VIEW ORDER DETAIL---------------------//
 
-    public static ViewOrderDetailBuyerResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
+    public ViewOrderDetailBuyerResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
         String error = ViewOrderDetailBuyerValidation.validate(request);
         if (error.isEmpty()) {
             // correct case here
@@ -317,7 +361,7 @@ public class BuyerLogic {
 
     //-------------------------CANCEL ORDER-------------------------//
 
-    public static CancelOrderResponse cancelOrderLogic(CancelOrderRequest request) {
+    public CancelOrderResponse cancelOrderLogic(CancelOrderRequest request) {
         String error = CancelOrderValidation.validate(request);
         if (error.isEmpty()) {
             // correct case here
@@ -342,4 +386,69 @@ public class BuyerLogic {
                 .type("err")
                 .build();
     }
+
+    //-------------------------VIEW CATEGORY-------------------------//
+
+    public ViewCategoryResponse viewCategoryLogic() {
+        String error = "";
+
+        // correct case here
+
+        return ViewCategoryResponse.builder()
+                .status("200")
+                .message("Cancel Order Successfully")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
+
+    //-------------------------FITER CATEGORY-------------------------//
+
+    public FilterCategoryResponse filterCategoryLogic(FilterCategoryRequest request) {
+        String error = "";
+
+        // correct case here
+
+        return FilterCategoryResponse.builder()
+                .status("200")
+                .message("Cancel Order Successfully")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
+    //-------------------------SEARCH FLOWER BY NAME-------------------------//
+
+    public SearchFlowerResponse searchFlowerLogic(SearchFlowerRequest request) {
+        String error = "";
+
+        // correct case here
+
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
 }

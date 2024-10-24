@@ -13,7 +13,6 @@ import java.util.List;
 @Table(name = "`flower`")
 public class Flower {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,6 +36,11 @@ public class Flower {
 
     @Column(name = "`sold_quantity`")
     private int soldQuantity;
+
+    @OneToMany(mappedBy = "flower")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<FlowerImage> flowerImageList;
 
     @OneToMany(mappedBy = "flower")
     @ToString.Exclude

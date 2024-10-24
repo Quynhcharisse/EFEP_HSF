@@ -2,11 +2,9 @@ package com.hsf301.efep.service_implementors;
 
 import com.hsf301.efep.enums.FailPageFor;
 import com.hsf301.efep.enums.SuccessPageFor;
-import com.hsf301.efep.logics.AccountLogic;
 import com.hsf301.efep.logics.BuyerLogic;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.serivces.BuyerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -32,8 +30,10 @@ public class BuyerServiceImpl implements BuyerService {
     //---------------------------------VIEW FLOWER TOP LIST----------------------------------//
 
     @Override
-    public void viewFlowerTopList(int top, Model model) {
-
+    public String viewFlowerTopList(int top, Model model) {
+        ViewFlowerTopListResponse response = buyerLogic.viewFlowerTopListLogic(top);
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.VIEW_FLOWER_TOP_LIST : FailPageFor.VIEW_FLOWER_TOP_LIST;
     }
 
     //-----------------------------------VIEW WISHLIST---------------------------------------//
@@ -84,7 +84,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String viewOrderHistory(HttpSession session, Model model) {
-        ViewOrderHistoryResponse response = BuyerLogic.viewOrderHistoryLogic();
+        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic();
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_HISTORY : FailPageFor.VIEW_ORDER_HISTORY;
     }
@@ -93,7 +93,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String viewOrderStatus(HttpSession session, Model model) {
-        ViewOrderStatusResponse response = BuyerLogic.viewOrderStatusLogic();
+        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic();
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_STATUS : FailPageFor.VIEW_ORDER_STATUS;
     }
@@ -102,7 +102,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model) {
-        ViewOrderDetailBuyerResponse response = BuyerLogic.viewOrderDetailLogic(request);
+        ViewOrderDetailBuyerResponse response = buyerLogic.viewOrderDetailLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_DETAIL_BUYER : FailPageFor.VIEW_ORDER_DETAIL_BUYER;
     }
@@ -111,9 +111,37 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String cancelOrder(CancelOrderRequest request, HttpSession session, Model model) {
-        CancelOrderResponse response = BuyerLogic.cancelOrderLogic(request);
+        CancelOrderResponse response = buyerLogic.cancelOrderLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.CANCEL_ORDER : FailPageFor.CANCEL_ORDER;
     }
+
+    //-------------------------VIEW CATEGORY-------------------------//
+
+    @Override
+    public String viewCategory(Model model) {
+        ViewCategoryResponse response = buyerLogic.viewCategoryLogic();
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.VIEW_CATEGORY : FailPageFor.VIEW_CATEGORY;
+    }
+
+    //-------------------------FITER CATEGORY-------------------------//
+
+    @Override
+    public String filterCategory(FilterCategoryRequest request, Model model) {
+        FilterCategoryResponse response = buyerLogic.filterCategoryLogic(request);
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
+    }
+
+    //-------------------------SEARCH FLOWER BY NAME-------------------------//
+
+    @Override
+    public String searchFlower(SearchFlowerRequest request, Model model) {
+        SearchFlowerResponse response = buyerLogic.searchFlowerLogic(request);
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
+    }
+
 
 }
