@@ -28,6 +28,8 @@ public class ViewOrderHistoryResponse {
 
         private int orderId;
 
+        private String shopName;
+
         private float totalPrice;
 
         private String status;
@@ -40,8 +42,6 @@ public class ViewOrderHistoryResponse {
     @NoArgsConstructor
     @Builder
     public static class Detail {
-
-        private String sellerName;
 
         private String flowerName;
 

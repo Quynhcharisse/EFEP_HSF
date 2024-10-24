@@ -1,19 +1,37 @@
 package com.hsf301.efep.logics;
 
+import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
+import com.hsf301.efep.repositories.AccountRepo;
+import com.hsf301.efep.repositories.FlowerRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+
+@RequiredArgsConstructor
+@Component
 public class ShopLogic {
+    private final FlowerRepo flowerRepo;
+    private final AccountRepo accountRepo;
 
     //------------------------CREATE FLOWER---------------------//
 
-    public static CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request) {
+    public CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request) {
         String error = "";
+        Account account = accountRepo.findById(request.getAccountId()).orElse(null);
+        assert  account != null;
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-
+            Flower flower = new Flower();
+            flower.setName(request.getName());
+            flower.setDescription(request.getDescription());
+            flower.setFlowerAmount(request.getFlowerAmount());
+            flower.setQuantity(request.getQuantity());
+//            Float totalPrice =
 
             //end of correct case
 
