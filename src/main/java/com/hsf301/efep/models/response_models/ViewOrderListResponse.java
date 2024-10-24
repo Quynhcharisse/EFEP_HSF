@@ -21,7 +21,7 @@ public class ViewOrderListResponse {
     private String type;
 
     private List<OrderBill> orderList;
-
+    //-----------------------------------//
 
     @Data
     @AllArgsConstructor
@@ -38,8 +38,6 @@ public class ViewOrderListResponse {
         private float totalPrice;
 
         private String status;
-
-        private String paymentType;
 
         private String paymentMethod;
 

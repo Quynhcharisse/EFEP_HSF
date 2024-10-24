@@ -2,10 +2,15 @@ package com.hsf301.efep.logics;
 
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
+import com.hsf301.efep.validations.ChangeOrderStatusValidation;
+import com.hsf301.efep.validations.ViewOrderDetailValidation;
+import com.hsf301.efep.validations.ViewOrderListValidation;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ShopLogic {
 
-    //------------------------CREATE FLOWER---------------------//
+    //-----------------------------------------CREATE FLOWER----------------------------------//
 
     public static CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request) {
         String error = "";
@@ -36,9 +41,9 @@ public class ShopLogic {
                 .build();
     }
 
-    //-------------------------VIEW FLOWER---------------------//
+    //---------------------------------------VIEW FLOWER FOR SHOP---------------------------------//
 
-    public static ViewFlowerListResponse viewFlowerLogic(ViewFlowerListRequest request) {
+    public static ViewFlowerListResponse viewFlowerForShopLogic(ViewFlowerListRequest request) {
         String error = "";
 
         // Trường hợp không có lỗi
@@ -67,7 +72,7 @@ public class ShopLogic {
                 .build();
     }
 
-//------------------------UPDATE FLOWER---------------------//
+//-----------------------------------------UPDATE FLOWER----------------------------------//
 
     public static UpdateFlowerResponse updateFlowerLogic(UpdateFlowerRequest request) {
         String error = "";
@@ -98,7 +103,7 @@ public class ShopLogic {
                 .build();
     }
 
-    //-------------------DELETE FLOWER---------------------//
+    //--------------------------------------DELETE FLOWER-----------------------------------//
 
     public static DeleteFlowerResponse deleteFlowerLogic(DeleteFlowerRequest request) {
         String error = "";
@@ -129,10 +134,31 @@ public class ShopLogic {
                 .build();
     }
 
-    //-------------------------CHANGE ORDER STATUS---------------------//
+                                    //---------FLOWER IMAGE ---------//
+
+    //---------------------------------------VIEW FLOWER IMAGE------------------------------------------//
+
+    public String viewFlowerLogic() {
+        return "";
+    }
+
+    //---------------------------------------ADD FLOWER IMAGE------------------------------------------//
+
+    public String addFlowerImageLogic() {
+        return "";
+    }
+
+    //---------------------------------------DELETE FLOWER IMAGE------------------------------------------//
+
+    public String deleteFlowerImageLogic() {
+        return "";
+    }
+
+                              //----------ORDER FOR SHOP(SELLER SHOP)------------//
+    //-------------------------------------CHANGE ORDER STATUS------------------------------------//
 
     public static ChangeOrderStatusResponse changeOrderStatusLogic(ChangeOrderStatusRequest request) {
-        String error = "";
+        String error = ChangeOrderStatusValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
@@ -163,7 +189,7 @@ public class ShopLogic {
     //-------------------------VIEW ORDER DETAIL---------------------//
 
     public static ViewOrderDetailResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
-        String error = "";
+        String error = ViewOrderDetailValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
@@ -193,8 +219,8 @@ public class ShopLogic {
 
     //-------------------------VIEW ORDER LIST-------------------------//
 
-    public static ViewOrderListResponse viewOrderList() {
-        String error = "";
+    public static ViewOrderListResponse viewOrderList(int accountId) {
+        String error = ViewOrderListValidation.validate();
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {

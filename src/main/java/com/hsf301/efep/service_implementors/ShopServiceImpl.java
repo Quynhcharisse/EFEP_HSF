@@ -11,9 +11,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ShopServiceImpl implements ShopService {
+
+    private final ShopLogic shopLogic;
+
+                            //----------------FLOWER FOR SHOP---------------//
 
     //-------------------------------------------CREATE FLOWER----------------------------------//
 
@@ -27,8 +33,8 @@ public class ShopServiceImpl implements ShopService {
     //-------------------------------------------VIEW FLOWER----------------------------------//
 
     @Override
-    public String viewFlowerList(ViewFlowerListRequest request, HttpSession session, Model model) {
-       ViewFlowerListResponse response = ShopLogic.viewFlowerLogic(request);
+    public String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model) {
+       ViewFlowerListResponse response = ShopLogic.viewFlowerForShopLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_FLOWER : FailPageFor.VIEW_FLOWER;
     }
@@ -50,6 +56,16 @@ public class ShopServiceImpl implements ShopService {
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.DELETE_FLOWER : FailPageFor.DELETE_FLOWER;
     }
+
+    //---------------------------------------GET ALL FLOWER STATUS------------------------------------------//
+
+    @Override
+    public List<String> getAllFlowerStatus() {
+        return List.of();
+    }
+
+
+                                //----------ORDER FOR SHOP(SELLER SHOP)------------//
 
     //--------------------------------------CHANGE ORDER STATUS---------------------------------------//
 
@@ -77,5 +93,29 @@ public class ShopServiceImpl implements ShopService {
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_LIST : FailPageFor.VIEW_ORDER_LIST;
     }
+
+                                        //---------FLOWER IMAGE ---------//
+
+    //---------------------------------------VIEW FLOWER IMAGE------------------------------------------//
+
+    @Override
+    public String viewFlowerImage(ViewFlowerImageRequest request, HttpSession session, Model model) {
+        return "";
+    }
+
+    //---------------------------------------ADD FLOWER IMAGE------------------------------------------//
+
+    @Override
+    public String addFlowerImage(AddFlowerImageRequest request, HttpSession session, Model model) {
+        return "";
+    }
+
+    //---------------------------------------DELETE FLOWER IMAGE------------------------------------------//
+
+    @Override
+    public String deleteFlowerImage(DeleteFlowerImageRequest request, HttpSession session, Model model) {
+        return "";
+    }
+
 
 }
