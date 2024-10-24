@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class BuyerServiceImpl implements BuyerService {
@@ -19,6 +21,7 @@ public class BuyerServiceImpl implements BuyerService {
     private final BuyerLogic buyerLogic;
 
 
+    //-------------------------------------------------VIEW SLIDE BAR-------------------------//
 
     //----------------------------------VIEW SLIDE BAR----------------------------------------//
     public String viewSlideBar(Model model) {
@@ -80,11 +83,22 @@ public class BuyerServiceImpl implements BuyerService {
         return response.getStatus().equals("200") ? SuccessPageFor.DELETE_WISHLIST_ITEM : FailPageFor.DELETE_WISHLIST_ITEM;
     }
 
+
+    //-------------------------CREATE ORDER-------------------------//
+
+
+    @Override
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        CreateOrderResponse response = buyerLogic.createOrderLogic(request);
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
+    }
+
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @Override
-    public String viewOrderHistory(HttpSession session, Model model) {
-        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic();
+    public String viewOrderHistory(HttpSession session, Model model, int accountId) {
+        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic(accountId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_HISTORY : FailPageFor.VIEW_ORDER_HISTORY;
     }
@@ -92,8 +106,8 @@ public class BuyerServiceImpl implements BuyerService {
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @Override
-    public String viewOrderStatus(HttpSession session, Model model) {
-        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic();
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic(orderId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_STATUS : FailPageFor.VIEW_ORDER_STATUS;
     }
@@ -142,6 +156,7 @@ public class BuyerServiceImpl implements BuyerService {
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
     }
+
 
 
 }

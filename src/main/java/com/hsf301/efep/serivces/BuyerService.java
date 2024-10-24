@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
+import java.util.Map;
+
 public interface BuyerService {
 
     String addToWishList(AddToWishListRequest request, HttpServletRequest httpServletRequest, HttpSession session, Model model);
@@ -17,9 +19,9 @@ public interface BuyerService {
 
     String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model);
 
-    String viewOrderStatus(HttpSession session, Model model);
+    String viewOrderStatus(HttpSession session, Model model, int orderId);
 
-    String viewOrderHistory(HttpSession session, Model model);
+    String viewOrderHistory(HttpSession session, Model model, int accountId);
 
     String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model);
 
@@ -34,4 +36,6 @@ public interface BuyerService {
     String filterCategory(FilterCategoryRequest request, Model model);
 
     String searchFlower(SearchFlowerRequest request, Model model);
+
+    String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request);
 }

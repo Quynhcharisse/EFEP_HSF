@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/buyer")
@@ -70,16 +72,16 @@ public class BuyerController {
 
     @GetMapping("/order-history")
     @Operation(hidden = true)
-    public String viewOrderHistory(HttpSession session, Model model) {
-        return buyerService.viewOrderHistory(session, model);
+    public String viewOrderHistory(HttpSession session, Model model,int accountId) {
+        return buyerService.viewOrderHistory(session, model, accountId);
     }
 
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @GetMapping("/order/status")
     @Operation(hidden = true)
-    public String viewOrderStatus(HttpSession session, Model model) {
-        return buyerService.viewOrderStatus(session, model);
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        return buyerService.viewOrderStatus(session, model, orderId);
     }
 
     //-------------------------VIEW ORDER DETAIL---------------------//
@@ -120,6 +122,13 @@ public class BuyerController {
     @PostMapping("/category/filter")
     public String filterCategory( @ModelAttribute FilterCategoryRequest request, Model model) {
         return buyerService.filterCategory(request, model);
+    }
+
+    //---------------------------GET PAYMENT PAGE RESULT----------------------------//
+
+    @PostMapping("/create/order")
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        return buyerService.createOrder(httpServletRequest, model, session, request);
     }
 
 
