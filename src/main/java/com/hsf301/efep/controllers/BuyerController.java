@@ -72,16 +72,16 @@ public class BuyerController {
 
     @GetMapping("/order-history")
     @Operation(hidden = true)
-    public String viewOrderHistory(HttpSession session, Model model) {
-        return buyerService.viewOrderHistory(session, model);
+    public String viewOrderHistory(HttpSession session, Model model,int accountId) {
+        return buyerService.viewOrderHistory(session, model, accountId);
     }
 
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @GetMapping("/order/status")
     @Operation(hidden = true)
-    public String viewOrderStatus(HttpSession session, Model model) {
-        return buyerService.viewOrderStatus(session, model);
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        return buyerService.viewOrderStatus(session, model, orderId);
     }
 
     //-------------------------VIEW ORDER DETAIL---------------------//
@@ -105,22 +105,22 @@ public class BuyerController {
 
     @PostMapping("/flower/search")
     @Operation(hidden = true)
-    public String searchFlower(SearchFlowerRequest request, Model model) {
+    public String searchFlower(@ModelAttribute SearchFlowerRequest request, Model model) {
         return buyerService.searchFlower(request, model);
     }
 
     //---------------------------VIEW CATEGORY------------------------------//
 
-    //    @GetMapping("/category")
-    //    @Operation(hidden = true)
-    //    public String viewCategory(HttpSession session, Model model) {
-    //        return buyerService.viewCategory(session, model);
-    //    }
+        @GetMapping("/category")
+        @Operation(hidden = true)
+        public String viewCategory(Model model) {
+            return buyerService.viewCategory(model);
+        }
 
     //---------------------------FITER CATEGORY----------------------------//
 
     @PostMapping("/category/filter")
-    public String filterCategory(FilterCategoryRequest request, Model model) {
+    public String filterCategory( @ModelAttribute FilterCategoryRequest request, Model model) {
         return buyerService.filterCategory(request, model);
     }
 

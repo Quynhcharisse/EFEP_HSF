@@ -25,7 +25,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public String createFlower(CreateFlowerRequest request, HttpSession session, Model model) {
-        CreateFlowerResponse response = ShopLogic.createFlowerLogic(request);
+        CreateFlowerResponse response = shopLogic.createFlowerLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.CREATE_FLOWER : FailPageFor.CREATE_FLOWER;
     }
@@ -33,8 +33,8 @@ public class ShopServiceImpl implements ShopService {
     //-------------------------------------------VIEW FLOWER----------------------------------//
 
     @Override
-    public String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model) {
-       ViewFlowerListResponse response = ShopLogic.viewFlowerForShopLogic(request);
+    public String viewFlowerList(ViewFlowerListRequest request, HttpSession session, Model model) {
+       ViewFlowerListResponse response = shopLogic.viewFlowerLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_FLOWER : FailPageFor.VIEW_FLOWER;
     }

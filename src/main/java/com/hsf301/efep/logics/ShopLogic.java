@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ShopLogic {
+    private final FlowerRepo flowerRepo;
+    private final AccountRepo accountRepo;
 
     //-----------------------------------------CREATE FLOWER----------------------------------//
 

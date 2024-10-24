@@ -21,6 +21,7 @@ public class BuyerServiceImpl implements BuyerService {
     private final BuyerLogic buyerLogic;
 
 
+    //-------------------------------------------------VIEW SLIDE BAR-------------------------//
 
     //----------------------------------VIEW SLIDE BAR----------------------------------------//
     public String viewSlideBar(Model model) {
@@ -96,8 +97,8 @@ public class BuyerServiceImpl implements BuyerService {
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @Override
-    public String viewOrderHistory(HttpSession session, Model model) {
-        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic();
+    public String viewOrderHistory(HttpSession session, Model model, int accountId) {
+        ViewOrderHistoryResponse response = buyerLogic.viewOrderHistoryLogic(accountId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_HISTORY : FailPageFor.VIEW_ORDER_HISTORY;
     }
@@ -105,8 +106,8 @@ public class BuyerServiceImpl implements BuyerService {
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @Override
-    public String viewOrderStatus(HttpSession session, Model model) {
-        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic();
+    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
+        ViewOrderStatusResponse response = buyerLogic.viewOrderStatusLogic(orderId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_STATUS : FailPageFor.VIEW_ORDER_STATUS;
     }
