@@ -6,6 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface AccountRepo extends JpaRepository<Account, Integer> {
+
      Optional<Account> findByEmailAndPassword(String email, String password);
+
      Optional<Account> findByEmail(String email);
+
+     Optional<Account> findByUserName(String name);
+
+     Optional<Account> findByUserPhone(String phone);
+
 }
