@@ -16,7 +16,9 @@ public class SuccessPageFor {
 
     //-----BUYER-----//
 
-    public static String VIEW_SLIDE_BAR = "login";
+    public static String VIEW_SLIDE_BAR = "home";
+
+    public static String VIEW_FLOWER_TOP_LIST = "home";
 
     public static String VIEW_WISHLIST = "viewWishList";
 
@@ -35,6 +37,13 @@ public class SuccessPageFor {
     public static String VIEW_ORDER_DETAIL_BUYER = "viewOrderDetailBuyer";
 
     public static String CANCEL_ORDER = "cancelOrder";
+
+    public static String VIEW_CATEGORY = "home";
+
+    public static String FILTER_CATEGORY = "home";
+
+    public static String SEARCH_FLOWER = "home";
+
 
     //-----SELLER-----//
 

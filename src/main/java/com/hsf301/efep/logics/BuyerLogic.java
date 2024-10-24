@@ -7,9 +7,9 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.validations.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -17,15 +17,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
+// neu bo @Component==> bao loi
 public class BuyerLogic {
 
-    private final AccountRepo accountRepo;
+    private AccountRepo accountRepo;
+    private FlowerRepo flowerRepo;
+    private WishlistItemRepo wishlistItemRepo;
+    private WishlistRepo wishlistRepo;
 
-    private final FlowerRepo flowerRepo;
+    //-----------------------------------------------VIEW SLIDE BAR-----------------------------------------//
 
-    private final WishlistItemRepo wishlistItemRepo;
-
+    public ViewSlideBarResponse viewSlideBar() {
+        String error = "";
     private final WishlistRepo wishlistRepo;
 
     private final OrderRepo orderRepo;
@@ -40,14 +43,53 @@ public class BuyerLogic {
                     .build();
         }
 
+//            }    if(!error.isEmpty()){
+//            ViewSlideBarResponse.builder()
+//                    .status("400")
+//                    .message(error)
+//                    .type("err")
+//                    .build();
+
+        List<String> flowerImgageLinkList = new ArrayList<>();
+        flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/648/original/spring-sale-banner-season-floral-discount-poster-with-flowers-vector.jpg");
+        flowerImgageLinkList.add("https://as2.ftcdn.net/v2/jpg/02/44/86/81/1000_F_244868120_ZDcYjdJ6NMJHumrT6FQQQDiiEkX9h427.jpg");
+        flowerImgageLinkList.add("https://static.vecteezy.com/system/resources/previews/003/110/679/large_2x/summer-sale-promo-web-banner-multicolour-editable-floral-flower-frame-vector.jpg");
+        flowerImgageLinkList.add("https://as1.ftcdn.net/v2/jpg/02/40/86/86/1000_F_240868665_0HcnhSG2uUOvAvCdRrHnnTIDsCAGTUqK.jpg");
         return ViewSlideBarResponse.builder()
                 .status("200")
                 .message("Login successfully")
+                .imageList(flowerImgageLinkList)
                 .type("msg")
                 .build();
     }
 
-    //--------------------------------VIEW WISHLIST----------------------------------//
+    //-----------------------------------------------VIEW SLIDE BAR----------------------------------------------//
+
+
+    public ViewFlowerTopListResponse viewFlowerTopListLogic(int top) {
+        String error = "";
+        return ViewFlowerTopListResponse.builder()
+                .status("200")
+                .message("")
+                .flowerList(flowerRepo.findAll().stream().map(flower -> ViewFlowerTopListResponse.Flower.builder()
+                                        .id(flower.getId())
+                                        .name(flower.getName())
+                                        .price(flower.getPrice())
+                                        .imageList(flower.getFlowerImageList().stream()
+                                                .map(
+                                                        img -> ViewFlowerTopListResponse.Image.builder()
+                                                                .link(img.getLink())
+                                                                .build()
+                                                )
+                                                .toList()
+                                        )
+                                        .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+    //-----------------------------------------------VIEW WISHLIST------------------------------------------------//
 
     public ViewWishlistResponse viewWishlistLogic(int accountId) {
         Account account = accountRepo.findById(accountId).orElse(null);
@@ -247,8 +289,39 @@ public class BuyerLogic {
 
     }
 
+    //----------------------------CREATE ORDER------------------------//
+
+    public CreateOrderResponse createOrderLogic(CreateOrderRequest request) {
+        String error =  CreateOrderValidation.validate(request);
+        if (error.isEmpty()) {
+            // correct case here
+
+
+            //end of correct case
+
+            return CreateOrderResponse.builder()
+                    .status("200")
+                    .message("")
+                    .type("msg")
+                    .build();
+        }
+
+        // fail case here
+
+
+        //end of fail case
+        return CreateOrderResponse.builder()
+                .status("400")
+                .message("")
+                .type("err")
+                .build();
+    }
+
+
     //-------------------------VIEW ORDER HISTORY---------------------//
 
+    public ViewOrderHistoryResponse viewOrderHistoryLogic() {
+        String error = "";
     public ViewOrderHistoryResponse viewOrderHistoryLogic(int accountId) {
         Account account = Role.getCurrentLoggedAccount(accountId, accountRepo);
         List<Order> orderList = orderRepo.finAllBy_User_Id(account.getUser().getId());
@@ -269,7 +342,11 @@ public class BuyerLogic {
             }
             //end of correct case
         }
+
         // fail case here
+
+
+        //end of fail case
         return ViewOrderHistoryResponse.builder()
                 .status("404")
                 .message("No orders found for User")
@@ -309,14 +386,20 @@ public class BuyerLogic {
 
         if (order != null) {
             // correct case here
+
+
             //end of correct case
+
             return ViewOrderStatusResponse.builder()
                     .status("200")
                     .message("View Order Status Successfully")
                     .type("msg")
                     .build();
         }
+
         // fail case here
+
+
         //end of fail case
         return ViewOrderStatusResponse.builder()
                 .status("400")
@@ -372,13 +455,17 @@ public class BuyerLogic {
             assert order != null;
             Status.changeOrderStatus(order, Status.ORDER_STATUS_CANCELLED, orderRepo);
             //end of correct case
+
             return CancelOrderResponse.builder()
                     .status("200")
                     .message("Cancel Order Successfully")
                     .type("msg")
                     .build();
         }
+
         // fail case here
+
+
         //end of fail case
         return CancelOrderResponse.builder()
                 .status("400")
@@ -386,4 +473,69 @@ public class BuyerLogic {
                 .type("err")
                 .build();
     }
+
+    //-------------------------VIEW CATEGORY-------------------------//
+
+    public ViewCategoryResponse viewCategoryLogic() {
+        String error = "";
+
+        // correct case here
+
+        return ViewCategoryResponse.builder()
+                .status("200")
+                .message("Cancel Order Successfully")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
+
+    //-------------------------FITER CATEGORY-------------------------//
+
+    public FilterCategoryResponse filterCategoryLogic(FilterCategoryRequest request) {
+        String error = "";
+
+        // correct case here
+
+        return FilterCategoryResponse.builder()
+                .status("200")
+                .message("Cancel Order Successfully")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
+    //-------------------------SEARCH FLOWER BY NAME-------------------------//
+
+    public SearchFlowerResponse searchFlowerLogic(SearchFlowerRequest request) {
+        String error = "";
+
+        // correct case here
+
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .type("msg")
+                .build();
+
+        //end of correct case
+
+
+        // fail case here
+        //no error
+        //end of fail case
+    }
+
 }

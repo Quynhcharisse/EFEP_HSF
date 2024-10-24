@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/buyer")
@@ -17,15 +19,16 @@ public class BuyerController {
 
     private final BuyerService buyerService;
 
-    //-----------------------VIEW SLIDE BAR-------------------//
+    //-----------------------------VIEW SLIDE BAR-----------------------------//
 
-    @GetMapping("/slide/bar")
-    public String viewSlideBar(Model model){
-        return buyerService.viewSlideBar(model);
-    }
+    //Mac dinh chay song song voi home page ==> khong can controller cho thymleaf
+
+    //-------------------------VIEW FLOWER TOP LIST---------------------------//
+
+    //Mac dinh chay song song voi home page ==> khong can controller cho thymleaf
 
 
-    //-------------------------VIEW WISHLIST------------------//
+    //-------------------------------VIEW WISHLIST------------------------------//
 
     @GetMapping("/wishlist")
     @Operation(hidden = true)
@@ -33,7 +36,7 @@ public class BuyerController {
         return buyerService.viewWishlist(session, model, accountId);
     }
 
-    //-------------------------ADD TO WISHLIST------------------//
+    //-------------------------------ADD TO WISHLIST------------------------------//
 
     @PostMapping("/wishlist")
     public String addToWishlist(AddToWishListRequest request, HttpServletRequest httpServletRequest, Model model, HttpSession session) {
@@ -64,20 +67,21 @@ public class BuyerController {
         return buyerService.deleteWishlistItem(request, session, model);
     }
 
+
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @GetMapping("/order-history")
     @Operation(hidden = true)
-    public String viewOrderHistory(HttpSession session, Model model, int accountId) {
-        return buyerService.viewOrderHistory(session, model,accountId);
+    public String viewOrderHistory(HttpSession session, Model model) {
+        return buyerService.viewOrderHistory(session, model);
     }
 
     //-------------------------VIEW ORDER STATUS---------------------//
 
     @GetMapping("/order/status")
     @Operation(hidden = true)
-    public String viewOrderStatus(HttpSession session, Model model, int orderId) {
-        return buyerService.viewOrderStatus(session, model, orderId);
+    public String viewOrderStatus(HttpSession session, Model model) {
+        return buyerService.viewOrderStatus(session, model);
     }
 
     //-------------------------VIEW ORDER DETAIL---------------------//
@@ -95,5 +99,37 @@ public class BuyerController {
     public String cancelOrder(CancelOrderRequest request, HttpSession session, Model model) {
         return buyerService.cancelOrder(request, session, model);
     }
+
+
+    //-------------------------SEARCH FLOWER BY NAME-------------------------//
+
+    @PostMapping("/flower/search")
+    @Operation(hidden = true)
+    public String searchFlower(SearchFlowerRequest request, Model model) {
+        return buyerService.searchFlower(request, model);
+    }
+
+    //---------------------------VIEW CATEGORY------------------------------//
+
+    //    @GetMapping("/category")
+    //    @Operation(hidden = true)
+    //    public String viewCategory(HttpSession session, Model model) {
+    //        return buyerService.viewCategory(session, model);
+    //    }
+
+    //---------------------------FITER CATEGORY----------------------------//
+
+    @PostMapping("/category/filter")
+    public String filterCategory(FilterCategoryRequest request, Model model) {
+        return buyerService.filterCategory(request, model);
+    }
+
+    //---------------------------GET PAYMENT PAGE RESULT----------------------------//
+
+    @PostMapping("/create/order")
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        return buyerService.createOrder(httpServletRequest, model, session, request);
+    }
+
 
 }

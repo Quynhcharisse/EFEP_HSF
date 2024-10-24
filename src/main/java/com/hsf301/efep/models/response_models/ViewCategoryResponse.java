@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ViewSlideBarResponse {
+public class ViewCategoryResponse {
 
     private String status;
 
@@ -19,6 +19,16 @@ public class ViewSlideBarResponse {
 
     private String type;
 
-    private List<String> imageList;
+    private List<Category> categoryList;
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Category {
+
+        private int id;
+
+        private String name;
+    }
 }
