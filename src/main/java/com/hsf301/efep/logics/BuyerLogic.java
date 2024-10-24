@@ -1,28 +1,30 @@
 package com.hsf301.efep.logics;
 
-import com.hsf301.efep.models.entity_models.Account;
-import com.hsf301.efep.models.entity_models.Flower;
-import com.hsf301.efep.models.entity_models.Wishlist;
-import com.hsf301.efep.models.entity_models.WishlistItem;
+import com.hsf301.efep.models.entity_models.*;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.validations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Component
 // neu bo @Component==> bao loi
 public class BuyerLogic {
 
-    private AccountRepo accountRepo;
-    private FlowerRepo flowerRepo;
-    private WishlistItemRepo wishlistItemRepo;
-    private WishlistRepo wishlistRepo;
+    private final AccountRepo accountRepo;
+    private final FlowerRepo flowerRepo;
+    private final FlowerCategoryRepo flowerCategoryRepo;
+    private final WishlistItemRepo wishlistItemRepo;
+    private final WishlistRepo wishlistRepo;
+    private final CategoryRepo categoryRepo;
 
     //-----------------------------------------------VIEW SLIDE BAR-----------------------------------------//
 
@@ -394,14 +396,20 @@ public class BuyerLogic {
 
         // correct case here
 
+        //categoryList = null;
         return ViewCategoryResponse.builder()
                 .status("200")
-                .message("Cancel Order Successfully")
+                .message("")
                 .type("msg")
+                .categoryList(
+                        categoryRepo.findAll().stream()
+                                .map(category -> ViewCategoryResponse.Category.builder()
+                                        .id(category.getId())
+                                        .name(category.getName())
+                                        .build())
+                                .toList())
                 .build();
-
         //end of correct case
-
 
         // fail case here
         //no error
@@ -416,10 +424,33 @@ public class BuyerLogic {
 
         // correct case here
 
+
+
         return FilterCategoryResponse.builder()
                 .status("200")
                 .message("Cancel Order Successfully")
                 .type("msg")
+                .categoryId(request.getCategoryId())
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .map(
+                                        flower -> FilterCategoryResponse.Flower.builder()
+                                                .id(flower.getId())
+                                                .name(flower.getName())
+                                                .price(flower.getPrice())
+                                                .images(
+                                                       flower.getFlowerImageList().stream()
+                                                               .map(
+                                                                       img -> FilterCategoryResponse.Image.builder()
+                                                                               .link(img.getLink())
+                                                                               .build()
+                                                               )
+                                                               .toList()
+                                                )
+                                                .build()
+                                )
+                                .toList()
+                )
                 .build();
 
         //end of correct case
@@ -437,10 +468,34 @@ public class BuyerLogic {
 
         // correct case here
 
+
+
+
         return SearchFlowerResponse.builder()
                 .status("200")
                 .message("")
                 .type("msg")
+                .keyword(request.getKeyword())
+                .flowerList(
+                        flowerRepo.findAll().stream()
+                        .map(
+                                flower -> SearchFlowerResponse.Flower.builder()
+                                        .id(flower.getId())
+                                        .name(flower.getName())
+                                        .price(flower.getPrice())
+                                        .images(
+                                                flower.getFlowerImageList().stream()
+                                                        .map(
+                                                                img -> SearchFlowerResponse.Image.builder()
+                                                                        .link(img.getLink())
+                                                                        .build()
+                                                        )
+                                                        .toList()
+                                        )
+                                        .build()
+                        )
+                        .toList()
+                )
                 .build();
 
         //end of correct case
