@@ -26,10 +26,6 @@ public class User {
 
     private String phone;
 
-    private String avatar;
-
-    private String background;
-
     private LocalDate createdDate;
 
     @OneToMany(mappedBy = "user")

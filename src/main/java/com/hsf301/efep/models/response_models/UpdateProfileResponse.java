@@ -23,7 +23,4 @@ public class UpdateProfileResponse {
 
     private String phone;
 
-    private String avatar;
-
-    private String background;
 }

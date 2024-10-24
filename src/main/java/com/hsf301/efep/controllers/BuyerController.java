@@ -30,8 +30,8 @@ public class BuyerController {
 
     @GetMapping("/wishlist")
     @Operation(hidden = true)
-    public String viewWishlist(HttpSession session, Model model) {
-        return buyerService.viewWishlist(session, model);
+    public String viewWishlist(HttpSession session, Model model, int accountId) {
+        return buyerService.viewWishlist(session, model, accountId);
     }
 
     //-------------------------------ADD TO WISHLIST------------------------------//

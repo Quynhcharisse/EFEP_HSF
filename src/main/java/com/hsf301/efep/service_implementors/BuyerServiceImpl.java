@@ -6,6 +6,7 @@ import com.hsf301.efep.logics.AccountLogic;
 import com.hsf301.efep.logics.BuyerLogic;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
+import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.serivces.BuyerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,10 +18,13 @@ import org.springframework.ui.Model;
 @RequiredArgsConstructor
 public class BuyerServiceImpl implements BuyerService {
 
+    private final BuyerLogic buyerLogic;
+
+
 
     //----------------------------------VIEW SLIDE BAR----------------------------------------//
     public String viewSlideBar(Model model) {
-        ViewSlideBarResponse response = BuyerLogic.viewSlideBar();
+        ViewSlideBarResponse response = buyerLogic.viewSlideBar();
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_SLIDE_BAR : FailPageFor.VIEW_SLIDE_BAR;
     }
@@ -34,8 +38,8 @@ public class BuyerServiceImpl implements BuyerService {
 
     //-----------------------------------VIEW WISHLIST---------------------------------------//
     @Override
-    public String viewWishlist(HttpSession session, Model model) {
-        ViewWishlistResponse response = BuyerLogic.viewWishlistLogic();
+    public String viewWishlist(HttpSession session, Model model, int accountId) {
+        ViewWishlistResponse response = buyerLogic.viewWishlistLogic(accountId);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.VIEW_WISHLIST : FailPageFor.VIEW_WISHLIST;
     }
@@ -44,7 +48,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String addToWishList(AddToWishListRequest request, HttpServletRequest httpServletRequest, HttpSession session, Model model) {
-        AddToWishListResponse response = BuyerLogic.AddToWishListLogic(request);
+        AddToWishListResponse response = buyerLogic.AddToWishListLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.ADD_TO_WISHLIST : FailPageFor.ADD_TO_WISHLIST;
     }
@@ -53,7 +57,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String updateWishlist(UpdateWishlistRequest request, HttpSession session, Model model) {
-        UpdateWishlistResponse response = BuyerLogic.updateWishlistLogic(request);
+        UpdateWishlistResponse response = buyerLogic.updateWishlistLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.UPDATE_WISHLIST : FailPageFor.UPDATE_WISHLIST;
     }
@@ -62,7 +66,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String deleteWishlist(DeleteWishlistRequest request, HttpSession session, Model model) {
-        DeleteWishlistResponse response = BuyerLogic.deleteWishlistLogic(request);
+        DeleteWishlistResponse response = buyerLogic.deleteWishlistLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.DELETE_WISHLIST : FailPageFor.DELETE_WISHLIST;
     }
@@ -71,7 +75,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public String deleteWishlistItem(DeleteWishlistItemRequest request, HttpSession session, Model model) {
-        DeleteWishlistItemResponse response = BuyerLogic.deleteWishlistItemLogic(request);
+        DeleteWishlistItemResponse response = buyerLogic.deleteWishlistItemLogic(request);
         model.addAttribute(response.getType(), response);
         return response.getStatus().equals("200") ? SuccessPageFor.DELETE_WISHLIST_ITEM : FailPageFor.DELETE_WISHLIST_ITEM;
     }

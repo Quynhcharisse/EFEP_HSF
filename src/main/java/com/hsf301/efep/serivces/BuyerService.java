@@ -9,7 +9,7 @@ public interface BuyerService {
 
     String addToWishList(AddToWishListRequest request, HttpServletRequest httpServletRequest, HttpSession session, Model model);
 
-    String viewWishlist(HttpSession session, Model model);
+    String viewWishlist(HttpSession session, Model model, int accountId);
 
     String updateWishlist(UpdateWishlistRequest request, HttpSession session, Model model);
 
