@@ -34,126 +34,160 @@ public class BuyerLogic {
 
     //--------------------------------VIEW WISHLIST----------------------------------//
 
-    public static ViewWishlistResponse viewWishlistLogic() {
-        String error = "";
-
+    public ViewWishlistResponse viewWishlistLogic(int accountId) {
+        Account account = accountRepo.findById(accountId).orElse(null);
+        assert account !=null;
+        List<ViewWishlistResponse.WishlistItems> wishlistItems = viewWishlistItemList(accountId);
         // Trường hợp không có lỗi
-        if (error.isEmpty()) {
+        if (!wishlistItems.isEmpty()) {
             // correct case here
-
-
+            float totalPrice = wishlistItems
+                    .stream()
+                    .map(items -> items.getPrice() * items.getQuantity())
+                    .reduce(0f,Float::sum);
             //end of correct case
-
             return ViewWishlistResponse.builder()
                     .status("200")
                     .message("View wishlist Successfully")
+                    .id(account.getUser().getWishlist().getId())
+                    .userId(account.getUser().getId())
+                    .userName(account.getUser().getName())
+                    .totalPrice(totalPrice)
+                    .wishlistItemList(viewWishlistItemList(accountId))
                     .type("msg")
                     .build();
         }
 
         // fail case here
+        else {
+            //end of fail case
+            // Trường hợp có lỗi
+            return ViewWishlistResponse.builder()
+                    .status("400")
+                    .message("View wishlist Failed")
+                    .type("err")
+                    .build();
+        }
+    }
+    private List<ViewWishlistResponse.WishlistItems> viewWishlistItemList(int accountId){
+        Account account = accountRepo.findById(accountId).orElse(null);
+        assert account != null;
+        return account.getUser().getWishlist().getWishlistItemList().stream()
+                .map(wishlistItem -> new ViewWishlistResponse
+                        .WishlistItems(wishlistItem.getId(), wishlistItem.getFlower().getName(), wishlistItem.getQuantity(), wishlistItem.getFlower().getPrice()))
+                .toList();
 
-
-        //end of fail case
-        // Trường hợp có lỗi
-        return ViewWishlistResponse.builder()
-                .status("400")
-                .message("View wishlist Failed")
-                .type("err")
-                .build();
     }
 
     //--------------------------------ADD TO WISHLIST----------------------------------//
 
-    public static AddToWishListResponse AddToWishListLogic(AddToWishListRequest request) {
+    public AddToWishListResponse AddToWishListLogic(AddToWishListRequest request) {
         String error = AddToWishListValidation.validate(request);
+        Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
+        assert flower !=null;
+        Account account = accountRepo.findById(request.getAccountId()).orElse(null);
+        assert account !=null;
+        Wishlist wishlist = account.getUser().getWishlist();
         if (error.isEmpty()) {
             // correct case here
-
-
+            if(checkExistItem(request, wishlist)){
+                WishlistItem wishlistItem = wishlistItemRepo.findByFlower_Id(request.getFlowerId()).orElse(null);
+                assert wishlistItem != null;
+                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1);
+                wishlistItemRepo.save(wishlistItem);
+            }
             //end of correct case
-
-            Integer accountId = 0; // change to your data
-            Integer flowerId = 0; // change to your data
-
-
-
             return AddToWishListResponse.builder()
                     .status("200")
                     .message("Add to wishlist Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
+        else {
+            wishlist.getWishlistItemList().add(wishlistItemRepo.save(
+                    WishlistItem.builder()
+                            .wishlist(wishlist)
+                            .flower(flower)
+                            .quantity(1)
+                            .build()
+            ));
+            accountRepo.save(account);
+            //end of fail case
+            return AddToWishListResponse.builder()
+                    .status("400")
+                    .message("Add to wishlist Failed")
+                    .type("err")
+                    .build();
+        }
+    }
 
 
-        //end of fail case
-        return AddToWishListResponse.builder()
-                .status("400")
-                .message("Add to wishlist Failed")
-                .type("err")
-                .build();
+    private boolean checkExistItem(AddToWishListRequest request, Wishlist wishlist){
+        return wishlist.getWishlistItemList()
+                .stream()
+                .anyMatch(wishlistItem -> Objects.equals(wishlistItem.getFlower().getId(), request.getFlowerId()));
     }
 
     //--------------------------------UPDATE WISHLIST----------------------------------//
 
-    public static UpdateWishlistResponse updateWishlistLogic(UpdateWishlistRequest request) {
+    public UpdateWishlistResponse updateWishlistLogic(UpdateWishlistRequest request) {
         String error = WishListValidation.validate(request);
+        Account account = accountRepo.findById(request.getAccountId()).orElse(null);
+        assert account != null;
+        Wishlist wishlist = wishlistRepo.findByUser_Account_Id(account.getId()).orElse(null);
+        assert wishlist != null;
+        WishlistItem wishlistItem = wishlistItemRepo.findById(Integer.parseInt(request.getWishlistItemId())).orElse(null);
+        assert wishlistItem != null;
         if (error.isEmpty()) {
             // correct case here
+            if("asc".equals(request.getRequest())){
+                wishlistItem.setQuantity(wishlistItem.getQuantity() + 1 );
+            } else if ("desc".equals(request.getRequest())) {
+                if(wishlistItem.getQuantity() > 1){
+                    wishlistItem.setQuantity(wishlistItem.getQuantity() - 1 );
+                }else {
+                    wishlistItemRepo.delete(wishlistItem);
+                }
+            }
 
-
+            wishlistItemRepo.save(wishlistItem);
             //end of correct case
-
-            int accountId = 0; // change to your data
-            int flowerId = 0; // change to your data
-
-
-
             return UpdateWishlistResponse.builder()
                     .status("200")
                     .message("Update wishlist Successfully")
                     .type("msg")
                     .build();
+        } else {
+            // fail case here
+            //end of fail case
+            return UpdateWishlistResponse.builder()
+                    .status("400")
+                    .message("Update wishlist Failed")
+                    .type("err")
+                    .build();
         }
-
-        // fail case here
-
-
-        //end of fail case
-        return UpdateWishlistResponse.builder()
-                .status("400")
-                .message("Update wishlist Failed")
-                .type("err")
-                .build();
     }
 
     //--------------------------------DELETE WISHLIST----------------------------------//
 
-    public static DeleteWishlistResponse deleteWishlistLogic(DeleteWishlistRequest request) {
+    public DeleteWishlistResponse deleteWishlistLogic(DeleteWishlistRequest request) {
         String error = DeleteWishListValidation.validate(request);
+        Wishlist wishlist = wishlistRepo.findById(request.getWishlistId()).orElse(null);
+        assert wishlist != null;
         if (error.isEmpty()) {
             // correct case here
-
-
+            wishlistItemRepo.deleteAll(wishlist.getWishlistItemList());
+            wishlist.getWishlistItemList().clear();
+            wishlistRepo.save(wishlist);
             //end of correct case
-
-            Integer accountId = 0; // change to your data
-            Integer flowerId = 0; // change to your data
-
-
-
             return DeleteWishlistResponse.builder()
                     .status("200")
                     .message("Delete wishlist Successfully")
                     .type("msg")
                     .build();
         }
-
         // fail case here
-
-
         //end of fail case
         return DeleteWishlistResponse.builder()
                 .status("400")
@@ -164,19 +198,22 @@ public class BuyerLogic {
 
     //--------------------------------DELETE WISHLIST ITEM----------------------------------//
 
-    public static DeleteWishlistItemResponse deleteWishlistItemLogic(DeleteWishlistItemRequest request) {
+    public DeleteWishlistItemResponse deleteWishlistItemLogic(DeleteWishlistItemRequest request) {
         String error = DeleteWishListItemValidation.validate(request);
+        Account account = accountRepo.findById(request.getAccountId()).orElse(null);
+        assert account != null;
         if (error.isEmpty()) {
             // correct case here
-
-
+            Wishlist wishlist = account.getUser().getWishlist();
+            Optional<WishlistItem> optionalWishlistItem = wishlist
+                    .getWishlistItemList()
+                    .stream()
+                    .filter(item -> Objects.equals(item.getId(),request.getWishlistItemId()))
+                    .findFirst();
+            WishlistItem wishlistItem = optionalWishlistItem.get();
+            wishlist.getWishlistItemList().remove(wishlistItem);
+            wishlistItemRepo.delete(wishlistItem);
             //end of correct case
-
-            int accountId = 0; // change to your data
-            int wishlistItemId = 0; // change to your data
-
-
-
             return DeleteWishlistItemResponse.builder()
                     .status("200")
                     .message("Delete wishlist item Successfully")
@@ -185,14 +222,13 @@ public class BuyerLogic {
         }
 
         // fail case here
-
-
-        //end of fail case
         return DeleteWishlistItemResponse.builder()
                 .status("400")
                 .message("Delete wishlist item Failed")
                 .type("err")
                 .build();
+        //end of fail case
+
     }
 
     //-------------------------VIEW ORDER HISTORY---------------------//
