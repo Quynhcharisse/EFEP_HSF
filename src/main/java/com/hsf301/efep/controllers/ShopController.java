@@ -76,7 +76,5 @@ public class ShopController {
     public String viewOrderList(HttpSession session, Model model, int accountId) {
         return shopService.viewOrderList(session, model, accountId);
     }
-
-
     //---------------------------------------------------------------//
 }
