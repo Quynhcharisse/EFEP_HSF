@@ -2,7 +2,6 @@ package com.hsf301.efep.controllers;
 
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.serivces.ShopService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +19,13 @@ public class ShopController {
 
              //----------------FLOWER FOR SHOP---------------//
 
+    //-------------------GET ALL FLOWER STATUS-----------------//
+
+    @GetMapping("/flower/status")
+    public List<String> getAllFlowerStatus() {
+        return shopService.getAllFlowerStatus();
+    }
+
     //------------------------CREATE FLOWER---------------------//
 
     @PostMapping("/flower")
@@ -27,11 +33,11 @@ public class ShopController {
         return shopService.createFlower(request, session, model);
     }
 
-    //-------------------------VIEW FLOWER---------------------//
+    //-------------------------VIEW FLOWER FOR SHOP---------------------//
 
     @GetMapping("/flower")
-    public String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model) {
-        return shopService.viewFlowerListForShop(request, session, model);
+    public String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model, int sellerId) {
+        return shopService.viewFlowerListForShop(request, session, model, sellerId);
     }
 
     //------------------------UPDATE FLOWER---------------------//
@@ -46,31 +52,6 @@ public class ShopController {
     @DeleteMapping("/flower")
     public String deleteFlower(DeleteFlowerRequest request, HttpSession session, Model model) {
         return shopService.deleteFlower(request, session, model);
-    }
-                         //---------FLOWER IMAGE ---------//
-
-
-    @GetMapping("/flower/image")
-    @Operation(hidden = true)
-    public String viewFlowerImage(ViewFlowerImageRequest request, HttpSession session, Model model) {
-        return shopService.viewFlowerImage(request, session, model);
-    }
-
-    @PostMapping("/flower/add/image")
-    @Operation(hidden = true)
-    public String addFlowerImage(AddFlowerImageRequest request, HttpSession session, Model model) {
-        return shopService.addFlowerImage(request, session, model);
-    }
-
-    @DeleteMapping("/flower/image")
-    @Operation(hidden = true)
-    public String deleteFlowerImage(DeleteFlowerImageRequest request, HttpSession session, Model model) {
-        return shopService.deleteFlowerImage(request, session, model);
-    }
-
-    @GetMapping("/flower/status")
-    public List<String> getAllFlowerStatus() {
-        return shopService.getAllFlowerStatus();
     }
 
                //----------ORDER FOR SHOP(SELLER SHOP)------------//
@@ -92,7 +73,10 @@ public class ShopController {
     //-------------------------VIEW ORDER LIST-------------------------//
 
     @GetMapping("/order/list")
-    public String viewOrderList(HttpSession session, Model model) {
-        return shopService.viewOrderList(session, model);
+    public String viewOrderList(HttpSession session, Model model, int accountId) {
+        return shopService.viewOrderList(session, model, accountId);
     }
+
+
+    //---------------------------------------------------------------//
 }

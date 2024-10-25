@@ -1,4 +1,5 @@
 package com.hsf301.efep.logics;
+
 import com.hsf301.efep.enums.Role;
 import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.*;
@@ -9,15 +10,11 @@ import com.hsf301.efep.validations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-@RequiredArgsConstructor
 @Component
 @RequiredArgsConstructor
 // neu bo @Component==> bao loi
@@ -25,14 +22,9 @@ public class BuyerLogic {
 
     private final AccountRepo accountRepo;
     private final FlowerRepo flowerRepo;
-
-    private final FlowerCategoryRepo flowerCategoryRepo;
     private final WishlistItemRepo wishlistItemRepo;
     private final WishlistRepo wishlistRepo;
     private final CategoryRepo categoryRepo;
-
-    private final WishlistItemRepo wishlistItemRepo;
-    private final WishlistRepo wishlistRepo;
     private final OrderRepo orderRepo;
 
 
@@ -588,4 +580,26 @@ public class BuyerLogic {
         //end of fail case
     }
 
+    //-------------------------VIEW FLOWER LIST FOR BUYER-------------------------//
+
+    public ViewFlowerListForBuyerResponse viewFlowerListForBuyerLogic() {
+            String error = "";
+        List<Flower> flowers = flowerRepo.findAll();
+            // Trường hợp không có lỗi
+            // correct case here
+
+            return ViewFlowerListForBuyerResponse.builder()
+                    .status("200")
+                    .message("Number of flower" + flowers.size())
+                    .type("msg")
+                    .build();
+
+            //end of correct case
+
+            // fail case here
+            //not error
+            //end of fail case
+            // Trường hợp có lỗi
+
+        }
 }

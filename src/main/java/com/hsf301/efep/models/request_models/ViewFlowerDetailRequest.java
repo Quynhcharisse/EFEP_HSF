@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ViewFlowerImageRequest {
+public class ViewFlowerDetailRequest {
 
-    private int accountId;
-
-    private int flowerId;
 }

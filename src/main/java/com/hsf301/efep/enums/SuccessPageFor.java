@@ -44,6 +44,8 @@ public class SuccessPageFor {
 
     public static String SEARCH_FLOWER = "home";
 
+    public static String VIEW_FLOWER_LIST_BUYER = "viewFlowerListBuyer";
+
 
     //-----SELLER-----//
 
@@ -61,7 +63,7 @@ public class SuccessPageFor {
 
     public static String VIEW_ORDER_LIST = "viewOrderList";
 
-
+    public static String VIEW_FLOWER_LIST_SHOP = "viewFlowerListShop";
 }
 
 

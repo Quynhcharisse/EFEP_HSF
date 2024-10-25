@@ -28,6 +28,8 @@ public class BuyerController {
     //Mac dinh chay song song voi home page ==> khong can controller cho thymleaf
 
 
+    //==================================WISHLIST================================//
+
     //-------------------------------VIEW WISHLIST------------------------------//
 
     @GetMapping("/wishlist")
@@ -68,6 +70,8 @@ public class BuyerController {
     }
 
 
+
+    //==================================ORDER===============================//
     //-------------------------VIEW ORDER HISTORY---------------------//
 
     @GetMapping("/order-history")
@@ -100,7 +104,16 @@ public class BuyerController {
         return buyerService.cancelOrder(request, session, model);
     }
 
+    //---------------------------CREATE ORDER----------------------------//
 
+    @PostMapping("/create/order")
+    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
+        return buyerService.createOrder(httpServletRequest, model, session, request);
+    }
+
+
+
+    //==================================FLOWER================================//
     //-------------------------SEARCH FLOWER BY NAME-------------------------//
 
     @PostMapping("/flower/search")
@@ -109,6 +122,13 @@ public class BuyerController {
         return buyerService.searchFlower(request, model);
     }
 
+    //-------------------------------------------VIEW FLOWER LIST FOR BY GUEST / BUYER ----------------------------------//
+
+    @GetMapping("/flower")
+    @Operation(hidden = true)
+    public String viewFlowerListForBuyer(HttpSession session, Model model) {
+        return buyerService.viewFlowerListForBuyer(session, model);
+    }
     //---------------------------VIEW CATEGORY------------------------------//
 
         @GetMapping("/category")
@@ -124,12 +144,6 @@ public class BuyerController {
         return buyerService.filterCategory(request, model);
     }
 
-    //---------------------------GET PAYMENT PAGE RESULT----------------------------//
-
-    @PostMapping("/create/order")
-    public String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request) {
-        return buyerService.createOrder(httpServletRequest, model, session, request);
-    }
 
 
 }

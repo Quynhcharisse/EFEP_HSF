@@ -41,6 +41,8 @@ public class FailPageFor {
 
     public static String SEARCH_FLOWER = "home";
 
+    public static String VIEW_FLOWER_LIST_BUYER = "viewFlowerListBuyer";
+
     //-----SELLER-----//
 
     public static String CREATE_FLOWER = "login";
@@ -56,4 +58,6 @@ public class FailPageFor {
     public static String VIEW_ORDER_DETAIL = "viewOrderDetail";
 
     public static String VIEW_ORDER_LIST = "viewOrderList";
+
+    public static String VIEW_FLOWER_LIST_SHOP = "viewFlowerListShop";
 }

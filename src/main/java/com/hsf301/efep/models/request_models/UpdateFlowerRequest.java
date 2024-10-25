@@ -1,6 +1,7 @@
 package com.hsf301.efep.models.request_models;
 
 
+import com.hsf301.efep.models.entity_models.FlowerImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,6 @@ public class UpdateFlowerRequest {
 
     private int quantity;
 
-//    private List<FlowerImage> flowerImageList;
+    private List<FlowerImage> flowerImageList;
 
-//    private List<FlowerCategory> flowerCategoryList;
 }

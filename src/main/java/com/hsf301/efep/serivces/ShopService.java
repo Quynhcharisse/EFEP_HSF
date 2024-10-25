@@ -7,11 +7,14 @@ import org.springframework.ui.Model;
 import java.util.List;
 
 public interface ShopService {
+
+    List<String> getAllFlowerStatus();
+
     String createFlower(CreateFlowerRequest request, HttpSession session, Model model);
 
-    String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model);
-
     String updateFlower(UpdateFlowerRequest request, HttpSession session, Model model);
+
+    String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model, int sellerId);
 
     String deleteFlower(DeleteFlowerRequest request, HttpSession session, Model model);
 
@@ -19,13 +22,5 @@ public interface ShopService {
 
     String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model);
 
-    String viewOrderList(HttpSession session, Model model);
-
-    String viewFlowerImage(ViewFlowerImageRequest request, HttpSession session, Model model);
-
-    String addFlowerImage(AddFlowerImageRequest request, HttpSession session, Model model);
-
-    String deleteFlowerImage(DeleteFlowerImageRequest request, HttpSession session, Model model);
-
-    List<String> getAllFlowerStatus();
+    String viewOrderList(HttpSession session, Model model, int accountId);
 }

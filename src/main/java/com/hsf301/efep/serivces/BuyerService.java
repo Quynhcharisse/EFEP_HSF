@@ -38,4 +38,6 @@ public interface BuyerService {
     String searchFlower(SearchFlowerRequest request, Model model);
 
     String createOrder(HttpServletRequest httpServletRequest, Model model, HttpSession session, CreateOrderRequest request);
+
+    String viewFlowerListForBuyer(HttpSession session, Model model);
 }
