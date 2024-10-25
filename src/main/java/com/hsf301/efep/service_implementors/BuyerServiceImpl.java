@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class BuyerServiceImpl implements BuyerService {
@@ -157,6 +155,12 @@ public class BuyerServiceImpl implements BuyerService {
         return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
     }
 
+    @Override
+    public String viewFlowerListForBuyer(HttpSession session, Model model) {
+        ViewFlowerListForBuyerResponse response = buyerLogic.viewFlowerListForBuyerLogic();
+        model.addAttribute(response.getType(), response);
+        return response.getStatus().equals("200") ? SuccessPageFor.FILTER_CATEGORY : FailPageFor.FILTER_CATEGORY;
+    }
 
 
 }

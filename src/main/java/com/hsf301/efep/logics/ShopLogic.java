@@ -1,37 +1,29 @@
 package com.hsf301.efep.logics;
 
-import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.AccountRepo;
 import com.hsf301.efep.repositories.FlowerRepo;
-import lombok.RequiredArgsConstructor;
+import com.hsf301.efep.validations.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 
-@RequiredArgsConstructor
 @Component
 public class ShopLogic {
-    private final FlowerRepo flowerRepo;
-    private final AccountRepo accountRepo;
-
-    //------------------------CREATE FLOWER---------------------//
+    private FlowerRepo flowerRepo;
+    private AccountRepo accountRepo;
+    //-----------------------------------------CREATE FLOWER----------------------------------//
 
     public CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request) {
-        String error = "";
-        Account account = accountRepo.findById(request.getAccountId()).orElse(null);
-        assert  account != null;
+        String error = CreateFlowerValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-            Flower flower = new Flower();
-            flower.setName(request.getName());
-            flower.setDescription(request.getDescription());
-            flower.setFlowerAmount(request.getFlowerAmount());
-            flower.setQuantity(request.getQuantity());
-//            Float totalPrice =
+
 
             //end of correct case
 
@@ -54,189 +46,174 @@ public class ShopLogic {
                 .build();
     }
 
-    //-------------------------VIEW FLOWER---------------------//
+    //---------------------------------------VIEW FLOWER FOR SHOP---------------------------------//
 
-    public static ViewFlowerListResponse viewFlowerLogic(ViewFlowerListRequest request) {
+    public ViewFlowerListResponse viewFlowerForShopLogic(int sellerId) {
         String error = "";
-
+        List<Flower> flowers = flowerRepo.findBySeller_Id(sellerId);
         // Trường hợp không có lỗi
-        if (error.isEmpty()) {
-            // correct case here
+        // correct case here
 
+        return ViewFlowerListResponse.builder()
+                .status("200")
+                .message("Number of flower" + flowers.size())
+                .type("msg")
+                .build();
 
-            //end of correct case
-
-            return ViewFlowerListResponse.builder()
-                    .status("200")
-                    .message("View Flower List Successfully")
-                    .type("msg")
-                    .build();
-        }
+        //end of correct case
 
         // fail case here
-
-
+        //not error
         //end of fail case
         // Trường hợp có lỗi
-        return ViewFlowerListResponse.builder()
-                .status("400")
-                .message("View Flower List Failed")
-                .type("err")
-                .build();
+
     }
 
-//------------------------UPDATE FLOWER---------------------//
+//-----------------------------------------UPDATE FLOWER----------------------------------//
 
-    public static UpdateFlowerResponse updateFlowerLogic(UpdateFlowerRequest request) {
-        String error = "";
+    public UpdateFlowerResponse updateFlowerLogic(UpdateFlowerRequest request) {
+        String error = UpdateFlowerValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-
-
-            //end of correct case
 
             return UpdateFlowerResponse.builder()
                     .status("200")
                     .message("Update Flower List Successfully")
                     .type("msg")
                     .build();
+
+            //end of correct case
         }
 
         // fail case here
 
-
-        //end of fail case
-        // Trường hợp có lỗi
         return UpdateFlowerResponse.builder()
                 .status("400")
                 .message("Update Flower List Failed")
                 .type("err")
                 .build();
+
+        //end of fail case
+        // Trường hợp có lỗi
+
     }
 
-    //-------------------DELETE FLOWER---------------------//
+    //--------------------------------------DELETE FLOWER-----------------------------------//
 
-    public static DeleteFlowerResponse deleteFlowerLogic(DeleteFlowerRequest request) {
+    public DeleteFlowerResponse deleteFlowerLogic(DeleteFlowerRequest request) {
         String error = "";
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
+            Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
+            assert flower != null;
+            flower.setStatus(Status.FLOWER_STATUS_DELETED);
+            flowerRepo.save(flower);
             // correct case here
-
-
-            //end of correct case
-
             return DeleteFlowerResponse.builder()
                     .status("200")
-                    .message("Delete Flower List Successfully")
+                    .message(flower.getName() + " has been deleted" + "(" + flower.getStatus() + ")")
                     .type("msg")
                     .build();
+            //end of correct case
+
+
         }
 
         // fail case here
 
+        return DeleteFlowerResponse.builder()
+                .status("400")
+                .message("Please login a seller account to do this action")
+                .type("err")
+                .build();
 
         //end of fail case
         // Trường hợp có lỗi
-        return DeleteFlowerResponse.builder()
-                .status("400")
-                .message("Delete Flower List Failed")
-                .type("err")
-                .build();
+
     }
 
-    //-------------------------CHANGE ORDER STATUS---------------------//
+    //----------ORDER FOR SHOP(SELLER SHOP)------------//
+    //-------------------------------------CHANGE ORDER STATUS------------------------------------//
 
-    public static ChangeOrderStatusResponse changeOrderStatusLogic(ChangeOrderStatusRequest request) {
-        String error = "";
+    public ChangeOrderStatusResponse changeOrderStatusLogic(ChangeOrderStatusRequest request) {
+        String error = ChangeOrderStatusValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-
-
-            //end of correct case
-
             return ChangeOrderStatusResponse.builder()
                     .status("200")
                     .message("Change Order Status Successfully")
                     .type("msg")
                     .build();
+            //end of correct case
         }
 
         // fail case here
-
-
-        //end of fail case
-        // Trường hợp có lỗi
         return ChangeOrderStatusResponse.builder()
                 .status("400")
                 .message("Change Order Status Failed")
                 .type("err")
                 .build();
+        //end of fail case
+        // Trường hợp có lỗi
+
     }
 
     //-------------------------VIEW ORDER DETAIL---------------------//
 
-    public static ViewOrderDetailResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
-        String error = "";
+    public ViewOrderDetailResponse viewOrderDetailLogic(ViewOrderDetailRequest request) {
+        String error = ViewOrderDetailValidation.validate(request);
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-
-
-            //end of correct case
-
             return ViewOrderDetailResponse.builder()
                     .status("200")
                     .message("View Order Detail Successfully")
                     .type("msg")
                     .build();
+            //end of correct case
         }
 
         // fail case here
-
-
-        //end of fail case
-        // Trường hợp có lỗi
         return ViewOrderDetailResponse.builder()
                 .status("400")
                 .message("View Order Detail Failed")
                 .type("err")
                 .build();
+        //end of fail case
+        // Trường hợp có lỗi
+
     }
 
     //-------------------------VIEW ORDER LIST-------------------------//
 
-    public static ViewOrderListResponse viewOrderList() {
-        String error = "";
+    public ViewOrderListResponse viewOrderList(int accountId) {
+        String error = ViewOrderListValidation.validate();
 
         // Trường hợp không có lỗi
         if (error.isEmpty()) {
             // correct case here
-
-
-            //end of correct case
-
             return ViewOrderListResponse.builder()
                     .status("200")
                     .message("View Order List Successfully")
                     .type("msg")
                     .build();
+            //end of correct case
         }
 
         // fail case here
-
-
-        //end of fail case
-        // Trường hợp có lỗi
         return ViewOrderListResponse.builder()
                 .status("400")
                 .message("View Order List Failed")
                 .type("err")
                 .build();
+        //end of fail case
+        // Trường hợp có lỗi
+
     }
 }
