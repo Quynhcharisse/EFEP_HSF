@@ -144,6 +144,4 @@ public class BuyerController {
         return buyerService.filterCategory(request, model);
     }
 
-
-
 }
