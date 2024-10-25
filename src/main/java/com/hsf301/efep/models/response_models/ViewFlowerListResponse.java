@@ -31,23 +31,27 @@ public class ViewFlowerListResponse {
 
         private String name;
 
+        private String status;
+
+        private String description;
+
         private float price;
 
-        private int flower_amount;
+        private int flowerAmount;
 
         private int quantity;
 
-        private int sold_quantity;
-//
-//        private List<Image> imageList;
-    }
+        private int soldQuantity;
 
-//    @Data
-//    @AllArgsConstructor
-//    @NoArgsConstructor
-//    @Builder
-//    public static class Image {
-//
-//        private String link;
-//    }
+        private List<Image> flowerImageList;
+
+    }
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Image {
+
+        private String link;
+    }
 }
