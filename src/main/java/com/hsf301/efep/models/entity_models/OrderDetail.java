@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.models.entity_models;
+package com.hsf301.efep.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

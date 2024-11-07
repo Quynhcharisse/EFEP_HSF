@@ -1,9 +1,9 @@
-package com.quynh.efep_hsf.validations;
+package com.hsf301.efep.validations;
 
-import com.quynh.efep_hsf.models.entity_models.Flower;
-import com.quynh.efep_hsf.models.request_models.UpdateFlowerRequest;
-import com.quynh.efep_hsf.repositories.CategoryRepo;
-import com.quynh.efep_hsf.repositories.FlowerRepo;
+import com.hsf301.efep.models.entity_models.Flower;
+import com.hsf301.efep.models.request_models.UpdateFlowerRequest;
+import com.hsf301.efep.repositories.CategoryRepo;
+import com.hsf301.efep.repositories.FlowerRepo;
 
 public class UpdateFlowerValidation {
     public static String validate(UpdateFlowerRequest request, FlowerRepo flowerRepo, CategoryRepo categoryRepo){
