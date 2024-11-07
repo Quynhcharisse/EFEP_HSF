@@ -1,6 +1,6 @@
-package com.quynh.efep_hsf.configurations;
+package com.hsf301.efep.configurations;
 
-import com.quynh.efep_hsf.enums.ActionCaseValues;
+import com.hsf301.efep.enums.ActionCaseValues;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,7 @@
-package com.quynh.efep_hsf.enums;
+package com.hsf301.efep.enums;
 
-import com.quynh.efep_hsf.models.entity_models.Account;
-import com.quynh.efep_hsf.repositories.AccountRepo;
+import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.repositories.AccountRepo;
 import jakarta.servlet.http.HttpSession;
 
 public class Roles {

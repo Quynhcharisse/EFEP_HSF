@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.pojo;
+package com.hsf301.efep.pojo;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
