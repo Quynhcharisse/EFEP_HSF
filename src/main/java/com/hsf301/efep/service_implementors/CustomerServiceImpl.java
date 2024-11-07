@@ -144,7 +144,52 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Add To WishList----------------------//
     @Override
     public String addToWishList(AddToWishListRequest request, RedirectAttributes attributes, HttpSession session) {
-        return null;
+        AddToWishListResponse response = addToWishListLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ADD_TO_WISHLIST);
+    }
+
+    private AddToWishListResponse addToWishListLogic(AddToWishListRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return AddToWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = AddToWishListValidation.validate(request, flowerRepo, account);
+        if(!error.isEmpty()) {
+            return AddToWishListResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
+        assert flower != null;
+        WishlistItem item = wishlistItemRepo.findByFlower_IdAndWishlist_User_Account_Id(flower.getId(), account.getId()).orElse(null);
+        Wishlist wishlist = account.getUser().getWishlist();
+        if(item == null) {
+            item = WishlistItem.builder()
+                    .wishlist(wishlist)
+                    .quantity(request.getQty())
+                    .flower(flower)
+                    .build();
+        }else{
+            if(item.getQuantity() + request.getQty() > flower.getQuantity()){
+                return AddToWishListResponse.builder()
+                        .status("400")
+                        .message("Max quantity exceeded")
+                        .build();
+            }
+            item.setQuantity(item.getQuantity() + request.getQty());
+        }
+        wishlistItemRepo.save(item);
+        return AddToWishListResponse.builder()
+                .status("200")
+                .message("Add to wishlist successfully")
+                .build();
     }
 
     //--------------------TEST--------------------//
