@@ -37,11 +37,29 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String searchFlowers(SearchFlowerRequest request, RedirectAttributes attributes) {
-        return null;
+        SearchFlowerResponse response = searchFlowersLogic(request);
+        attributes.addFlashAttribute("msg", response);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
     }
 
     private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-        return null;
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
+                                .map(
+                                        flower -> SearchFlowerResponse.Flower.builder()
+                                                .id(flower.getId())
+                                                .name(flower.getName())
+                                                .price(flower.getPrice())
+                                                .img(flower.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //--------------------TEST--------------------//
