@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -38,101 +37,40 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String searchFlowers(SearchFlowerRequest request, RedirectAttributes attributes) {
-        SearchFlowerResponse response = searchFlowersLogic(request);
-        attributes.addFlashAttribute("msg", response);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
+        return null;
     }
 
     private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-        return SearchFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(
-                        flowerRepo.findAll().stream()
-                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
-                                .map(
-                                        flower -> SearchFlowerResponse.Flower.builder()
-                                                .id(flower.getId())
-                                                .name(flower.getName())
-                                                .price(flower.getPrice())
-                                                .img(flower.getImg())
-                                                .build()
-                                )
-                                .toList()
-                )
-                .build();
+        return null;
     }
 
     //--------------------TEST--------------------//
 
     public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
-        return null;
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .map(flower -> SearchFlowerResponse.Flower.builder()
+                                        .id(flower.getId())
+                                        .name(flower.getName())
+                                        .price(flower.getPrice())
+                                        .img(flower.getImg())
+                                        .build())
+                                .toList()
+                )
+                .build();
     }
 
     //-----------------Sort Flowers----------------------//
     @Override
     public String sortFlowers(SortFlowerRequest request, RedirectAttributes attributes) {
-        SortFlowerResponse response = sortFlowersLogic(request);
-        attributes.addFlashAttribute("msg", response);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SORT_FLOWER);
+        return null;
     }
 
     private SortFlowerResponse sortFlowersLogic(SortFlowerRequest request) {
-        //Check price
-        List<Flower> flowers = flowerRepo.findAll().stream()
-                .filter(f -> f.getStatus().equals(Status.FLOWER_AVAILABLE))
-                .filter(f -> f.getPrice() >= request.getStartPrice() && f.getPrice() <= request.getEndPrice())
-                .toList();
-
-        //Check category
-        try {
-            int cateId = Integer.parseInt(request.getCateId());
-            if (categoryRepo.existsById(cateId)) {
-                flowers = flowers.stream()
-                        .filter(f -> f.getCategory().getId() == cateId)
-                        .toList();
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Well just a funny message that there is no category to sort with id: " + request.getCateId());
-        }
-
-        //Check sortType
-        flowers.sort(Comparator.comparing(Flower::getId).reversed());
-        if (request.getSortType() != null) {
-            switch (request.getSortType()) {
-                case "asc" -> {
-                    flowers.sort(Comparator.comparing(Flower::getName));
-                }
-
-                case "desc" -> {
-                    flowers.sort(Comparator.comparing(Flower::getName).reversed());
-                }
-
-                case "priceUp" -> {
-                    flowers.sort(Comparator.comparing(Flower::getPrice));
-                }
-
-                case "priceDown" -> {
-                    flowers.sort(Comparator.comparing(Flower::getPrice).reversed());
-                }
-
-            }
-        }
-
-        return SortFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(flowers.stream()
-                        .map(f -> SortFlowerResponse.Flower.builder()
-                                .id(f.getId())
-                                .name(f.getName())
-                                .price(f.getPrice())
-                                .img(f.getImg())
-                                .build()
-                        )
-                        .toList()
-                )
-                .build();
+        return null;
     }
 
     //--------------------TEST--------------------//
@@ -144,52 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Add To WishList----------------------//
     @Override
     public String addToWishList(AddToWishListRequest request, RedirectAttributes attributes, HttpSession session) {
-        AddToWishListResponse response = addToWishListLogic(request, Roles.getCurrentLoggedAccount(session));
-        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
-        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ADD_TO_WISHLIST);
-    }
-
-    private AddToWishListResponse addToWishListLogic(AddToWishListRequest request, Account account) {
-        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
-            return AddToWishListResponse.builder()
-                    .status("403")
-                    .message("Please login a customer account first")
-                    .build();
-        }
-
-        String error = AddToWishListValidation.validate(request, flowerRepo, account);
-        if(!error.isEmpty()) {
-            return AddToWishListResponse.builder()
-                    .status("400")
-                    .message(error)
-                    .build();
-        }
-
-        Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
-        assert flower != null;
-        WishlistItem item = wishlistItemRepo.findByFlower_IdAndWishlist_User_Account_Id(flower.getId(), account.getId()).orElse(null);
-        Wishlist wishlist = account.getUser().getWishlist();
-        if(item == null) {
-            item = WishlistItem.builder()
-                    .wishlist(wishlist)
-                    .quantity(request.getQty())
-                    .flower(flower)
-                    .build();
-        }else{
-            if(item.getQuantity() + request.getQty() > flower.getQuantity()){
-                return AddToWishListResponse.builder()
-                        .status("400")
-                        .message("Max quantity exceeded")
-                        .build();
-            }
-            item.setQuantity(item.getQuantity() + request.getQty());
-        }
-        wishlistItemRepo.save(item);
-        return AddToWishListResponse.builder()
-                .status("200")
-                .message("Add to wishlist successfully")
-                .build();
+        return null;
     }
 
     //--------------------TEST--------------------//
@@ -201,35 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Update WishList----------------------//
     @Override
     public String updateWishList(UpdateWishListRequest request, RedirectAttributes attributes, HttpSession session) {
-        UpdateWishListResponse response = updateWishListLogic(request, Roles.getCurrentLoggedAccount(session));
-        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
-        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.UPDATE_WISHLIST);
-    }
-
-    private UpdateWishListResponse updateWishListLogic(UpdateWishListRequest request, Account account) {
-        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
-            return UpdateWishListResponse.builder()
-                    .status("403")
-                    .message("Please login a customer account first")
-                    .build();
-        }
-
-        String error = UpdateWishListValidation.validate(request, wishlistItemRepo);
-        if(!error.isEmpty()) {
-            return UpdateWishListResponse.builder()
-                    .status("400")
-                    .message(error)
-                    .build();
-        }
-
-        WishlistItem item = wishlistItemRepo.findById(request.getWishListItemId()).get();
-        item.setQuantity(request.getNewQty());
-        wishlistItemRepo.save(item);
-        return UpdateWishListResponse.builder()
-                .status("200")
-                .message("Update wishlist successfully")
-                .build();
+        return null;
     }
     //--------------------TEST--------------------//
 
@@ -240,27 +105,7 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Clear WishList----------------------//
     @Override
     public String clearWishList(RedirectAttributes attributes, HttpSession session) {
-        ClearWishListResponse response = clearWishListLogic(Roles.getCurrentLoggedAccount(session));
-        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
-        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.CLEAR_WISHLIST);
-    }
-
-    private ClearWishListResponse clearWishListLogic(Account account) {
-        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
-            return ClearWishListResponse.builder()
-                    .status("403")
-                    .message("Please login a customer account first")
-                    .build();
-        }
-
-        Wishlist wishlist = account.getUser().getWishlist();
-        List<WishlistItem> wishlistItems = wishlistItemRepo.findAllByWishlist_Id(wishlist.getId());
-        wishlistItemRepo.deleteAll(wishlistItems);
-        return ClearWishListResponse.builder()
-                .status("200")
-                .message("Clear wishlist successfully")
-                .build();
+        return null;
     }
     //--------------------TEST--------------------//
 

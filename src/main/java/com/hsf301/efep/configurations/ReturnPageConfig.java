@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 public class ReturnPageConfig {
     private static HashMap<String, String> event;
+
+    //Create HashMap ==> not switch case
     private static void initActionCase(){
         event = new HashMap<>();
         event.put("HOME", "");
@@ -29,16 +31,17 @@ public class ReturnPageConfig {
     }
 
 
-
+    // Generate Return Mapping
     public static String generateReturnMapping(@ActionCase(actionCase = ActionCaseValues.HOME) ActionCaseValues actionCaseValues) {
         initActionCase();
         return makeURL(event.get(actionCaseValues.toString()));
     }
-
+    //Make URL
     private static String makeURL(String actionCase){
         return "redirect:/" + actionCase;
     }
 
+    //Test result
 //    public static void main(String[] args) {
 //        System.out.println(generateReturnMapping(ActionCaseValues.LOGIN_FAIL));
 //    }
