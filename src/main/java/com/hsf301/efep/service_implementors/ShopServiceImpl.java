@@ -42,44 +42,11 @@ public class ShopServiceImpl implements ShopService {
     //-------------------------------------Create Flower-------------------------------------//
     @Override
     public String createFlower(CreateFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
-        CreateFlowerResponse response = createFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
-        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
-        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
-        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.CREATE_FLOWER);
+        return null;
     }
 
     private CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request, Account account) {
-        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
-            return CreateFlowerResponse.builder()
-                    .status("403")
-                    .message("Please login a customer account first")
-                    .build();
-        }
-
-        String error = CreateFlowerValidation.validate(request, flowerRepo, categoryRepo);
-        if(!error.isEmpty()) {
-            return CreateFlowerResponse.builder()
-                    .status("400")
-                    .message(error)
-                    .build();
-        }
-
-        flowerRepo.save(
-                Flower.builder()
-                        .description(request.getDescription())
-                        .flowerAmount(request.getFlowerAmount())
-                        .img("https://img.freepik.com/premium-photo/default-dogwood-flowers-with-bokeh-background_1114710-193206.jpg")
-                        .name(request.getName())
-                        .price(request.getPrice())
-                        .quantity(request.getQuantity())
-                        .soldQuantity(0)
-                        .status(Status.FLOWER_AVAILABLE)
-                        .category(categoryRepo.findById(request.getCategoryId()).get())
-                        .seller(account.getUser().getSeller())
-                        .build()
-        );
-
-        return CreateFlowerResponse.builder().status("200").message("Create flower successfully").build();
+        return null;
     }
 
     //--------------------TEST--------------------//

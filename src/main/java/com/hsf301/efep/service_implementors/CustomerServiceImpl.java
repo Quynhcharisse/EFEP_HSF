@@ -47,20 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
-        return SearchFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(
-                        flowerRepo.findAll().stream()
-                                .map(flower -> SearchFlowerResponse.Flower.builder()
-                                        .id(flower.getId())
-                                        .name(flower.getName())
-                                        .price(flower.getPrice())
-                                        .img(flower.getImg())
-                                        .build())
-                                .toList()
-                )
-                .build();
+        return null;
     }
 
     //-----------------Sort Flowers----------------------//
