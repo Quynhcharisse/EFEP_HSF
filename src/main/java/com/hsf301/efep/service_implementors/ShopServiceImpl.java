@@ -5,7 +5,6 @@ import com.hsf301.efep.enums.ActionCaseValues;
 import com.hsf301.efep.enums.Roles;
 import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.Account;
-import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.entity_models.Category;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.CreateFlowerRequest;
@@ -17,8 +16,6 @@ import com.hsf301.efep.models.response_models.UpdateFlowerResponse;
 import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.repositories.FlowerRepo;
 import com.hsf301.efep.services.ShopService;
-import com.hsf301.efep.validations.CreateFlowerValidation;
-
 import com.hsf301.efep.validations.CreateFlowerValidation;
 import com.hsf301.efep.validations.DeleteFlowerValidation;
 import com.hsf301.efep.validations.UpdateFlowerValidation;
@@ -81,7 +78,37 @@ public class ShopServiceImpl implements ShopService {
     //--------------------TEST--------------------//
 
     public CreateFlowerResponse createFlowerLogicTest(CreateFlowerRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return CreateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = CreateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return CreateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        flowerRepo.save(
+                Flower.builder()
+                        .description(request.getDescription())
+                        .flowerAmount(request.getFlowerAmount())
+                        .img("https://img.freepik.com/premium-photo/default-dogwood-flowers-with-bokeh-background_1114710-193206.jpg")
+                        .name(request.getName())
+                        .price(request.getPrice())
+                        .quantity(request.getQuantity())
+                        .soldQuantity(0)
+                        .status(Status.FLOWER_AVAILABLE)
+                        .category(categoryRepo.findById(request.getCategoryId()).get())
+                        .seller(account.getUser().getSeller())
+                        .build()
+        );
+
+        return CreateFlowerResponse.builder().status("200").message("Create flower successfully").build();
     }
 
     //-------------------------------------Update Flower-------------------------------------//
@@ -124,7 +151,32 @@ public class ShopServiceImpl implements ShopService {
     //--------------------TEST--------------------//
 
     public UpdateFlowerResponse updateFlowerLogicTest(UpdateFlowerRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return UpdateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = UpdateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return UpdateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        Category category = categoryRepo.findById(request.getCategoryId()).get();
+        flower.setName(request.getName());
+        flower.setPrice(request.getPrice());
+        flower.setQuantity(request.getQuantity());
+        flower.setFlowerAmount(request.getFlowerAmount());
+        flower.setDescription(request.getDescription());
+        flower.setCategory(category);
+        flowerRepo.save(flower);
+
+        return UpdateFlowerResponse.builder().status("200").message("Update flower successfully").build();
     }
 
     //-------------------------------------Delete Flower-------------------------------------//
@@ -162,6 +214,25 @@ public class ShopServiceImpl implements ShopService {
     //--------------------TEST--------------------//
 
     public DisableFlowerResponse disableFlowerLogicTest(DisableFlowerRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return DisableFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = DeleteFlowerValidation.validate(request, flowerRepo);
+        if(!error.isEmpty()) {
+            return DisableFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        flower.setStatus(Status.FLOWER_DISABLE);
+        flowerRepo.save(flower);
+
+        return DisableFlowerResponse.builder().status("200").message("Disable successfully").build();
     }
 }
