@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.models.request_models;
+package com.quynh.efep_hsf.models.response_models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DeleteFlowerRequest {
-    int id;
+public class ClearWishListResponse {
+    String status;
+    String message;
 }

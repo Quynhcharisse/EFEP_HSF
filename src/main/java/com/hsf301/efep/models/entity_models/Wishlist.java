@@ -18,7 +18,7 @@ public class Wishlist {
     Integer id;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "`user_id`")
     User user;
 

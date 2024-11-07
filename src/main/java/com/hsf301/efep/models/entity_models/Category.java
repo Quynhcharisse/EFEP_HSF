@@ -21,8 +21,8 @@ public class Category {
 
     String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<FlowerCategory> flowerCategoryList;
+    private List<Flower> flowerList;
 }

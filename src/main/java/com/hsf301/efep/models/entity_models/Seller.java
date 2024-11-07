@@ -20,11 +20,11 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "`user_id`")
     User user;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     List<Flower> flowerList;
