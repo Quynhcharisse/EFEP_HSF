@@ -131,6 +131,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String logout(HttpSession session) {
-        return null;
+        session.invalidate();
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.HOME);
     }
 }
