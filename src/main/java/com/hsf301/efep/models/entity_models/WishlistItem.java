@@ -1,4 +1,4 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,12 +20,11 @@ public class WishlistItem {
 
     @ManyToOne
     @JoinColumn(name = "`wishlist_id`")
-    private Wishlist wishlist;
+    Wishlist wishlist;
 
     @ManyToOne
     @JoinColumn(name = "`flower_id`")
-    private Flower flower;
+    Flower flower;
 
     private int quantity;
-
 }

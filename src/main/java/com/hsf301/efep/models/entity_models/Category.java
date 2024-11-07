@@ -1,7 +1,8 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -11,17 +12,17 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "`category`")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private String name;
+    String name;
 
-    @OneToMany(mappedBy =  "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<FlowerCategogy> flowerCategogyList;
-
+    private List<Flower> flowerList;
 }

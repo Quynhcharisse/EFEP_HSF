@@ -1,36 +1,19 @@
-package com.hsf301.efep.models.request_models;
+package com.quynh.efep_hsf.models.request_models;
 
-
-import com.hsf301.efep.models.entity_models.FlowerImage;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateFlowerRequest {
-
-    private int accountId;
-
-    private int flowerId;
-
-    private String name;
-
-    private float price;
-
-    private String description;
-
-    private String status;
-
-    private int flowerAmount;
-
-    private int quantity;
-
-    private List<FlowerImage> flowerImageList;
-
+    int id;
+    String name;
+    float price;
+    int quantity;
+    int flowerAmount;
+    String description;
+    int categoryId;
 }

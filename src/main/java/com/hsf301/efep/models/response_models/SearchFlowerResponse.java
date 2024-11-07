@@ -1,9 +1,7 @@
-package com.hsf301.efep.models.response_models;
+package com.quynh.efep_hsf.models.response_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -11,38 +9,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SearchFlowerResponse {
-    private String status;
-
-    private String message;
-
-    private String keyword;
-
-    private String type;
-
-    private List<Flower> flowerList;
+    String status;
+    String message;
+    List<Flower> flowers;
 
     @Data
-    @AllArgsConstructor
     @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Flower {
-
-        private int id;
-
-        private String name;
-
-        private float price;
-
-        private List<Image> images;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class Image {
-
-        private String link;
+        int id;
+        String name;
+        float price;
+        String img;
     }
 }

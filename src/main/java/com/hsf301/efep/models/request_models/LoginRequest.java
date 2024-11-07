@@ -1,15 +1,16 @@
-package com.hsf301.efep.models.request_models;
+package com.quynh.efep_hsf.models.request_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginRequest {
-    private String email;
-    private String password;
+
+    String email;
+
+    String password;
 }

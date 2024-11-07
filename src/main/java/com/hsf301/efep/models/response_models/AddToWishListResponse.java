@@ -1,19 +1,14 @@
-package com.hsf301.efep.models.response_models;
+package com.quynh.efep_hsf.models.response_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddToWishListResponse {
-
-    private String status;
-
-    private String message;
-
-    private String type;
+    String status;
+    String message;
 }

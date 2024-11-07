@@ -1,7 +1,8 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,29 +13,30 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "`order`")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    int id;
 
-    private String status;
+    String status;
 
     @ManyToOne
-    @JoinColumn(name = "`buyer_id`")
-    private User user;
+    @JoinColumn(name = "buyer_id")
+    User user;
 
     @Column(name = "`buyer_name`")
-    private String buyerName;
+    String buyerName;
 
     @Column(name = "`created_date`")
-    private LocalDateTime createdDate;
+    LocalDateTime createdDate;
 
     @Column(name = "`total_price`")
-    private float totalPrice;
+    float totalPrice;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<OrderDetail> orderDetailList;
-
+    List<OrderDetail> orderDetailList;
 }

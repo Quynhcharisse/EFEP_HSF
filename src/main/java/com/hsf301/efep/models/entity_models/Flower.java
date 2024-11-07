@@ -1,60 +1,58 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "`flower`")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Flower {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    private String status;
+    String status;
 
     @ManyToOne
-    @JoinColumn(name = "`shop_id`")
-    private Shop shop;
+    @JoinColumn(name = "`seller_id`")
+    Seller seller;
 
-    private String name;
+    String img;
 
-    private float price;
+    String name;
 
-    private String description;
+    float price;
+
+    String description;
 
     @Column(name = "`flower_amount`")
-    private int flowerAmount;
+    int flowerAmount;
 
-    private int quantity;
+    int quantity;
 
     @Column(name = "`sold_quantity`")
-    private int soldQuantity;
+    int soldQuantity;
 
-    @OneToMany(mappedBy = "flower")
+    @ManyToOne
+    @JoinColumn(name = "`category_id`")
+    Category category;
+
+    @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<FlowerImage> flowerImageList;
+    List<WishlistItem> wishlistItemList;
 
-    @OneToMany(mappedBy = "flower")
+    @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<FlowerCategogy> flowerCategoryList;
-
-    @OneToMany(mappedBy = "flower")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<WishlistItem> wishlistItemList;
-
-    @OneToMany(mappedBy = "flower")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<OrderDetail> orderDetailList;
+    List<OrderDetail> orderDetailList;
 
 }

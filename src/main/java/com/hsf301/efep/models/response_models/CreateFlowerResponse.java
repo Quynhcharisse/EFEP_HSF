@@ -1,56 +1,14 @@
-package com.hsf301.efep.models.response_models;
+package com.quynh.efep_hsf.models.response_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateFlowerResponse {
-    private String status;
-
-    private String message;
-
-    private String type;
-
-    private FlowerInfo flower;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class FlowerInfo {
-        private int id;
-
-        private String name;
-
-        private float price;
-
-        private float rating;
-
-        private String description;
-
-        private int flowerAmount;
-
-        private int quantity;
-
-        private int soldQuantity;
-
-//        private List<Images> imageList;
-//
-//        @Data
-//        @AllArgsConstructor
-//        @NoArgsConstructor
-//        @Builder
-//        public static class Images {
-//            private String link;
-//        }
-    }
-
-
+    String status;
+    String message;
 }

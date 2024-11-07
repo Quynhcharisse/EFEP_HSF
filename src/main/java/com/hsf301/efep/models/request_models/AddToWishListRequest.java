@@ -1,12 +1,14 @@
-package com.hsf301.efep.models.request_models;
+package com.quynh.efep_hsf.models.request_models;
 
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddToWishListRequest {
-
-    private Integer accountId;
-
-    private Integer flowerId;
-
+    int flowerId;
+    int qty;
 }

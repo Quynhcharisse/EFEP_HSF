@@ -1,24 +1,17 @@
-package com.hsf301.efep.models.request_models;
+package com.quynh.efep_hsf.models.request_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegisterRequest {
-
-    private String name;
-
-    private String email;
-
-    private String phone;
-
-    private String password;
-
-    private String confirmPassword;
-
+    String email;
+    String password;
+    String confirmPassword;
+    String name;
+    String phone;
 }

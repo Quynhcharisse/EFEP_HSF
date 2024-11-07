@@ -1,4 +1,4 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,15 +15,15 @@ public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "`user_id`")
-    private User user;
+    User user;
 
-    @OneToMany(mappedBy = "wishlist")
+    @OneToMany(mappedBy = "wishlist", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<WishlistItem> wishlistItemList;
-
+    List<WishlistItem> wishlistItemList;
 }

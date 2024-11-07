@@ -1,14 +1,16 @@
-package com.hsf301.efep.controllers;
+package com.quynh.efep_hsf.controllers;
 
-import com.hsf301.efep.models.request_models.*;
-import com.hsf301.efep.serivces.AccountService;
-import io.swagger.v3.oas.annotations.Operation;
+
+import com.quynh.efep_hsf.models.request_models.LoginRequest;
+import com.quynh.efep_hsf.models.request_models.RegisterRequest;
+import com.quynh.efep_hsf.services.AccountService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -18,46 +20,19 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    //-------------REGISTER--------------//
-    @PostMapping("/register")
-    public String register(@ModelAttribute RegisterRequest request, Model model) {
-        return accountService.register(request, model);
-    }
-
-    //-------------LOGIN--------------//
     @PostMapping("/login")
-    public String login( @ModelAttribute LoginRequest request, HttpSession session, Model model) {
-        return accountService.login(request, session, model);
+    public String login(LoginRequest request, HttpSession session, RedirectAttributes redirectAttributes){
+        return accountService.login(request, session, redirectAttributes);
     }
 
-    //----------------LOGOUT----------------//
+    @PostMapping("/register")
+    public String register(RegisterRequest request, RedirectAttributes redirectAttributes){
+        return accountService.register(request, redirectAttributes);
+    }
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
-      return accountService.logout(session);
+        return accountService.logout(session);
     }
 
-    //-------------VIEW PROFILE--------------//
-
-    @GetMapping("/profile")
-    @Operation(hidden = true)
-        public String viewProfile( Model model, HttpSession session, RedirectAttributes redirectAttributes) {
-        return accountService.viewProfile( model, session, redirectAttributes);
-    }
-    
-    //-------------UPDATE PROFILE--------------//
-
-    @PutMapping("/update/profile")
-    @Operation(hidden = true)
-    public String updateProfile(UpdateProfileRequest request, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        return accountService.updateProfile(request, session, model, redirectAttributes);
-    }
-    
-    //-------------CHANGE PASSWORD--------------//
-
-    @PostMapping("/change/password")
-    @Operation(hidden = true)
-    public String changePassword(ChangePasswordRequest request, HttpSession session, Model model) {
-        return accountService.changePassword(request, session, model);
-    }
 }

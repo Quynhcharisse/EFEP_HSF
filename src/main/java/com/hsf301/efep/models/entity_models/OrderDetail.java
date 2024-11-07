@@ -1,7 +1,10 @@
-package com.hsf301.efep.models.entity_models;
+package com.quynh.efep_hsf.models.entity_models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -9,25 +12,24 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "`order_detail`")
-public class OrderDetail {
 
+public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "`order_id`")
-    private Order order;
+    Order order;
 
     @ManyToOne
     @JoinColumn(name = "`flower_id`")
-    private Flower flower;
+    Flower flower;
 
     @Column(name = "`flower_name`")
-    private String flowerName;
+    String flowerName;
 
-    private int quantity;
+    int quantity;
 
-    private float price;
-
+    float price;
 }

@@ -1,98 +1,234 @@
-package com.hsf301.efep.service_implementors;
+package com.quynh.efep_hsf.service_implementors;
 
-import com.hsf301.efep.enums.FailPageFor;
-import com.hsf301.efep.enums.Status;
-import com.hsf301.efep.enums.SuccessPageFor;
-import com.hsf301.efep.logics.ShopLogic;
-import com.hsf301.efep.models.request_models.*;
-import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.serivces.ShopService;
+import com.quynh.efep_hsf.configurations.ReturnPageConfig;
+import com.quynh.efep_hsf.enums.ActionCaseValues;
+import com.quynh.efep_hsf.enums.Roles;
+import com.quynh.efep_hsf.enums.Status;
+import com.quynh.efep_hsf.models.entity_models.Account;
+import com.quynh.efep_hsf.models.entity_models.Category;
+import com.quynh.efep_hsf.models.entity_models.Flower;
+import com.quynh.efep_hsf.models.request_models.*;
+import com.quynh.efep_hsf.models.response_models.*;
+import com.quynh.efep_hsf.repositories.CategoryRepo;
+import com.quynh.efep_hsf.repositories.FlowerRepo;
+import com.quynh.efep_hsf.services.ShopService;
+import com.quynh.efep_hsf.validations.CreateFlowerValidation;
+import com.quynh.efep_hsf.validations.DeleteFlowerValidation;
+import com.quynh.efep_hsf.validations.UpdateFlowerValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
 @RequiredArgsConstructor
 public class ShopServiceImpl implements ShopService {
 
-    private final ShopLogic shopLogic;
+    private final FlowerRepo flowerRepo;
+    private final CategoryRepo categoryRepo;
 
-                            //----------------FLOWER FOR SHOP---------------//
 
-    //---------------------------------------GET ALL FLOWER STATUS------------------------------------------//
-
+    //-------------------------------------Create Flower-------------------------------------//
     @Override
-    public List<String> getAllFlowerStatus() {
-        return Status.getFlowerStatusList();
+    public String createFlower(CreateFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
+        CreateFlowerResponse response = createFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.CREATE_FLOWER);
     }
 
-    //-------------------------------------------CREATE FLOWER----------------------------------//
-    @Override
-    public String createFlower(CreateFlowerRequest request, HttpSession session, Model model) {
-        CreateFlowerResponse response = shopLogic.createFlowerLogic(request);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.CREATE_FLOWER : FailPageFor.CREATE_FLOWER;
+    private CreateFlowerResponse createFlowerLogic(CreateFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return CreateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = CreateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return CreateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        flowerRepo.save(
+                Flower.builder()
+                        .description(request.getDescription())
+                        .flowerAmount(request.getFlowerAmount())
+                        .img("https://img.freepik.com/premium-photo/default-dogwood-flowers-with-bokeh-background_1114710-193206.jpg")
+                        .name(request.getName())
+                        .price(request.getPrice())
+                        .quantity(request.getQuantity())
+                        .soldQuantity(0)
+                        .status(Status.FLOWER_AVAILABLE)
+                        .category(categoryRepo.findById(request.getCategoryId()).get())
+                        .seller(account.getUser().getSeller())
+                        .build()
+        );
+
+        return CreateFlowerResponse.builder().status("200").message("Create flower successfully").build();
     }
 
-    //-------------------------------------------VIEW FLOWER LIST FOR SHOP----------------------------------//
+    //--------------------TEST--------------------//
 
-    @Override
-    public String viewFlowerListForShop(ViewFlowerListRequest request, HttpSession session, Model model, int sellerId) {
-        ViewFlowerListResponse response = shopLogic.viewFlowerForShopLogic(sellerId);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.VIEW_FLOWER_LIST_SHOP : FailPageFor.VIEW_FLOWER_LIST_SHOP;
+    public CreateFlowerResponse createFlowerLogicTest(CreateFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return CreateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = CreateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return CreateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        flowerRepo.save(
+                Flower.builder()
+                        .description(request.getDescription())
+                        .flowerAmount(request.getFlowerAmount())
+                        .img("https://img.freepik.com/premium-photo/default-dogwood-flowers-with-bokeh-background_1114710-193206.jpg")
+                        .name(request.getName())
+                        .price(request.getPrice())
+                        .quantity(request.getQuantity())
+                        .soldQuantity(0)
+                        .status(Status.FLOWER_AVAILABLE)
+                        .category(categoryRepo.findById(request.getCategoryId()).get())
+                        .seller(account.getUser().getSeller())
+                        .build()
+        );
+
+        return CreateFlowerResponse.builder().status("200").message("Create flower successfully").build();
     }
 
-
-    //-------------------------------------------UPDATE FLOWER----------------------------------//
-
+    //-------------------------------------Update Flower-------------------------------------//
     @Override
-    public String updateFlower(UpdateFlowerRequest request, HttpSession session, Model model) {
-        UpdateFlowerResponse response = shopLogic.updateFlowerLogic(request);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.UPDATE_FLOWER : FailPageFor.UPDATE_FLOWER;
+    public String updateFlower(UpdateFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
+        UpdateFlowerResponse response = updateFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.UPDATE_FLOWER);
     }
 
-    //-------------------------------------------DELETE FLOWER----------------------------------//
+    private UpdateFlowerResponse updateFlowerLogic(UpdateFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return UpdateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
 
-    @Override
-    public String deleteFlower(DeleteFlowerRequest request, HttpSession session, Model model) {
-        DeleteFlowerResponse response = shopLogic.deleteFlowerLogic(request);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.DELETE_FLOWER : FailPageFor.DELETE_FLOWER;
+        String error = UpdateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return UpdateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        Category category = categoryRepo.findById(request.getCategoryId()).get();
+        flower.setName(request.getName());
+        flower.setPrice(request.getPrice());
+        flower.setQuantity(request.getQuantity());
+        flower.setFlowerAmount(request.getFlowerAmount());
+        flower.setDescription(request.getDescription());
+        flower.setCategory(category);
+        flowerRepo.save(flower);
+
+        return UpdateFlowerResponse.builder().status("200").message("Update flower successfully").build();
+    }
+    //--------------------TEST--------------------//
+
+    public UpdateFlowerResponse updateFlowerLogicTest(UpdateFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return UpdateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = UpdateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return UpdateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        Category category = categoryRepo.findById(request.getCategoryId()).get();
+        flower.setName(request.getName());
+        flower.setPrice(request.getPrice());
+        flower.setQuantity(request.getQuantity());
+        flower.setFlowerAmount(request.getFlowerAmount());
+        flower.setDescription(request.getDescription());
+        flower.setCategory(category);
+        flowerRepo.save(flower);
+
+        return UpdateFlowerResponse.builder().status("200").message("Update flower successfully").build();
     }
 
-                                //----------ORDER FOR SHOP(SELLER SHOP)------------//
-
-    //--------------------------------------CHANGE ORDER STATUS---------------------------------------//
-
+    //-------------------------------------Delete Flower-------------------------------------//
     @Override
-    public String changeOrderStatus(ChangeOrderStatusRequest request, HttpSession session, Model model) {
-        ChangeOrderStatusResponse response = shopLogic.changeOrderStatusLogic(request);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.CHANGE_ORDER_STATUS : FailPageFor.CHANGE_ORDER_STATUS;
+    public String disableFlower(DisableFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
+        DisableFlowerResponse response = disableFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.DELETE_FLOWER);
     }
 
-    //---------------------------------------VIEW ORDER DETAIL----------------------------------------//
+    private DisableFlowerResponse disableFlowerLogic(DisableFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return DisableFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
 
-    @Override
-    public String viewOrderDetail(ViewOrderDetailRequest request, HttpSession session, Model model) {
-        ViewOrderDetailResponse response = shopLogic.viewOrderDetailLogic(request);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_DETAIL : FailPageFor.VIEW_ORDER_DETAIL;
+        String error = DeleteFlowerValidation.validate(request, flowerRepo);
+        if(!error.isEmpty()) {
+            return DisableFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        flower.setStatus(Status.FLOWER_DISABLE);
+        flowerRepo.save(flower);
+
+        return DisableFlowerResponse.builder().status("200").message("Disable successfully").build();
     }
 
+    //--------------------TEST--------------------//
 
-    //---------------------------------------VIEW ORDER LIST------------------------------------------//
+    public DisableFlowerResponse disableFlowerLogicTest(DisableFlowerRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return DisableFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
 
-    @Override
-    public String viewOrderList(HttpSession session, Model model, int accountId) {
-        ViewOrderListResponse response = shopLogic.viewOrderList(accountId);
-        model.addAttribute(response.getType(), response);
-        return response.getStatus().equals("200") ? SuccessPageFor.VIEW_ORDER_LIST : FailPageFor.VIEW_ORDER_LIST;
+        String error = DeleteFlowerValidation.validate(request, flowerRepo);
+        if(!error.isEmpty()) {
+            return DisableFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        flower.setStatus(Status.FLOWER_DISABLE);
+        flowerRepo.save(flower);
+
+        return DisableFlowerResponse.builder().status("200").message("Disable successfully").build();
     }
-
 }

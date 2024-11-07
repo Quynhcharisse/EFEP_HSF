@@ -1,4 +1,4 @@
-package com.hsf301.efep.models.request_models;
+package com.quynh.efep_hsf.models.request_models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,12 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateWishlistRequest {
-    int accountId;
-
-    int wishlistId;
-
-    String wishlistItemId;
-
-    String request;
+public class UpdateWishListRequest {
+    int wishListItemId;
+    int newQty;
 }

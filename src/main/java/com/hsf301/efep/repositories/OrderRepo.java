@@ -1,10 +1,7 @@
-package com.hsf301.efep.repositories;
+package com.quynh.efep_hsf.repositories;
 
-import com.hsf301.efep.models.entity_models.Order;
-import org.springframework.data.repository.CrudRepository;
+import com.quynh.efep_hsf.models.entity_models.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface OrderRepo extends CrudRepository<Order, Integer> {
-    List<Order> findAllByUser_Id(int id);
+public interface OrderRepo extends JpaRepository<Order, Integer> {
 }
