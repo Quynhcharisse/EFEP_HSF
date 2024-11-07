@@ -9,6 +9,7 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.services.CustomerService;
+import com.hsf301.efep.validations.CheckoutValidation;
 import com.hsf301.efep.validations.UpdateWishListValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
