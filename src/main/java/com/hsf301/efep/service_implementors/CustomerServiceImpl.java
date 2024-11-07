@@ -99,7 +99,35 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Update WishList----------------------//
     @Override
     public String updateWishList(UpdateWishListRequest request, RedirectAttributes attributes, HttpSession session) {
-        return null;
+        UpdateWishListResponse response = updateWishListLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.UPDATE_WISHLIST);
+    }
+
+    private UpdateWishListResponse updateWishListLogic(UpdateWishListRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return UpdateWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = UpdateWishListValidation.validate(request, wishlistItemRepo);
+        if(!error.isEmpty()) {
+            return UpdateWishListResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        WishlistItem item = wishlistItemRepo.findById(request.getWishListItemId()).get();
+        item.setQuantity(request.getNewQty());
+        wishlistItemRepo.save(item);
+        return UpdateWishListResponse.builder()
+                .status("200")
+                .message("Update wishlist successfully")
+                .build();
     }
     //--------------------TEST--------------------//
 
