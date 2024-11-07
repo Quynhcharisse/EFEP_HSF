@@ -42,23 +42,23 @@ public class CustomerServiceImpl implements CustomerService {
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
     }
 
-    private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-        return SearchFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(
-                        flowerRepo.findAll().stream()
-                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
-                                .map(
-                                        flower -> SearchFlowerResponse.Flower.builder()
-                                                .id(flower.getId())
-                                                .name(flower.getName())
-                                                .price(flower.getPrice())
-                                                .img(flower.getImg())
-                                                .build()
-                                )
-                                .toList()
-                )
+        private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
+            return SearchFlowerResponse.builder()
+                    .status("200")
+                    .message("")
+                    .flowers(
+                            flowerRepo.findAll().stream()
+                                    .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
+                                    .map(
+                                            flower -> SearchFlowerResponse.Flower.builder()
+                                                    .id(flower.getId())
+                                                    .name(flower.getName())
+                                                    .price(flower.getPrice())
+                                                    .img(flower.getImg())
+                                                    .build()
+                                    )
+                                    .toList()
+                    )
                 .build();
     }
 
