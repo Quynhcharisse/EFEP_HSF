@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -81,7 +82,65 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public SortFlowerResponse sortFlowersLogicTest(SortFlowerRequest request) {
-        return null;
+        //Check price
+        List<Flower> flowers = flowerRepo.findAll().stream()
+                .filter(f -> f.getStatus().equals(Status.FLOWER_AVAILABLE))
+                .filter(f -> f.getPrice() >= request.getStartPrice() && f.getPrice() <= request.getEndPrice())
+                .toList();
+
+        //Check category
+        try {
+            int cateId = Integer.parseInt(request.getCateId());
+            if (categoryRepo.existsById(cateId)) {
+                flowers = flowers.stream()
+                        .filter(f -> f.getCategory().getId() == cateId)
+                        .toList();
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Well just a funny message that there is no category to sort with id: " + request.getCateId());
+        }
+        flowers = new ArrayList<>(flowers);
+
+        //Check sortType
+        flowers.sort(Comparator.comparing(Flower::getId).reversed());
+        if (request.getSortType() != null) {
+            switch (request.getSortType()) {
+                case "asc" -> {
+                    flowers.sort(Comparator.comparing(Flower::getName));
+                }
+
+                case "desc" -> {
+                    flowers.sort(Comparator.comparing(Flower::getName).reversed());
+                }
+
+                case "priceUp" -> {
+                    flowers.sort(Comparator.comparing(Flower::getPrice));
+                }
+
+                case "priceDown" -> {
+                    flowers.sort(Comparator.comparing(Flower::getPrice).reversed());
+                }
+                default -> {
+                    // handle unexpected sort type
+                    throw new IllegalArgumentException("Invalid sort type: " + request.getSortType());
+                }
+
+            }
+        }
+        return SortFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(flowers.stream()
+                        .map(f -> SortFlowerResponse.Flower.builder()
+                                .id(f.getId())
+                                .name(f.getName())
+                                .price(f.getPrice())
+                                .img(f.getImg())
+                                .build()
+                        )
+                        .toList()
+                )
+                .build();
     }
 
     //-----------------Add To WishList----------------------//
