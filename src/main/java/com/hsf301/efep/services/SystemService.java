@@ -1,12 +1,14 @@
 package com.hsf301.efep.services;
 
+
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.pojo.Teammate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface SystemService {
     String getSlideBarImage(RedirectAttributes attributes);

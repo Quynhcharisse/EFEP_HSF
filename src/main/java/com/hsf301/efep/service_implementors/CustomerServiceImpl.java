@@ -84,7 +84,6 @@ public class CustomerServiceImpl implements CustomerService {
     public String updateWishList(UpdateWishListRequest request, RedirectAttributes attributes, HttpSession session) {
         return null;
     }
-
     //--------------------TEST--------------------//
 
     public UpdateWishListResponse updateWishListLogicTest(UpdateWishListRequest request, Account account) {
@@ -96,7 +95,6 @@ public class CustomerServiceImpl implements CustomerService {
     public String clearWishList(RedirectAttributes attributes, HttpSession session) {
         return null;
     }
-
     //--------------------TEST--------------------//
 
     public ClearWishListResponse clearWishListLogicTest(Account account) {
