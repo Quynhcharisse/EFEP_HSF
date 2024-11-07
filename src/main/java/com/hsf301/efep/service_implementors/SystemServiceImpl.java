@@ -1,9 +1,9 @@
 package com.hsf301.efep.service_implementors;
 
+import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
-import com.hsf301.efep.models.response_models.GetSlideBarImageResponse;
-import com.hsf301.efep.models.response_models.GetTopSoldFlowerResponse;
+import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.AccountRepo;
 import com.hsf301.efep.repositories.FlowerRepo;
 import com.hsf301.efep.services.SystemService;
@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -75,38 +77,86 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Customer Amount----------------------//
     @Override
-    public String getCustomerAmount(RedirectAttributes attributes) {
-        return "";
+    public GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes) {
+        return null;
     }
 
+    public GetCustomerAmountResponse getCustomerAmountLogic() {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetCustomerAmountResponse getCustomerAmountLogicTest() {
+        return null;
+    }
 
     //-----------------Get Flower Amount----------------------//
     @Override
-    public String getFlowerAmount(RedirectAttributes attributes) {
-        return "";
+    public GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes) {
+        return null;
+    }
+
+    private GetFlowerAmountResponse getFlowerAmountLogic() {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetFlowerAmountResponse getFlowerAmountLogicTest() {
+        return null;
     }
 
 
     //-----------------Get Working Year Amount----------------------//
     @Override
-    public String getWorkingYearAmount(RedirectAttributes attributes) {
-        return "";
+    public GetWorkingYearAmountResponse getWorkingYearAmount(RedirectAttributes attributes) {
+        return null;
     }
 
+    public GetWorkingYearAmountResponse getWorkingYearAmountLogic() {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetWorkingYearAmountResponse getWorkingYearAmountLogicTest() {
+        return null;
+    }
 
     //-----------------Get New Arrival Flower----------------------//
     @Override
-    public String getNewArrivalFlower(RedirectAttributes attributes) {
-        return "";
+    public GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes) {
+        return null;
+    }
+
+    private GetNewArrivalFlowerResponse getNewArrivalFlowerLogic() {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetNewArrivalFlowerResponse getNewArrivalFlowerLogicTest() {
+
+        return null;
     }
 
 
     //-----------------Get Teammate----------------------//
     @Override
-    public String getTeammate(RedirectAttributes attributes) {
-        return "";
+    public GetTeammateResponse getTeammate(RedirectAttributes attributes) {
+        return null;
     }
 
+    public GetTeammateResponse getTeammateLogic() {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+    public GetTeammateResponse getTeammateLogicTest() {
+
+        return null;
+    }
 
     //-----------------Get Flower Detail----------------------//
     @Override
@@ -114,14 +164,15 @@ public class SystemServiceImpl implements SystemService {
         return "";
     }
 
-
-
-    //-----------------Get Customer Profile----------------------//
-    @Override
-    public String getCustomerProfile(RedirectAttributes attributes) {
-        return "";
+    private GetFlowerDetailResponse getFlowerDetailLogic(GetFlowerDetailRequest request) {
+        return null;
     }
 
+    //--------------------TEST--------------------//
+
+    public GetFlowerDetailResponse getFlowerDetailLogicTest(GetFlowerDetailRequest request) {
+        return null;
+    }
 
 
     //-----------------Get Customer Order History----------------------//
@@ -130,7 +181,14 @@ public class SystemServiceImpl implements SystemService {
         return "";
     }
 
+    private GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogic(Account account) {
+        return null;
+    }
+    //--------------------TEST--------------------//
 
+    public GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogicTest(Account account) {
+        return null;
+    }
 
     //-----------------Get Customer List For Shop----------------------//
     @Override
@@ -144,4 +202,14 @@ public class SystemServiceImpl implements SystemService {
     public String getFlowerListForShop(RedirectAttributes attributes) {
         return "";
     }
+
+    private GetFlowerListForShopResponse getFlowerListForShopLogic(Account account) {
+        return null;
+    }
+
+    //--------------------TEST--------------------//
+    public GetFlowerListForShopResponse getFlowerListForShopLogicTest(Account account) {
+        return null;
+    }
+
 }

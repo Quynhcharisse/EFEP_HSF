@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class GetCustomerAmountResponse {
     String status;
     String message;
+    int amount;
 }

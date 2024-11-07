@@ -13,13 +13,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public interface SystemService {
     GetSlideBarImageResponse getSlideBarImage(RedirectAttributes attributes);
     GetTopSoldFlowerResponse getTopSoldFlower(RedirectAttributes attributes);
-    String getCustomerAmount(RedirectAttributes attributes);
-    String getFlowerAmount(RedirectAttributes attributes);
-    String getWorkingYearAmount(RedirectAttributes attributes);
-    String getNewArrivalFlower(RedirectAttributes attributes);
-    String getTeammate(RedirectAttributes attributes);
+    GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes);
+    GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes);
+    GetWorkingYearAmountResponse getWorkingYearAmount(RedirectAttributes attributes);
+    GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes);
+    GetTeammateResponse getTeammate(RedirectAttributes attributes);
     String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes);
-    String getCustomerProfile(RedirectAttributes attributes);
     String getCustomerOrderHistory(RedirectAttributes attributes);
     String getCustomerListForShop(RedirectAttributes attributes);
     String getFlowerListForShop(RedirectAttributes attributes);
