@@ -269,7 +269,45 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public AddToWishListResponse addToWishListLogicTest(AddToWishListRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return AddToWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = AddToWishListValidation.validate(request, flowerRepo, account);
+        if(!error.isEmpty()) {
+            return AddToWishListResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getFlowerId()).orElse(null);
+        assert flower != null;
+        WishlistItem item = wishlistItemRepo.findByFlower_IdAndWishlist_User_Account_Id(flower.getId(), account.getId()).orElse(null);
+        Wishlist wishlist = account.getUser().getWishlist();
+        if(item == null) {
+            item = WishlistItem.builder()
+                    .wishlist(wishlist)
+                    .quantity(request.getQty())
+                    .flower(flower)
+                    .build();
+        }else{
+            if(item.getQuantity() + request.getQty() > flower.getQuantity()){
+                return AddToWishListResponse.builder()
+                        .status("400")
+                        .message("Max quantity exceeded")
+                        .build();
+            }
+            item.setQuantity(item.getQuantity() + request.getQty());
+        }
+        wishlistItemRepo.save(item);
+        return AddToWishListResponse.builder()
+                .status("200")
+                .message("Add to wishlist successfully")
+                .build();
     }
 
     //-----------------Update WishList----------------------//
@@ -308,7 +346,28 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public UpdateWishListResponse updateWishListLogicTest(UpdateWishListRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return UpdateWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = UpdateWishListValidation.validate(request, wishlistItemRepo);
+        if(!error.isEmpty()) {
+            return UpdateWishListResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        WishlistItem item = wishlistItemRepo.findById(request.getWishListItemId()).get();
+        item.setQuantity(request.getNewQty());
+        wishlistItemRepo.save(item);
+        return UpdateWishListResponse.builder()
+                .status("200")
+                .message("Update wishlist successfully")
+                .build();
     }
 
     //-----------------Clear WishList----------------------//
@@ -340,7 +399,20 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public ClearWishListResponse clearWishListLogicTest(Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return ClearWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        Wishlist wishlist = account.getUser().getWishlist();
+        List<WishlistItem> wishlistItems = wishlistItemRepo.findAllByWishlist_Id(wishlist.getId());
+        wishlistItemRepo.deleteAll(wishlistItems);
+        return ClearWishListResponse.builder()
+                .status("200")
+                .message("Clear wishlist successfully")
+                .build();
     }
 
     //-----------------Check out----------------------//
