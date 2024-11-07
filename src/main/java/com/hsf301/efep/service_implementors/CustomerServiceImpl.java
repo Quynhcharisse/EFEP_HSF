@@ -229,25 +229,108 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Check out----------------------//
     @Override
     public String checkout(CheckoutRequest request, RedirectAttributes attributes, HttpSession session) {
-        return null;
+        CheckoutResponse response = checkoutLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.CHECK_OUT);
+    }
+
+    private CheckoutResponse checkoutLogic(CheckoutRequest request, Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return CheckoutResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = CheckoutValidation.validate(request);
+        if(!error.isEmpty()) {
+            return CheckoutResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        return buildOrder(request, account);
     }
 
     private CheckoutResponse buildOrder (CheckoutRequest request, Account account){
-        return null;
+        String updateItemError = "";
+        for(CheckoutRequest.Item item : request.getItems()){
+            UpdateWishListResponse updateWishListResponse = updateWishListLogic(UpdateWishListRequest.builder().wishListItemId(item.getId()).newQty(item.getQuantity()).build(), account);
+            if(updateWishListResponse.getStatus().equals("400")){
+                updateItemError = updateWishListResponse.getMessage();
+                break;
+            }
+        }
+        if(!updateItemError.isEmpty()){
+            return CheckoutResponse.builder()
+                    .status("400")
+                    .message(updateItemError)
+                    .build();
+        }
+        float totalPrice = calculateTotalPrice(account);
+        createOrderDetail(
+                createOrder(account, totalPrice),
+                account
+        );
+        clearWishListLogic(account);
+
+        return CheckoutResponse.builder()
+                .status("200")
+                .message("Checkout successfully")
+                .build();
     }
 
     private float calculateTotalPrice(Account account){
-        return 0;
+        float totalPrice = 0;
+        for(WishlistItem item: wishlistItemRepo.findAllByWishlist_Id(account.getUser().getWishlist().getId())){
+            Flower f = item.getFlower();
+            totalPrice += f.getPrice() * item.getQuantity();
+        }
+        return totalPrice;
     }
 
     private Order createOrder(Account account, float totalPrice){
-        return null;
+        return orderRepo.save(
+                Order.builder()
+                        .buyerName(account.getUser().getName())
+                        .createdDate(LocalDateTime.now())
+                        .status(Status.ORDER_PROCESSING)
+                        .totalPrice(totalPrice)
+                        .user(account.getUser())
+                        .build()
+        );
     }
 
     private void createOrderDetail(Order order, Account account){
+        List<OrderDetail> orderDetails = wishlistItemRepo.findAllByWishlist_Id(account.getUser().getWishlist().getId())
+                .stream()
+                .map(
+                        item -> {
+                            updateFlowerNewQuantityAndSoldQuantity(item);
+                            Flower flower = item.getFlower();
+                            return OrderDetail.builder()
+                                    .flowerName(flower.getName())
+                                    .price(flower.getPrice())
+                                    .quantity(item.getQuantity())
+                                    .flower(flower)
+                                    .order(order)
+                                    .build();
+                        }
+                )
+                .toList();
+        orderDetailRepo.saveAll(orderDetails);
+
+        order.setOrderDetailList(orderDetails);
+        orderRepo.save(order);
     }
 
     private void updateFlowerNewQuantityAndSoldQuantity(WishlistItem item){
+        Flower flower = item.getFlower();
+        flower.setQuantity(flower.getQuantity() - item.getQuantity());
+        flower.setSoldQuantity(flower.getSoldQuantity() + item.getQuantity());
+        flowerRepo.save(flower);
     }
 
     //--------------------TEST--------------------//
