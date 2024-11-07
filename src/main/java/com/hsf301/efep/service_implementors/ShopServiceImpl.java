@@ -20,6 +20,8 @@ import com.hsf301.efep.services.ShopService;
 import com.hsf301.efep.validations.CreateFlowerValidation;
 
 import com.hsf301.efep.validations.CreateFlowerValidation;
+import com.hsf301.efep.validations.DeleteFlowerValidation;
+import com.hsf301.efep.validations.UpdateFlowerValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -85,11 +87,39 @@ public class ShopServiceImpl implements ShopService {
     //-------------------------------------Update Flower-------------------------------------//
     @Override
     public String updateFlower(UpdateFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
-        return null;
+        UpdateFlowerResponse response = updateFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.UPDATE_FLOWER);
     }
 
     private UpdateFlowerResponse updateFlowerLogic(UpdateFlowerRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return UpdateFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = UpdateFlowerValidation.validate(request, flowerRepo, categoryRepo);
+        if(!error.isEmpty()) {
+            return UpdateFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        Category category = categoryRepo.findById(request.getCategoryId()).get();
+        flower.setName(request.getName());
+        flower.setPrice(request.getPrice());
+        flower.setQuantity(request.getQuantity());
+        flower.setFlowerAmount(request.getFlowerAmount());
+        flower.setDescription(request.getDescription());
+        flower.setCategory(category);
+        flowerRepo.save(flower);
+
+        return UpdateFlowerResponse.builder().status("200").message("Update flower successfully").build();
     }
     //--------------------TEST--------------------//
 
@@ -100,11 +130,33 @@ public class ShopServiceImpl implements ShopService {
     //-------------------------------------Delete Flower-------------------------------------//
     @Override
     public String disableFlower(DisableFlowerRequest request, RedirectAttributes attributes, HttpSession session) {
-        return null;
+        DisableFlowerResponse response = disableFlowerLogic(request, Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.DELETE_FLOWER);
     }
 
     private DisableFlowerResponse disableFlowerLogic(DisableFlowerRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return DisableFlowerResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = DeleteFlowerValidation.validate(request, flowerRepo);
+        if(!error.isEmpty()) {
+            return DisableFlowerResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+        flower.setStatus(Status.FLOWER_DISABLE);
+        flowerRepo.save(flower);
+
+        return DisableFlowerResponse.builder().status("200").message("Disable successfully").build();
     }
 
     //--------------------TEST--------------------//
