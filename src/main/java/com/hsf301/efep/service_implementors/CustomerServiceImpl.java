@@ -195,9 +195,28 @@ public class CustomerServiceImpl implements CustomerService {
     //-----------------Clear WishList----------------------//
     @Override
     public String clearWishList(RedirectAttributes attributes, HttpSession session) {
-        return null;
+        ClearWishListResponse response = clearWishListLogic(Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.CLEAR_WISHLIST);
     }
 
+    private ClearWishListResponse clearWishListLogic(Account account) {
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return ClearWishListResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        Wishlist wishlist = account.getUser().getWishlist();
+        List<WishlistItem> wishlistItems = wishlistItemRepo.findAllByWishlist_Id(wishlist.getId());
+        wishlistItemRepo.deleteAll(wishlistItems);
+        return ClearWishListResponse.builder()
+                .status("200")
+                .message("Clear wishlist successfully")
+                .build();
+    }
     //--------------------TEST--------------------//
 
     public ClearWishListResponse clearWishListLogicTest(Account account) {
