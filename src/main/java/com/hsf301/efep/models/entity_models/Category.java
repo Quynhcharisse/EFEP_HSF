@@ -1,5 +1,4 @@
 package com.hsf301.efep.models.entity_models;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
