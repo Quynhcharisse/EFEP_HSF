@@ -1,8 +1,8 @@
-package com.quynh.efep_hsf.validations;
+package com.hsf301.efep.validations;
 
-import com.quynh.efep_hsf.models.request_models.RegisterRequest;
-import com.quynh.efep_hsf.repositories.AccountRepo;
-import com.quynh.efep_hsf.repositories.UserRepo;
+import com.hsf301.efep.models.request_models.RegisterRequest;
+import com.hsf301.efep.repositories.AccountRepo;
+import com.hsf301.efep.repositories.UserRepo;
 
 public class RegisterValidation {
     public static String validate(RegisterRequest request, UserRepo userRepo, AccountRepo accountRepo){

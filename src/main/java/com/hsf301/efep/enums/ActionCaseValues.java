@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.enums;
+package com.hsf301.efep.enums;
 
 public enum ActionCaseValues {
     HOME,

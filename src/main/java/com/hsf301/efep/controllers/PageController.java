@@ -1,7 +1,7 @@
-package com.quynh.efep_hsf.controllers;
+package com.hsf301.efep.controllers;
 
-import com.quynh.efep_hsf.models.response_models.LoginResponse;
-import com.quynh.efep_hsf.utils.ResponseHandlerUtil;
+import com.hsf301.efep.models.response_models.LoginResponse;
+import com.hsf301.efep.utils.ResponseHandlerUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

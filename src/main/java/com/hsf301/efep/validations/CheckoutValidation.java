@@ -1,6 +1,6 @@
-package com.quynh.efep_hsf.validations;
+package com.hsf301.efep.validations;
 
-import com.quynh.efep_hsf.models.request_models.CheckoutRequest;
+import com.hsf301.efep.models.request_models.CheckoutRequest;
 
 public class CheckoutValidation {
     public static String validate(CheckoutRequest request){

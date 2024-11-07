@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.utils;
+package com.hsf301.efep.utils;
 
 import org.springframework.ui.Model;
 

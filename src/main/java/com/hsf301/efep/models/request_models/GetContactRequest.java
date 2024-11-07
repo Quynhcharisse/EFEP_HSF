@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.models.request_models;
+package com.hsf301.efep.models.request_models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

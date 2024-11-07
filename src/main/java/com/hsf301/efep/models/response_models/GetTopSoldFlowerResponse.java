@@ -1,4 +1,4 @@
-package com.quynh.efep_hsf.models.response_models;
+package com.hsf301.efep.models.response_models;
 
 public class GetTopSoldFlowerResponse {
 }
