@@ -1,6 +1,6 @@
-package com.quynh.efep_hsf.repositories;
+package com.hsf301.efep.repositories;
 
-import com.quynh.efep_hsf.models.entity_models.Wishlist;
+import com.hsf301.efep.models.entity_models.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WishlistRepo extends JpaRepository<Wishlist, Integer> {

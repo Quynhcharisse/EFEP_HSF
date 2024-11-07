@@ -1,9 +1,9 @@
-package com.quynh.efep_hsf.controllers;
+package com.hsf301.efep.controllers;
 
 
-import com.quynh.efep_hsf.models.request_models.LoginRequest;
-import com.quynh.efep_hsf.models.request_models.RegisterRequest;
-import com.quynh.efep_hsf.services.AccountService;
+import com.hsf301.efep.models.request_models.LoginRequest;
+import com.hsf301.efep.models.request_models.RegisterRequest;
+import com.hsf301.efep.services.AccountService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

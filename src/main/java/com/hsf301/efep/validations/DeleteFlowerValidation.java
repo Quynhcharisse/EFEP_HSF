@@ -1,8 +1,8 @@
-package com.quynh.efep_hsf.validations;
+package com.hsf301.efep.validations;
 
-import com.quynh.efep_hsf.enums.Status;
-import com.quynh.efep_hsf.models.request_models.DisableFlowerRequest;
-import com.quynh.efep_hsf.repositories.FlowerRepo;
+import com.hsf301.efep.enums.Status;
+import com.hsf301.efep.models.request_models.DisableFlowerRequest;
+import com.hsf301.efep.repositories.FlowerRepo;
 
 public class DeleteFlowerValidation {
     public static String validate(DisableFlowerRequest request, FlowerRepo flowerRepo){

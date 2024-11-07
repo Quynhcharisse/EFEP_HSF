@@ -1,9 +1,9 @@
-package com.quynh.efep_hsf.validations;
+package com.hsf301.efep.validations;
 
-import com.quynh.efep_hsf.models.entity_models.Account;
-import com.quynh.efep_hsf.models.entity_models.Flower;
-import com.quynh.efep_hsf.models.request_models.AddToWishListRequest;
-import com.quynh.efep_hsf.repositories.FlowerRepo;
+import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.models.entity_models.Flower;
+import com.hsf301.efep.models.request_models.AddToWishListRequest;
+import com.hsf301.efep.repositories.FlowerRepo;
 
 public class AddToWishListValidation {
     public static String validate(AddToWishListRequest request, FlowerRepo flowerRepo, Account account){
