@@ -63,7 +63,11 @@ public class AccountServiceImpl implements AccountService {
     //--------------------TEST--------------------//
 
     public LoginResponse loginLogicTest(LoginRequest request) {
-        return null;
+        Account account = accountRepo.findByEmailAndPassword(request.getEmail(), request.getPassword()).orElse(null);
+        if (account == null) {
+            return LoginResponse.builder().status("400").message("Email or password is incorrect").build();
+        }
+        return LoginResponse.builder().status("200").message("Login successfully").build();
     }
 
 
@@ -124,7 +128,43 @@ public class AccountServiceImpl implements AccountService {
     //--------------------TEST--------------------//
 
     public RegisterResponse registerLogicTest(RegisterRequest request) {
-        return null;
+       String error = RegisterValidation.validate(request, userRepo, accountRepo);
+       if (!error.isEmpty()) {
+           return RegisterResponse.builder().status("400").message(error).build();
+       }
+       Account acc = accountRepo.save(
+               Account.builder()
+                       .status(Status.ACCOUNT_ACTIVE)
+                       .email(request.getEmail())
+                       .password(request.getPassword())
+                       .role(Roles.CUSTOMER)
+                       .build()
+       );
+
+       User user = userRepo.save(
+               User.builder()
+                       .account(acc)
+                       .name(request.getName())
+                       .phone(request.getPhone())
+                       .avatar("https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg")
+                       .background("")
+                       .createdDate(LocalDate.now())
+                       .build()
+       );
+
+       acc.setUser(user);
+       accountRepo.save(acc);
+
+       Wishlist wishlist = wishlistRepo.save(
+               Wishlist.builder()
+                       .user(user)
+                       .wishlistItemList(new ArrayList<>())
+                       .build()
+       );
+
+       user.setWishlist(wishlist);
+       userRepo.save(user);
+        return RegisterResponse.builder().status("200").message("Register successfully").build();
     }
 
     //-------------------------------------Logout-------------------------------------//
