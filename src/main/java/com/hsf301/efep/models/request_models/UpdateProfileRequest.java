@@ -8,9 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SortFlowerRequest {
-    float startPrice;
-    float endPrice;
-    String cateId;
-    String sortType;
+public class UpdateProfileRequest {
+    String name;
+    String phone;
 }

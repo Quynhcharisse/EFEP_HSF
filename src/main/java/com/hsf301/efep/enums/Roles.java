@@ -7,8 +7,11 @@ import jakarta.servlet.http.HttpSession;
 public class Roles {
 
     public static final String SHOP = "shop";
-
     public static final String CUSTOMER = "customer";
+
+    public static Account getShopAccount(AccountRepo accountRepo) {
+        return accountRepo.findByRole(SHOP);
+    }
 
     public static boolean checkIfThisAccountIsShop(Account account) {
         return SHOP.equals(account.getRole());
@@ -18,11 +21,7 @@ public class Roles {
         return CUSTOMER.equals(account.getRole());
     }
 
-    public static Account getShopLoggedAccount(HttpSession session){
+    public static Account getCurrentLoggedAccount(HttpSession session){
         return session.getAttribute("acc") != null ? (Account) session.getAttribute("acc") : null;
-    }
-
-    public static Account getCustomerLoggedAccount(int id, AccountRepo accountRepo){
-        return accountRepo.findById(id).orElse(null);
     }
 }

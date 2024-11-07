@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SortFlowerResponse {
+public class SearchFlowerResponse {
     String status;
     String message;
     List<Flower> flowers;

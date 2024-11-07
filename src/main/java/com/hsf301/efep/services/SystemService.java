@@ -9,16 +9,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 public interface SystemService {
-    GetSlideBarImageResponse getSlideBarImage(RedirectAttributes attributes);
-    GetTopSoldFlowerResponse getTopSoldFlower(RedirectAttributes attributes);
-    GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes);
-    GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes);
-    GetWorkingYearAmountResponse getWorkingYearAmount(RedirectAttributes attributes);
-    GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes);
-    GetTeammateResponse getTeammate(RedirectAttributes attributes);
-    GetFlowerDetailResponse getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes);
-//    GetCustomerProfileResponse getCustomerProfile(RedirectAttributes attributes);
-    GetCustomerOrderHistoryResponse getCustomerOrderHistory(RedirectAttributes attributes);
-    GetCustomerListForShopResponse getCustomerListForShop(RedirectAttributes attributes);
-    GetFlowerListForShopResponse getFlowerListForShop(RedirectAttributes attributes);
+    String getSlideBarImage(RedirectAttributes attributes);
+    String getTopSoldFlower(RedirectAttributes attributes);
+    String getCustomerAmount(RedirectAttributes attributes);
+    String getFlowerAmount(RedirectAttributes attributes);
+    String getWorkingYearAmount(RedirectAttributes attributes);
+    String getNewArrivalFlower(RedirectAttributes attributes);
+    String getTeammate(RedirectAttributes attributes);
+    String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes);
+    String getCustomerProfile(RedirectAttributes attributes);
+    String getCustomerOrderHistory(RedirectAttributes attributes);
+    String getCustomerListForShop(RedirectAttributes attributes);
+    String getFlowerListForShop(RedirectAttributes attributes);
 }

@@ -4,13 +4,15 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SortFlowerRequest {
-    float startPrice;
-    float endPrice;
-    String cateId;
-    String sortType;
+public class CreateFlowerRequest {
+    String name;
+    float price;
+    int quantity;
+    int flowerAmount;
+    String description;
+    int categoryId;
 }

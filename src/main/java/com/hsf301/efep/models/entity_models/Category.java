@@ -1,6 +1,5 @@
 package com.quynh.efep_hsf.models.entity_models;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,24 +7,22 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "`seller`")
+@Table(name = "`category`")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Seller {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "`user_id`")
-    User user;
+    String name;
 
-    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    List<Flower> flowerList;
+    private List<Flower> flowerList;
 }

@@ -9,20 +9,25 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "`flower_category`")
+@Table(name = "`account`")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FlowerCategory {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "`flower_id`")
-    Flower flower;
+    String status;
 
-    @ManyToOne
-    @JoinColumn(name = "`category_id`")
-    Category category;
+    String email;
+
+    String password;
+
+    String role;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private User user;
 
 }
