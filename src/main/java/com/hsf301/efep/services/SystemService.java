@@ -11,8 +11,8 @@ import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface SystemService {
-    String getSlideBarImage(RedirectAttributes attributes);
-    String getTopSoldFlower(RedirectAttributes attributes);
+    GetSlideBarImageResponse getSlideBarImage(RedirectAttributes attributes);
+    GetTopSoldFlowerResponse getTopSoldFlower(RedirectAttributes attributes);
     String getCustomerAmount(RedirectAttributes attributes);
     String getFlowerAmount(RedirectAttributes attributes);
     String getWorkingYearAmount(RedirectAttributes attributes);
