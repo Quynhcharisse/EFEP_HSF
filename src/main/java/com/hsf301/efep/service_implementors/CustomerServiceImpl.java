@@ -37,30 +37,35 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String searchFlowers(SearchFlowerRequest request, RedirectAttributes attributes) {
-        return null;
+        SearchFlowerResponse response = searchFlowersLogic(request);
+        attributes.addFlashAttribute("msg", response);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
     }
 
     private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-        return null;
-    }
-
-    //--------------------TEST--------------------//
-
-    public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
         return SearchFlowerResponse.builder()
                 .status("200")
                 .message("")
                 .flowers(
                         flowerRepo.findAll().stream()
-                                .map(flower -> SearchFlowerResponse.Flower.builder()
-                                        .id(flower.getId())
-                                        .name(flower.getName())
-                                        .price(flower.getPrice())
-                                        .img(flower.getImg())
-                                        .build())
+                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
+                                .map(
+                                        flower -> SearchFlowerResponse.Flower.builder()
+                                                .id(flower.getId())
+                                                .name(flower.getName())
+                                                .price(flower.getPrice())
+                                                .img(flower.getImg())
+                                                .build()
+                                )
                                 .toList()
                 )
                 .build();
+    }
+
+    //--------------------TEST--------------------//
+
+    public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
+        return null;
     }
 
     //-----------------Sort Flowers----------------------//
