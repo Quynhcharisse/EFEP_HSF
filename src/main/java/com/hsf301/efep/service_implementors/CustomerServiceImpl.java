@@ -9,8 +9,6 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.services.CustomerService;
-import com.hsf301.efep.validations.AddToWishListValidation;
-import com.hsf301.efep.validations.CheckoutValidation;
 import com.hsf301.efep.validations.UpdateWishListValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -43,30 +41,46 @@ public class CustomerServiceImpl implements CustomerService {
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
     }
 
-        private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-            return SearchFlowerResponse.builder()
-                    .status("200")
-                    .message("")
-                    .flowers(
-                            flowerRepo.findAll().stream()
-                                    .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
-                                    .map(
-                                            flower -> SearchFlowerResponse.Flower.builder()
-                                                    .id(flower.getId())
-                                                    .name(flower.getName())
-                                                    .price(flower.getPrice())
-                                                    .img(flower.getImg())
-                                                    .build()
-                                    )
-                                    .toList()
-                    )
+    private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
+                                .map(
+                                        flower -> SearchFlowerResponse.Flower.builder()
+                                                .id(flower.getId())
+                                                .name(flower.getName())
+                                                .price(flower.getPrice())
+                                                .img(flower.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
                 .build();
     }
 
     //--------------------TEST--------------------//
 
     public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
-        return null;
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().toLowerCase().contains(request.getKeyword().toLowerCase()))
+                                .map(
+                                        flower -> SearchFlowerResponse.Flower.builder()
+                                                .id(flower.getId())
+                                                .name(flower.getName())
+                                                .price(flower.getPrice())
+                                                .img(flower.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //-----------------Sort Flowers----------------------//
