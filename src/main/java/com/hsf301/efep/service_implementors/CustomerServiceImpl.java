@@ -525,6 +525,21 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public CheckoutResponse checkoutLogicTest(CheckoutRequest request, Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return CheckoutResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .build();
+        }
+
+        String error = CheckoutValidation.validate(request);
+        if(!error.isEmpty()) {
+            return CheckoutResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .build();
+        }
+
+        return buildOrder(request, account);
     }
 }
