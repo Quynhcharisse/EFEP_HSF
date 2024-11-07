@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -66,7 +65,20 @@ public class CustomerServiceImpl implements CustomerService {
     //--------------------TEST--------------------//
 
     public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
-        return null;
+        return SearchFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .map(flower -> SearchFlowerResponse.Flower.builder()
+                                        .id(flower.getId())
+                                        .name(flower.getName())
+                                        .price(flower.getPrice())
+                                        .img(flower.getImg())
+                                        .build())
+                                .toList()
+                )
+                .build();
     }
 
     //-----------------Sort Flowers----------------------//
