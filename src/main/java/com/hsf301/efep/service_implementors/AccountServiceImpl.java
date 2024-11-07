@@ -9,6 +9,10 @@ import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.entity_models.User;
 import com.hsf301.efep.models.entity_models.Wishlist;
 
+import com.hsf301.efep.configurations.ReturnPageConfig;
+import com.hsf301.efep.enums.ActionCaseValues;
+import com.hsf301.efep.enums.Roles;
+import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.request_models.LoginRequest;
 import com.hsf301.efep.models.request_models.RegisterRequest;
 import com.hsf301.efep.models.response_models.LoginResponse;
@@ -36,11 +40,26 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String login(LoginRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
-        return null;
+        LoginResponse response = loginLogic(request);
+        if (response.getStatus().equals("400")) {
+            redirectAttributes.addFlashAttribute("error", response);
+            return ReturnPageConfig.generateReturnMapping(ActionCaseValues.LOGIN_FAIL);
+        }
+        Account account = accountRepo.findByEmailAndPassword(request.getEmail(), request.getPassword()).get();
+        session.setAttribute("account", account);
+        redirectAttributes.addFlashAttribute("msg", response);
+        if (Roles.checkIfThisAccountIsCustomer(account)) {
+            return ReturnPageConfig.generateReturnMapping(ActionCaseValues.LOGIN_SUCCESS_CUSTOMER);
+        }
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.LOGIN_SUCCESS_SHOP);
     }
 
     private LoginResponse loginLogic(LoginRequest request) {
-        return null;
+        Account account = accountRepo.findByEmailAndPassword(request.getEmail(), request.getPassword()).orElse(null);
+        if (account == null) {
+            return LoginResponse.builder().status("400").message("Email or password is incorrect").build();
+        }
+        return LoginResponse.builder().status("200").message("Login successfully").build();
     }
 
     //--------------------TEST--------------------//
