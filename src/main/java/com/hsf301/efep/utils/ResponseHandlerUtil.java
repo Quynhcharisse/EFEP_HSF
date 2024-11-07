@@ -4,7 +4,7 @@ import org.springframework.ui.Model;
 
 public class ResponseHandlerUtil {
 
-    public static <T> boolean checkResponse(Object response, Class<T> classType) {
+    public static boolean checkResponse(Object response, Class<?> classType) {
         return response.getClass().equals(classType);
     }
 

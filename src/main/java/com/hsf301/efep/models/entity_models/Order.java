@@ -35,7 +35,7 @@ public class Order {
     @Column(name = "`total_price`")
     float totalPrice;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     List<OrderDetail> orderDetailList;

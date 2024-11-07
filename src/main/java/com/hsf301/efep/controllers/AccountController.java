@@ -35,5 +35,4 @@ public class AccountController {
         return accountService.logout(session);
     }
 
-
 }

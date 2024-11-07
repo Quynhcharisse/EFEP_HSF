@@ -25,6 +25,8 @@ public class Flower {
     @JoinColumn(name = "`seller_id`")
     Seller seller;
 
+    String img;
+
     String name;
 
     float price;
@@ -39,10 +41,9 @@ public class Flower {
     @Column(name = "`sold_quantity`")
     int soldQuantity;
 
-    @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    List<FlowerCategory> flowerCategoryList;
+    @ManyToOne
+    @JoinColumn(name = "`category_id`")
+    Category category;
 
     @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
     @ToString.Exclude

@@ -4,10 +4,10 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DeleteWishListRequest {
-    int wishlistItemId;
+public class DisableFlowerRequest {
+    int id;
 }
