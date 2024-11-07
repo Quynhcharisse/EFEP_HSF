@@ -46,8 +46,7 @@ public class PageController {
                 ResponseHandlerUtil.initResponse(response, ((LoginResponse) response).getStatus(), model);
             }
         }
-
-
         return "login";
     }
+    //Note: Page Controller created to return pages
 }
