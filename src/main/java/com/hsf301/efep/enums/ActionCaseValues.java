@@ -17,6 +17,7 @@ public enum ActionCaseValues {
     CREATE_FLOWER,
     UPDATE_FLOWER,
     FLOWER_DETAIL,
+    ORDER_HISTORY,
     DELETE_FLOWER;
 
     ActionCaseValues(){}
