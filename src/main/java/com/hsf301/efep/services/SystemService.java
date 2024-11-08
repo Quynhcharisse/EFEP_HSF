@@ -20,6 +20,5 @@ public interface SystemService {
     GetTeammateResponse getTeammate(RedirectAttributes attributes);
     String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes);
     String getCustomerOrderHistory(RedirectAttributes attributes);
-    String getCustomerListForShop(RedirectAttributes attributes);
     String getFlowerListForShop(RedirectAttributes attributes);
 }

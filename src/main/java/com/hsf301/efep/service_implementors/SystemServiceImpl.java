@@ -118,7 +118,11 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetCustomerAmountResponse getCustomerAmountLogicTest() {
-        return null;
+        return GetCustomerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(accountRepo.countByRole(Roles.CUSTOMER))
+                .build();
     }
 
     //-----------------Get Flower Amount----------------------//
@@ -138,7 +142,11 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetFlowerAmountResponse getFlowerAmountLogicTest() {
-        return null;
+        return GetFlowerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(flowerRepo.countByStatus(Status.FLOWER_AVAILABLE))
+                .build();
     }
 
 
@@ -164,7 +172,16 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetWorkingYearAmountResponse getWorkingYearAmountLogicTest() {
-        return null;
+        return GetWorkingYearAmountResponse.builder()
+                .status("200")
+                .message("")
+                .duration(
+                        Period.between(
+                                LocalDate.of(2022, 1, 1),
+                                LocalDate.now()
+                        ).getYears()
+                )
+                .build();
     }
 
     //-----------------Get New Arrival Flower----------------------//
@@ -199,8 +216,26 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetNewArrivalFlowerResponse getNewArrivalFlowerLogicTest() {
+        List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
+        flowers.sort(Comparator.comparing(Flower::getId).reversed());
+        flowers = flowers.stream().limit(10).toList();
 
-        return null;
+        return GetNewArrivalFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetNewArrivalFlowerResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
 
@@ -251,13 +286,6 @@ public class SystemServiceImpl implements SystemService {
     public GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogicTest(Account account) {
         return null;
     }
-
-    //-----------------Get Customer List For Shop----------------------//
-    @Override
-    public String getCustomerListForShop(RedirectAttributes attributes) {
-        return "";
-    }
-
 
     //-----------------Get Flower List For Shop----------------------//
     @Override
