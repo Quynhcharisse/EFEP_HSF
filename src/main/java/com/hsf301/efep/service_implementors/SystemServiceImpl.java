@@ -1,5 +1,7 @@
 package com.hsf301.efep.service_implementors;
 
+import com.hsf301.efep.enums.Roles;
+import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
@@ -102,11 +104,15 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Customer Amount----------------------//
     @Override
     public GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes) {
-        return null;
+        return getCustomerAmountLogic();
     }
 
-    public GetCustomerAmountResponse getCustomerAmountLogic() {
-        return null;
+    private GetCustomerAmountResponse getCustomerAmountLogic() {
+        return GetCustomerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(accountRepo.countByRole(Roles.CUSTOMER))
+                .build();
     }
 
     //--------------------TEST--------------------//
@@ -118,11 +124,15 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Flower Amount----------------------//
     @Override
     public GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes) {
-        return null;
+        return getFlowerAmountLogic();
     }
 
     private GetFlowerAmountResponse getFlowerAmountLogic() {
-        return null;
+        return GetFlowerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(flowerRepo.countByStatus(Status.FLOWER_AVAILABLE))
+                .build();
     }
 
     //--------------------TEST--------------------//
