@@ -428,12 +428,58 @@ public class SystemServiceImpl implements SystemService {
     }
 
     private GetFlowerListForShopResponse getFlowerListForShopLogic(Account account) {
-        return null;
+        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return GetFlowerListForShopResponse.builder()
+                    .status("200")
+                    .message("Please login the shop account first")
+                    .flowers(null)
+                    .build();
+        }
+        return GetFlowerListForShopResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .map(
+                                        f -> GetFlowerListForShopResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .img(f.getImg())
+                                                .status(f.getStatus())
+                                                .qty(f.getQuantity())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //--------------------TEST--------------------//
     public GetFlowerListForShopResponse getFlowerListForShopLogicTest(Account account) {
-        return null;
+        if (account == null || !Roles.checkIfThisAccountIsShop(account)) {
+            return GetFlowerListForShopResponse.builder()
+                    .status("403")
+                    .message("Please login the shop account first")
+                    .flowers(null)
+                    .build();
+        }
+        return GetFlowerListForShopResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowerRepo.findAll().stream()
+                                .map(
+                                        f -> GetFlowerListForShopResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .img(f.getImg())
+                                                .status(f.getStatus())
+                                                .qty(f.getQuantity())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
 }
