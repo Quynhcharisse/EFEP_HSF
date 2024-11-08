@@ -5,6 +5,7 @@ import com.hsf301.efep.enums.Roles;
 import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.entity_models.Flower;
+import com.hsf301.efep.models.entity_models.Order;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.AccountRepo;
@@ -12,6 +13,7 @@ import com.hsf301.efep.enums.ActionCaseValues;
 import com.hsf301.efep.repositories.FlowerRepo;
 import com.hsf301.efep.services.SystemService;
 import com.hsf301.efep.validations.GetFlowerDetailValidation;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -315,12 +317,40 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Customer Order History----------------------//
     @Override
-    public String getCustomerOrderHistory(RedirectAttributes attributes) {
-        return "";
+    public String getCustomerOrderHistory(RedirectAttributes attributes, HttpSession session) {
+        GetCustomerOrderHistoryResponse response = getCustomerOrderHistoryLogic(Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ORDER_HISTORY);
     }
 
     private GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogic(Account account) {
-        return null;
+        if (account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return GetCustomerOrderHistoryResponse.builder()
+                    .status("400")
+                    .message("Please login a customer account first")
+                    .order(null)
+                    .build();
+        }
+
+        List<Order> order = account.getUser().getOrderList();
+
+        return GetCustomerOrderHistoryResponse.builder()
+                .status("200")
+                .message("")
+                .order(
+                        order.stream()
+                                .map(
+                                        o -> GetCustomerOrderHistoryResponse.Order.builder()
+                                                .id(o.getId())
+                                                .createdDate(o.getCreatedDate())
+                                                .status(o.getStatus())
+                                                .totalPrice(o.getTotalPrice())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
     //--------------------TEST--------------------//
 

@@ -8,6 +8,7 @@ import com.hsf301.efep.pojo.Teammate;
 
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface SystemService {
@@ -19,6 +20,6 @@ public interface SystemService {
     GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes);
     GetTeammateResponse getTeammate(RedirectAttributes attributes);
     String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes);
-    String getCustomerOrderHistory(RedirectAttributes attributes);
+    String getCustomerOrderHistory(RedirectAttributes attributes, HttpSession session);
     String getFlowerListForShop(RedirectAttributes attributes);
 }
