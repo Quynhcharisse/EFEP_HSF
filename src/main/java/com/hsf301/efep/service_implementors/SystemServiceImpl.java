@@ -1,14 +1,15 @@
 package com.hsf301.efep.service_implementors;
 
-import com.hsf301.efep.enums.Roles;
-import com.hsf301.efep.enums.Status;
+import com.hsf301.efep.configurations.ReturnPageConfig;
 import com.hsf301.efep.models.entity_models.Account;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.AccountRepo;
+import com.hsf301.efep.enums.ActionCaseValues;
 import com.hsf301.efep.repositories.FlowerRepo;
 import com.hsf301.efep.services.SystemService;
+import com.hsf301.efep.validations.GetFlowerDetailValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -104,15 +105,11 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Customer Amount----------------------//
     @Override
     public GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes) {
-        return getCustomerAmountLogic();
+        return null;
     }
 
-    private GetCustomerAmountResponse getCustomerAmountLogic() {
-        return GetCustomerAmountResponse.builder()
-                .status("200")
-                .message("")
-                .amount(accountRepo.countByRole(Roles.CUSTOMER))
-                .build();
+    public GetCustomerAmountResponse getCustomerAmountLogic() {
+        return null;
     }
 
     //--------------------TEST--------------------//
@@ -124,15 +121,11 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Flower Amount----------------------//
     @Override
     public GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes) {
-        return getFlowerAmountLogic();
+        return null;
     }
 
     private GetFlowerAmountResponse getFlowerAmountLogic() {
-        return GetFlowerAmountResponse.builder()
-                .status("200")
-                .message("")
-                .amount(flowerRepo.countByStatus(Status.FLOWER_AVAILABLE))
-                .build();
+        return null;
     }
 
     //--------------------TEST--------------------//
@@ -179,11 +172,28 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Teammate----------------------//
     @Override
     public GetTeammateResponse getTeammate(RedirectAttributes attributes) {
-        return null;
+        return getTeammateLogic();
     }
 
-    public GetTeammateResponse getTeammateLogic() {
-        return null;
+    private GetTeammateResponse getTeammateLogic() {
+
+        String leader = "CEO & Founder & CTO";
+        String member = "CTO";
+
+        List<GetTeammateResponse.Teammate> teammates = new ArrayList<>();
+        teammates.add(createTeammate("", "Pham Van Nhu Quynh", leader));
+        teammates.add(createTeammate("", "", member));
+        teammates.add(createTeammate("", "", member));
+
+        return GetTeammateResponse.builder()
+                .status("200")
+                .message("")
+                .teammates(teammates)
+                .build();
+    }
+
+    private GetTeammateResponse.Teammate createTeammate(String img, String name, String role) {
+        return GetTeammateResponse.Teammate.builder().image(img).name(name).role(role).build();
     }
 
     //--------------------TEST--------------------//
@@ -195,11 +205,40 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Flower Detail----------------------//
     @Override
     public String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes) {
-        return "";
+        GetFlowerDetailResponse response = getFlowerDetailLogic(request);
+        attributes.addFlashAttribute("msg", response);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.FLOWER_DETAIL);
     }
 
     private GetFlowerDetailResponse getFlowerDetailLogic(GetFlowerDetailRequest request) {
-        return null;
+        String error = GetFlowerDetailValidation.validate(request, flowerRepo);
+        if (!error.isEmpty()) {
+            return GetFlowerDetailResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .flowerDetail(null)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+
+        return GetFlowerDetailResponse.builder()
+                .status("200")
+                .message("")
+                .flowerDetail(
+                        GetFlowerDetailResponse.FlowerDetail.builder()
+                                .name(flower.getName())
+                                .price(flower.getPrice())
+                                .description(flower.getDescription())
+                                .flowerAmount(flower.getFlowerAmount())
+                                .img(flower.getImg())
+                                .qty(flower.getQuantity())
+                                .soldQty(flower.getSoldQuantity())
+                                .status(flower.getStatus())
+                                .category(flower.getCategory())
+                                .build()
+                )
+                .build();
     }
 
     //--------------------TEST--------------------//
