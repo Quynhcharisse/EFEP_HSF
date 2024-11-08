@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{header::head}"></head>
+
+<body>
+<div th:replace="~{header::header}"></div>
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <!-- Top Breadcrumb Area -->
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(/img/bg-img/24.jpg);">
+        <h2>Wishlist</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+
+<!-- ##### Cart Area Start ##### -->
+<div class="cart-area section-padding-0-100 clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="cart-table clearfix">
+                    <table class="table table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Flowers</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${items.items}">
+                            <td class="cart_product_img">
+                                <img th:src="@{/img/bg-img/9.jpg}" alt="Product">
+                                <h5 th:text="${item.name}"></h5>
+                            </td>
+                            <td class="qty">
+                                <div class="quantity">
+                                    <span class="qty-minus" th:onclick="'updateQuantity(-1, ' + ${item.id} + ')'"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                    <input type="number" class="qty-text" th:id="'qty' + ${item.id}" step="1" min="1" th:attr="max=${item.flower.quantity}" name="quantity" value="1">
+                                    <input type="number" hidden class="qty-number" th:id="'price' + ${item.id}" name="initPrice" th:value="${item.price}">
+                                    <span class="qty-plus" onclick="updateQuantity(1)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+
+                                    <script>
+                                        function updateQuantity(change, id) {
+                                            var effect = document.getElementById('qty' + id);
+                                            var price = document.getElementById('price' + id)
+                                            var total = document.getElementById('total' + id)
+                                            var qty = parseInt(effect.value, 10);
+                                            var maxQty = parseInt(effect.max, 10);
+                                            var p = parseFloat(price.value, 10);
+
+                                            // Update the quantity based on the 'change' argument
+                                            if (change === -1 && qty > 1) {
+                                                effect.value = qty - 1; // Decrease the quantity
+                                            } else if (change === 1 && qty < maxQty) {
+                                                effect.value = qty + 1; // Increase the quantity
+                                            }
+
+                                            total.innerHTML = (p * effect.value).toFixed(2);
+
+                                            // Optional: Ensure the value stays within the bounds
+                                            effect.value = Math.max(1, Math.min(maxQty, effect.value));
+                                        }
+                                    </script>
+
+                                </div>
+                            </td>
+                            <td class="price" th:text="'$' + ${item.price}"><span></span></td>
+                            <td class="total_price" th:id="'total' + ${item.id}"><span></span></td>
+                            <td class="action"><a th:href="@{/}"><i class="icon_close"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Coupon Discount -->
+            <div class="col-12 col-lg-6">
+                <div class="coupon-discount mt-70">
+                    <h5>COUPON DISCOUNT</h5>
+                    <p>Coupons can be applied in the cart prior to checkout. Add an eligible item from the booth of the
+                        seller that created the coupon code to your cart. Click the green "Apply code" button to add the
+                        coupon to your order. The order total will update to indicate the savings specific to the coupon
+                        code entered.</p>
+                    <form action="#" method="post">
+                        <label>
+                            <input type="text" name="coupon-code" placeholder="Enter your coupon code">
+                        </label>
+                        <button type="submit">APPLY COUPON</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Cart Totals -->
+            <div class="col-12 col-lg-6">
+                <div class="cart-totals-area mt-70">
+                    <h5 class="title--">Cart Total</h5>
+                    <div class="subtotal d-flex justify-content-between">
+                        <h5>Subtotal</h5>
+                        <h5>$9.99</h5>
+                    </div>
+                    <div class="shipping d-flex justify-content-between">
+                        <h5>Shipping</h5>
+                        <div class="shipping-address">
+                            <form action="#" method="post">
+                                <label>
+                                    <select class="custom-select">
+                                        <option selected>Country</option>
+                                        <option value="1">USA</option>
+                                        <option value="2">Latvia</option>
+                                        <option value="3">Japan</option>
+                                        <option value="4">Bangladesh</option>
+                                    </select>
+                                </label>
+                                <label for="shipping-text"></label><input type="text" name="shipping-text" id="shipping-text" placeholder="State">
+                                <label for="shipping-zip"></label><input type="text" name="shipping-zip" id="shipping-zip" placeholder="ZIP">
+                                <button type="submit">Update Total</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="total d-flex justify-content-between">
+                        <h5>Total</h5>
+                        <h5>$9.99</h5>
+                    </div>
+                    <div class="checkout-btn">
+                        <a th:href="@{/}" class="btn alazea-btn w-100">PROCEED TO CHECKOUT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- ##### Cart Area End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<head th:replace="~{footer::footer}"></head>
+<!-- ##### Footer Area End ##### -->
+</body>
+
+</html>

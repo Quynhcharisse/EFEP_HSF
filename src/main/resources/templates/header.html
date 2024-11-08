@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta content="" name="description">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Alazea</title>
+
+    <!-- Favicon -->
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/toast.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+
+</head>
+<div th:fragment="header">
+    <!-- Preloader -->
+    <div class="preloader d-flex align-items-center justify-content-center">
+        <div class="preloader-circle"></div>
+        <div class="preloader-img">
+            <img alt="" th:src="@{/img/core-img/leaf.png}">
+        </div>
+    </div>
+
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- ***** Top Header Area ***** -->
+        <div class="top-header-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="top-header-content d-flex align-items-center justify-content-between">
+                            <!-- Top Header Content -->
+                            <div class="top-header-meta">
+                                <a data-placement="bottom" data-toggle="tooltip" th:href="@{/}"
+                                   title="vannhuquynhp@gmail.com"><i aria-hidden="true" class="fa fa-envelope-o"></i>
+                                    <span>Email: vannhuquynhp@gmail.com</span></a>
+                                <a data-placement="bottom" data-toggle="tooltip" th:href="@{/}" title="0909090909"><i
+                                        aria-hidden="true" class="fa fa-phone"></i> <span>Call Us: 0909090909</span></a>
+                            </div>
+
+                            <!-- Top Header Content -->
+                            <div class="top-header-meta d-flex">
+
+                                <!--  Register  -->
+                                <div class="register" th:if="${session.account} == null">
+                                    <a th:href="@{/}"><i aria-hidden="true" class="fa fa-user-circle-o"></i>
+                                        <span>Register</span></a>
+                                </div>
+                                <!-- Login -->
+                                <div class="login" th:if="${session.account} == null">
+                                    <a th:href="@{/login}"><i aria-hidden="true" class="fa fa-sign-in"></i>
+                                        <span>Login</span></a>
+                                </div>
+                                <!--  Logout  -->
+                                <div class="logout" th:if="${session.account} != null">
+                                    <a th:href="@{/account/logout}"><i aria-hidden="true" class="fa fa-sign-out"></i>
+                                        <span>Logout</span></a>
+                                </div>
+                                <!--  Profile  -->
+                                <div class="profile" th:if="${session.account} != null">
+                                    <a th:href="@{/}"><i aria-hidden="true" class="fa fa-user"></i> <span>Profile</span></a>
+                                </div>
+                                <!-- Wishlist -->
+                                <div class="cart">
+                                    <a th:href="@{/}"><i aria-hidden="true" class="fa-solid fa-heart"></i>
+                                        <span>Wishlist
+                                        <span class="cart-quantity" th:if="${session.account} != null"
+                                              th:text="'(' + ${session.account.user.wishlist.wishlistItemList.size()} + ')'"></span>
+                                        <span class="cart-quantity" th:if="${session.account} == null">(0)</span>
+                                    </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ***** Navbar Area ***** -->
+        <div class="alazea-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <div class="container">
+                    <!-- Menu -->
+                    <nav class="classy-navbar justify-content-between" id="alazeaNav">
+
+                        <!-- Nav Brand -->
+                        <a class="nav-brand" th:href="@{/}"><img alt="" th:src="@{/img/core-img/logo.png}"></a>
+
+                        <!-- Navbar Toggler -->
+                        <div class="classy-navbar-toggler">
+                            <span class="navbarToggler">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </div>
+
+                        <!-- Menu -->
+                        <div class="classy-menu">
+
+                            <!-- Close Button -->
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap">
+                                    <span class="top"></span>
+                                    <span class="bottom"></span>
+                                </div>
+                            </div>
+
+                            <!-- Navbar Start -->
+                            <div class="classynav">
+                                <ul>
+                                    <li><a th:href="@{/}">Home</a></li>
+                                    <li><a th:href="@{/about}">About</a></li>
+                                    <li><a th:href="@{/}">Pages</a>
+                                        <ul class="dropdown">
+                                            <li><a th:href="@{/}">Home</a></li>
+                                            <li><a th:href="@{/about}">About</a></li>
+                                            <li><a th:href="@{/shop}">Shop</a>
+                                                <ul class="dropdown">
+                                                    <li><a th:href="@{/shop}">Shop</a></li>
+                                                    <li><a th:href="@{/}">Shop Details</a></li>
+                                                    <li><a th:href="@{/cart}">Shopping Cart</a></li>
+                                                    <li><a th:href="@{/}">Checkout</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a th:href="@{/portfolio}">Portfolio</a>
+                                                <ul class="dropdown">
+                                                    <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                                                    <li><a th:href="@{/}">Portfolio Details</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a th:href="@{/blog}">Blog</a>
+                                                <ul class="dropdown">
+                                                    <li><a th:href="@{/blog}">Blog</a></li>
+                                                    <li><a th:href="@{/}">Blog Details</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a th:href="@{/contact}">Contact</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a th:href="@{/shop}">Shop</a></li>
+                                    <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                                    <li><a th:href="@{/contact}">Contact</a></li>
+                                </ul>
+
+                                <!-- Search Icon -->
+                                <div id="searchIcon">
+                                    <i aria-hidden="true" class="fa fa-search"></i>
+                                </div>
+
+                            </div>
+                            <!-- Navbar End -->
+                        </div>
+                    </nav>
+
+                    <!-- Search Form -->
+                    <div class="search-form">
+                        <form th:action="@{/customer/search}" method="post">
+                            <label for="search"></label><input id="search" name="keyword"
+                                                               placeholder="Type keywords &amp; press enter..."
+                                                               type="search">
+                            <button class="d-none" type="submit"></button>
+                        </form>
+                        <!-- Close Icon -->
+                        <div class="closeIcon"><i aria-hidden="true" class="fa fa-times"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+</html>

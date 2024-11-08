@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{header :: head}"></head>
+<body>
+
+    <!-- ##### Header Area Start ##### -->
+    <div th:replace="~{header :: header}"></div>
+    <!-- ##### Header Area End ##### -->
+
+    <!-- ##### Breadcrumb Area Start ##### -->
+    <div class="breadcrumb-area">
+        <!-- Top Breadcrumb Area -->
+        <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center" style="background-image: url(/img/bg-img/24.jpg);">
+            <h2>ABOUT US</h2>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">About</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Breadcrumb Area End ##### -->
+
+    <!-- ##### About Area Start ##### -->
+    <section class="about-us-area">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-12 col-lg-5">
+                    <!-- Section Heading -->
+                    <div class="section-heading">
+                        <h2>ABOUT US</h2>
+                        <p>Alazea: Where Floral Passion Blooms</p>
+                    </div>
+                    <p>At Alazea, we cultivate more than flowers; we nurture moments of beauty and emotion. Our petals whisper tales of elegance and grace, each arrangement a masterpiece of nature's artistry. Step into our world, where blooms become stories and your moments blossom with exquisite charm. Welcome to Alazea, where floral dreams come to life.</p>
+
+                    <!-- Progress Bar Content Area -->
+                    <div class="alazea-progress-bar mb-50">
+                        <!-- Single Progress Bar -->
+                        <div class="single_progress_bar" th:each="cate : ${flowerPerCate.categories}">
+                            <p th:text="${cate.name} + '     (' + ${cate.percentage} + '%)'"></p>
+                            <div th:id="'bar' + ${cate.id}" class="barfiller">
+                                <span class="fill" th:attr="data-percentage=${cate.percentage}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="alazea-benefits-area">
+                        <div class="row">
+                            <!-- Single Benefits Area -->
+                            <div class="col-12 col-sm-6">
+                                <div class="single-benefits-area">
+                                    <img th:src="@{/img/core-img/b1.png}" alt="">
+                                    <h5>Quality Blooms</h5>
+                                    <p>Experience a garden of unparalleled beauty and sophistication, where nature's elegance flourishes in every petal</p>
+                                </div>
+                            </div>
+
+                            <!-- Single Benefits Area -->
+                            <div class="col-12 col-sm-6">
+                                <div class="single-benefits-area">
+                                    <img th:src="@{/img/core-img/b2.png}" alt="">
+                                    <h5>Exquisite Creations</h5>
+                                    <p>Immerse yourself in a world of quality floral artistry. Our creations speak volumes, each petal echoing a tale of elegance and sophistication</p>
+                                </div>
+                            </div>
+
+                            <!-- Single Benefits Area -->
+                            <div class="col-12 col-sm-6">
+                                <div class="single-benefits-area">
+                                    <img th:src="@{/img/core-img/b3.png}" alt="">
+                                    <h5>Good price</h5>
+                                    <p>Discover blooming treasures at our flower shop, where quality meets affordability. Elevate your space with our exquisite flowers offered at competitive prices</p>
+                                </div>
+                            </div>
+
+                            <!-- Single Benefits Area -->
+                            <div class="col-12 col-sm-6">
+                                <div class="single-benefits-area">
+                                    <img th:src="@{/img/core-img/b4.png}" alt="">
+                                    <h5>Fast support</h5>
+                                    <p>Swift and dedicated assistance awaits at our flower shop, ensuring your floral needs are met promptly. Experience our commitment to quick and reliable support for all your requests</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="border-line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### About Area End ##### -->
+
+    <!-- ##### Cool Facts Area Start ##### -->
+    <section class="cool-facts-area bg-img section-padding-100-0" style="background-image: url(./static/img/bg-img/cool-facts.png);">
+        <div class="container">
+            <div class="row">
+
+                <!-- Single Cool Facts Area -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="single-cool-fact d-flex align-items-center justify-content-center mb-100">
+                        <div class="cf-icon">
+                            <img th:src="@{/img/core-img/cf1.png}" alt="">
+                        </div>
+                        <div class="cf-content">
+                            <h2><span class="counter" th:text="${flowerAmount.amount}"></span></h2>
+                            <h6>FLOWERS</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Cool Facts Area -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="single-cool-fact d-flex align-items-center justify-content-center mb-100">
+                        <div class="cf-icon">
+                            <img th:src="@{/img/core-img/cf2.png}" alt="">
+                        </div>
+                        <div class="cf-content">
+                            <h2><span class="counter" th:text="${customerAmount.amount}"></span></h2>
+                            <h6>CUSTOMERS</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Cool Facts Area -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="single-cool-fact d-flex align-items-center justify-content-center mb-100">
+                        <div class="cf-icon">
+                            <img th:src="@{/img/core-img/cf3.png}" alt="">
+                        </div>
+                        <div class="cf-content">
+                            <h2><span class="counter" th:text="${orderAmount.amount}"></span></h2>
+                            <h6>ORDERS</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Cool Facts Area -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="single-cool-fact d-flex align-items-center justify-content-center mb-100">
+                        <div class="cf-icon">
+                            <img th:src="@{/img/core-img/cf4.png}" alt="">
+                        </div>
+                        <div class="cf-content">
+                            <h2><span class="counter" th:text="${workingYear.duration}"></span></h2>
+                            <h6>WORKING YEARS</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Side Image -->
+        <div class="side-img wow fadeInUp" data-wow-delay="500ms">
+            <img th:src="@{/img/core-img/pot.png}" alt="">
+        </div>
+    </section>
+    <!-- ##### Cool Facts Area End ##### -->
+
+    <!-- ##### Team Area Start ##### -->
+    <section class="team-area section-padding-100-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Section Heading -->
+                    <div class="section-heading text-center">
+                        <h2>OUR TEAM</h2>
+                        <p>A team of dedicated experienced professionals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <!-- Single Team Member Area -->
+                <div class="col-12 col-sm-6 col-lg-4" th:each="member : ${team.teammates}">
+                    <div class="single-team-member text-center mb-100">
+                        <!-- Team Member Thumb -->
+                        <div class="team-member-thumb">
+                            <img th:src="@{${member.image}}" alt="">
+                            <!-- Social Info -->
+                            <div class="team-member-social-info">
+                                <a th:href="@{${member.facebook}}"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                <a th:href="@{${member.github}}"><i class="fa fa-github" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <!-- Team Member Info -->
+                        <div class="team-member-info mt-30">
+                            <h5 th:text="${member.name}"></h5>
+                            <p th:text="${member.role}"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ##### Team Area End ##### -->
+
+    <!-- ##### Footer Area Start ##### -->
+    <div th:replace="~{footer :: footer}"></div>
+    <!-- ##### Footer Area End ##### -->
+</body>
+
+</html>

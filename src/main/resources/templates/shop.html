@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{header :: head}"></head>
+
+<body>
+<!-- ##### Header Area Start ##### -->
+<div th:replace="~{header :: header}"></div>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <!-- Top Breadcrumb Area -->
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(/img/bg-img/24.jpg);">
+        <h2>Shop</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+
+<!-- ##### Shop Area Start ##### -->
+<section class="shop-page section-padding-0-100">
+    <div class="container">
+        <div class="row">
+            <!-- Shop Sorting Data -->
+            <div class="col-12">
+                <div class="shop-sorting-data d-flex flex-wrap align-items-center justify-content-between">
+                    <!-- Shop Page Count -->
+                    <div class="shop-page-count">
+                        <p th:if="${flowerList.currentPage * 10 - flowerList.currentPage} < ${flowerList.totalElements}"
+                           th:text="'Showing ' + ${flowerList.currentPage * 10 - flowerList.currentPage - 8} + '-' + ${flowerList.currentPage * 10 - flowerList.currentPage} + ' of ' + ${flowerList.totalElements} + ' results'"></p>
+                        <p th:if="${flowerList.currentPage * 10 - flowerList.currentPage} >= ${flowerList.totalElements}"
+                           th:text="'Showing ' + ${flowerList.currentPage * 10 - flowerList.currentPage - 8} + '-' + ${flowerList.totalElements} + ' of ' + ${flowerList.totalElements} + ' results'"></p>
+                    </div>
+                    <!-- Search by Terms -->
+                    <div class="search_by_terms"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Area -->
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="shop-sidebar-area">
+                    <form th:action="@{/shop}" th:method="get">
+                        <!-- Shop Widget -->
+                        <div class="shop-widget price mb-50">
+                            <h4 class="widget-title">Prices</h4>
+                            <div class="widget-desc">
+                                <div class="slider-range">
+                                    <div th:attr="data-min=${flowerList.minPrice},
+                                              data-max=${flowerList.maxPrice},
+                                              data-value-min=${flowerList.minPrice},
+                                              data-value-max=${flowerList.maxPrice}"
+                                         data-unit="$"
+                                         class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+                                         data-label-result="Price:">
+                                        <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
+                                        <span class="ui-slider-handle ui-state-default ui-corner-all first-handle"
+                                              tabindex="0"></span>
+                                        <span class="ui-slider-handle ui-state-default ui-corner-all"
+                                              tabindex="0"></span>
+                                    </div>
+                                    <div class="range-price"
+                                         th:text="'Price: $' + ${flowerList.minPrice} + ' - $' + ${flowerList.maxPrice}">
+                                        Price: $8 - $30
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shop Widget -->
+                        <div class="shop-widget catagory mb-50">
+                            <h4 class="widget-title">Categories</h4>
+                            <div class="widget-desc">
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="check-box" type="radio" class="custom-control-input" id="customCheck0"
+                                           checked>
+                                    <label class="custom-control-label" for="customCheck0">All plants <span
+                                            class="text-muted" th:text="'(' + ${flowerList.totalElements} + ')'"></span></label>
+                                </div>
+                                <!-- Single Checkbox -->
+                                <div th:each="cate : ${flowerPerCate.categories}"
+                                     class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="check-box" type="radio" class="custom-control-input"
+                                           th:id="'customCheck' + ${cate.id}">
+                                    <label class="custom-control-label" th:for="'customCheck' + ${cate.id}"
+                                           th:text="${cate.name} + '   (' + ${cate.flowerNumber} + ')'">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shop Widget -->
+                        <div class="shop-widget sort-by mb-50">
+                            <h4 class="widget-title">Sort by</h4>
+                            <div class="widget-desc">
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="radio-box" type="radio" class="custom-control-input" id="customCheck70"
+                                           checked>
+                                    <label class="custom-control-label" for="customCheck70">New arrivals</label>
+                                </div>
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="radio-box" type="radio" class="custom-control-input"
+                                           id="customCheck80">
+                                    <label class="custom-control-label" for="customCheck80">Alphabetically, A-Z</label>
+                                </div>
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="radio-box" type="radio" class="custom-control-input"
+                                           id="customCheck90">
+                                    <label class="custom-control-label" for="customCheck90">Alphabetically, Z-A</label>
+                                </div>
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center mb-2">
+                                    <input name="radio-box" type="radio" class="custom-control-input"
+                                           id="customCheck100">
+                                    <label class="custom-control-label" for="customCheck100">Price: low to high</label>
+                                </div>
+                                <!-- Single Checkbox -->
+                                <div class="custom-control custom-checkbox d-flex align-items-center">
+                                    <input name="radio-box" type="radio" class="custom-control-input"
+                                           id="customCheck110">
+                                    <label class="custom-control-label" for="customCheck110">Price: high to low</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shop Widget -->
+                        <div class="shop-widget best-seller mb-50">
+                            <div class="welcome-btn-group">
+                                <button class="btn alazea-btn mr-30">Sort</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- All Products Area -->
+            <div class="col-12 col-md-8 col-lg-9">
+                <div class="shop-products-area">
+                    <div class="row">
+                        <!-- Single Product Area -->
+                        <div class="col-12 col-sm-6 col-lg-4" th:each="f : ${flowerList.flowers}">
+                            <div class="single-product-area mb-50">
+                                <!-- Product Image -->
+                                <div class="product-img">
+                                    <a th:href="@{/customer/flower/detail(id=${f.id})}"><img th:src="@{/img/bg-img/9.jpg}" alt=""></a>
+                                    <div class="product-meta d-flex">
+                                        <a th:href="@{/customer/flower/detail(id=${f.id})}" class="add-to-cart-btn">View Detail</a>
+                                    </div>
+                                </div>
+                                <!-- Product Info -->
+                                <div class="product-info mt-15 text-center">
+                                    <a th:href="@{/customer/flower/detail(id=${f.id})}">
+                                        <p th:text="${f.name}"></p>
+                                    </a>
+                                    <h6 th:text="'$' + ${f.price}"></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" th:href="@{/shop(page=1)}"><i
+                                    class="fa fa-angle-double-left"></i></a>
+                            <li class="page-item" th:if="${flowerList.currentPage - 1} >= 1"><a class="page-link"
+                                                                                                th:href="@{/shop(page=${flowerList.currentPage - 1})}"
+                                                                                                th:text="${flowerList.currentPage - 1}"></a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                                     th:href="@{/shop(page=${flowerList.currentPage})}"
+                                                     th:text="${flowerList.currentPage}"></a></li>
+                            <li class="page-item" th:if="${flowerList.currentPage + 1} <= ${flowerList.totalPages}"><a
+                                    class="page-link" th:href="@{/shop(page=${flowerList.currentPage + 1})}"
+                                    th:text="${flowerList.currentPage + 1}"></a></li>
+                            <li class="page-item"><a class="page-link"
+                                                     th:href="@{/shop(page=${flowerList.totalPages})}"><i
+                                    class="fa fa-angle-double-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Shop Area End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="~{footer :: footer}"></div>
+<!-- ##### Footer Area End ##### -->
+</body>
+
+</html>
