@@ -26,11 +26,16 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Slide Bar Image----------------------//
     @Override
     public GetSlideBarImageResponse getSlideBarImage(RedirectAttributes attributes) {
-        return null;
+        return getSlideBarImageLogic();
     }
 
-    private GetSlideBarImageResponse getSlideBarImageLogic(RedirectAttributes attributes) {
-        return null;
+    private GetSlideBarImageResponse getSlideBarImageLogic() {
+        return GetSlideBarImageResponse.builder()
+                .status("200")
+                .message("")
+                .link1("https://www.frankstonflorist.com.au/wp-content/uploads/slider/cache/47326b2292695347818ef2497f3fef9e/slider-flowers.jpg")
+                .link2("https://www.lgflowers.nl/templates/yootheme/cache/9a/lg-flowers-slider-6-9a1be667.jpeg")
+                .build();
     }
 
     //=-------------------------Test--------------------------//
@@ -45,11 +50,30 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Top Sold Flower----------------------//
     @Override
     public GetTopSoldFlowerResponse getTopSoldFlower(RedirectAttributes attributes) {
-        return null;
+        return getTopSoldFlowerLogic();
     }
 
-    public GetTopSoldFlowerResponse getTopSoldFlowerLogic() {
-        return null;
+    private GetTopSoldFlowerResponse getTopSoldFlowerLogic() {
+        List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
+        flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
+        flowers = flowers.stream().limit(10).toList();
+
+        return GetTopSoldFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetTopSoldFlowerResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //=-------------------------Test--------------------------//
