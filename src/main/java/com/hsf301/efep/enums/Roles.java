@@ -22,6 +22,6 @@ public class Roles {
     }
 
     public static Account getCurrentLoggedAccount(HttpSession session){
-        return session.getAttribute("acc") != null ? (Account) session.getAttribute("acc") : null;
+        return session.getAttribute("account") != null ? (Account) session.getAttribute("account") : null;
     }
 }

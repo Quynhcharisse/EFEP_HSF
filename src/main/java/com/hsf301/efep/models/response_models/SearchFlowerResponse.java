@@ -13,14 +13,19 @@ import java.util.List;
 public class SearchFlowerResponse {
     String status;
     String message;
+    int currentPage;
+    int totalPages;
+    long totalElements;
+    int minPrice;
+    int maxPrice;
     List<Flower> flowers;
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class Flower {
+    public static class Flower{
         int id;
         String name;
         float price;

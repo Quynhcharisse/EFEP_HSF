@@ -1,0 +1,21 @@
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* scrollbar's background */
+::-webkit-scrollbar-track {
+    background: black;
+}
+
+/* scrollbar */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(120deg, #A8E6CF, #56AB2F);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* change color when user click on scrollbar */
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(120deg, #A4CF7A, #388E3C);
+}

@@ -20,6 +20,7 @@ public class GetFlowerDetailResponse {
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class FlowerDetail {
+        int id;
         String name;
         float price;
         String description;

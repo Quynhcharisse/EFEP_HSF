@@ -2,6 +2,7 @@ package com.hsf301.efep.service_implementors;
 
 import com.hsf301.efep.configurations.ReturnPageConfig;
 import com.hsf301.efep.enums.ActionCaseValues;
+import com.hsf301.efep.enums.PageSize;
 import com.hsf301.efep.enums.Roles;
 import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.*;
@@ -9,11 +10,14 @@ import com.hsf301.efep.models.request_models.*;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.services.CustomerService;
+import com.hsf301.efep.services.SystemService;
 import com.hsf301.efep.validations.AddToWishListValidation;
 import com.hsf301.efep.validations.CheckoutValidation;
 import com.hsf301.efep.validations.UpdateWishListValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,62 +31,31 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
     private final FlowerRepo flowerRepo;
     private final CategoryRepo categoryRepo;
-    private final WishlistRepo wishlistRepo;
     private final WishlistItemRepo wishlistItemRepo;
-    private final AccountRepo accountRepo;
     private final OrderRepo orderRepo;
     private final OrderDetailRepo orderDetailRepo;
+    private final SystemService systemService;
 
 
     //-----------------Search Flowers----------------------//
 
     @Override
     public String searchFlowers(SearchFlowerRequest request, RedirectAttributes attributes) {
-        SearchFlowerResponse response = searchFlowersLogic(request);
-        attributes.addFlashAttribute("msg", response);
+        GetFlowerListResponse response = searchFlowersLogic(request);
+        attributes.addFlashAttribute("flowerList", response);
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SEARCH_FLOWER);
     }
 
-    private SearchFlowerResponse searchFlowersLogic(SearchFlowerRequest request) {
-        return SearchFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(
-                        flowerRepo.findAll().stream()
-                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().contains(request.getKeyword()))
-                                .map(
-                                        flower -> SearchFlowerResponse.Flower.builder()
-                                                .id(flower.getId())
-                                                .name(flower.getName())
-                                                .price(flower.getPrice())
-                                                .img(flower.getImg())
-                                                .build()
-                                )
-                                .toList()
-                )
-                .build();
+    private GetFlowerListResponse searchFlowersLogic(SearchFlowerRequest request) {
+        Page<Flower> flowers = flowerRepo.findAllByStatusAndNameContainingIgnoreCase(Status.FLOWER_AVAILABLE, request.getKeyword(), PageRequest.of(0, PageSize.SIZE));
+        return systemService.getFlowerList(flowers, 0, request.getKeyword());
     }
 
     //--------------------TEST--------------------//
 
-    public SearchFlowerResponse searchFlowersLogicTest(SearchFlowerRequest request) {
-        return SearchFlowerResponse.builder()
-                .status("200")
-                .message("")
-                .flowers(
-                        flowerRepo.findAll().stream()
-                                .filter(flower -> flower.getStatus().equals(Status.FLOWER_AVAILABLE) && flower.getName().toLowerCase().contains(request.getKeyword().toLowerCase()))
-                                .map(
-                                        flower -> SearchFlowerResponse.Flower.builder()
-                                                .id(flower.getId())
-                                                .name(flower.getName())
-                                                .price(flower.getPrice())
-                                                .img(flower.getImg())
-                                                .build()
-                                )
-                                .toList()
-                )
-                .build();
+    public GetFlowerListResponse searchFlowersLogicTest(SearchFlowerRequest request) {
+        Page<Flower> flowers = flowerRepo.findAllByStatusAndNameContainingIgnoreCase(Status.FLOWER_AVAILABLE, request.getKeyword(), PageRequest.of(0, PageSize.SIZE));
+        return systemService.getFlowerList(flowers, 0, request.getKeyword());
     }
 
     //-----------------Sort Flowers----------------------//
@@ -172,7 +145,6 @@ public class CustomerServiceImpl implements CustomerService {
             System.err.println("Well just a funny message that there is no category to sort with id: " + request.getCateId());
         }
         flowers = new ArrayList<>(flowers);
-
         //Check sortType
         flowers.sort(Comparator.comparing(Flower::getId).reversed());
         if (request.getSortType() != null) {
@@ -199,6 +171,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             }
         }
+
         return SortFlowerResponse.builder()
                 .status("200")
                 .message("")
@@ -219,7 +192,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public String addToWishList(AddToWishListRequest request, RedirectAttributes attributes, HttpSession session) {
         AddToWishListResponse response = addToWishListLogic(request, Roles.getCurrentLoggedAccount(session));
-        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "items" : "error", response);
         if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ADD_TO_WISHLIST);
     }
@@ -247,22 +220,31 @@ public class CustomerServiceImpl implements CustomerService {
         if(item == null) {
             item = WishlistItem.builder()
                     .wishlist(wishlist)
-                    .quantity(request.getQty())
+                    .quantity(request.getQuantity())
                     .flower(flower)
                     .build();
         }else{
-            if(item.getQuantity() + request.getQty() > flower.getQuantity()){
+            if(item.getQuantity() + request.getQuantity() > flower.getQuantity()){
                 return AddToWishListResponse.builder()
                         .status("400")
                         .message("Max quantity exceeded")
                         .build();
             }
-            item.setQuantity(item.getQuantity() + request.getQty());
+            item.setQuantity(item.getQuantity() + request.getQuantity());
         }
         wishlistItemRepo.save(item);
         return AddToWishListResponse.builder()
                 .status("200")
                 .message("Add to wishlist successfully")
+                .items(wishlistItemRepo.findAllByWishlist_User_Account_Id(account.getId()).stream()
+                        .map(i -> AddToWishListResponse.Item.builder()
+                                .id(i.getId())
+                                .name(i.getFlower().getName())
+                                .quantity(i.getQuantity())
+                                .price(i.getFlower().getPrice())
+                                .flower(i.getFlower())
+                                .build())
+                        .toList())
                 .build();
     }
 
@@ -291,17 +273,17 @@ public class CustomerServiceImpl implements CustomerService {
         if(item == null) {
             item = WishlistItem.builder()
                     .wishlist(wishlist)
-                    .quantity(request.getQty())
+                    .quantity(request.getQuantity())
                     .flower(flower)
                     .build();
         }else{
-            if(item.getQuantity() + request.getQty() > flower.getQuantity()){
+            if(item.getQuantity() + request.getQuantity() > flower.getQuantity()){
                 return AddToWishListResponse.builder()
                         .status("400")
                         .message("Max quantity exceeded")
                         .build();
             }
-            item.setQuantity(item.getQuantity() + request.getQty());
+            item.setQuantity(item.getQuantity() + request.getQuantity());
         }
         wishlistItemRepo.save(item);
         return AddToWishListResponse.builder()
@@ -343,6 +325,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .message("Update wishlist successfully")
                 .build();
     }
+
     //--------------------TEST--------------------//
 
     public UpdateWishListResponse updateWishListLogicTest(UpdateWishListRequest request, Account account) {

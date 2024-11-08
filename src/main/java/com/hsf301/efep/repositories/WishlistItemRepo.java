@@ -10,4 +10,6 @@ public interface WishlistItemRepo extends JpaRepository<WishlistItem, Integer> {
     Optional<WishlistItem> findByFlower_IdAndWishlist_User_Account_Id(int flowerId, int accountId);
 
     List<WishlistItem> findAllByWishlist_Id(int wishlistId);
+
+    List<WishlistItem> findAllByWishlist_User_Account_Id(int accountId);
 }

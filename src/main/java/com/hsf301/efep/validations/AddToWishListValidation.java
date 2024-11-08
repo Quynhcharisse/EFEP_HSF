@@ -12,7 +12,7 @@ public class AddToWishListValidation {
             return "Flower not found";
         }
 
-        if(request.getQty() > flower.getQuantity()){
+        if(request.getQuantity() > flower.getQuantity()){
             return "Max quantity exceeded";
         }
 

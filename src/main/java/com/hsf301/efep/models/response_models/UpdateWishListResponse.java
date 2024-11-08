@@ -12,4 +12,3 @@ public class UpdateWishListResponse {
     String status;
     String message;
 }
-

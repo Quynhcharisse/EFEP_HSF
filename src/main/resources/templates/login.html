@@ -1,51 +1,430 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flower Shop Login</title>
-    <link rel="stylesheet" href="./css/style1.css" />
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Alazea - Gardening &amp; Landscaping HTML Template</title>
+
+    <!-- Favicon -->
+    <link rel="icon" th:href="@{/img/core-img/favicon.ico}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/toast.css}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css}">
+
 </head>
+
 <body>
-<div class="login-container">
-    <div class="login-header">
-        <h2>Welcome to Flower Shop </h2>
-        <p>Đăng nhập để trải nghiệm mua sắm tuyệt vời cùng chúng tôi!</p>
-    </div>
-
-    <form th:action="@{/account/login}" class="login-form" th:method="POST">
-        <div class="input-group">
-            <label for="email">Email</label>
-            <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Nhập email của bạn"
-                    required
-            />
-        </div>
-
-        <div class="input-group">
-            <label for="password">Mật khẩu</label>
-            <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Nhập mật khẩu"
-                    required
-            />
-        </div>
-
-        <div class="actions">
-            <button type="submit" class="btn-login">Đăng nhập</button>
-
-        </div>
-    </form>
-    <a th:href="@{/forget}" class="forgot-password">Quên mật khẩu?</a>
-
-    <div class="signup">
-        <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+<!-- Preloader -->
+<div class="preloader d-flex align-items-center justify-content-center">
+    <div class="preloader-circle"></div>
+    <div class="preloader-img">
+        <img th:src="@{/img/core-img/leaf.png}" alt="">
     </div>
 </div>
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+
+    <!-- ***** Top Header Area ***** -->
+    <div class="top-header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="top-header-content d-flex align-items-center justify-content-between">
+                        <!-- Top Header Content -->
+                        <div class="top-header-meta">
+                            <a th:href="@{/}" data-toggle="tooltip" data-placement="bottom"
+                               title="infodeercreative@gmail.com"><i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                <span>Email: infodeercreative@gmail.com</span></a>
+                            <a th:href="@{/}" data-toggle="tooltip" data-placement="bottom" title="+1 234 122 122"><i
+                                    class="fa fa-phone" aria-hidden="true"></i> <span>Call Us: +1 234 122 122</span></a>
+                        </div>
+
+                        <!-- Top Header Content -->
+                        <div class="top-header-meta d-flex">
+                            <!-- Language Dropdown -->
+                            <!--                                <div class="language-dropdown">-->
+                            <!--                                    <div class="dropdown">-->
+                            <!--                                        <button class="btn btn-secondary dropdown-toggle mr-30" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Language</button>-->
+                            <!--                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+                            <!--                                            <a class="dropdown-item" th:href="#">USA</a>-->
+                            <!--                                            <a class="dropdown-item" th:href="#">UK</a>-->
+                            <!--                                            <a class="dropdown-item" th:href="#">Bangla</a>-->
+                            <!--                                            <a class="dropdown-item" th:href="#">Hindi</a>-->
+                            <!--                                            <a class="dropdown-item" th:href="#">Spanish</a>-->
+                            <!--                                            <a class="dropdown-item" th:href="#">Latin</a>-->
+                            <!--                                        </div>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!-- Login -->
+                            <div class="login">
+                                <a th:href="@{/}"><i class="fa fa-user" aria-hidden="true"></i> <span>Login</span></a>
+                            </div>
+                            <!-- Cart -->
+                            <div class="cart">
+                                <a th:href="@{/}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span>Cart <span class="cart-quantity">(1)</span></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** Navbar Area ***** -->
+    <div class="alazea-main-menu">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="alazeaNav">
+
+                    <!-- Nav Brand -->
+                    <a th:href="@{/}" class="nav-brand"><img th:src="@{/img/core-img/logo.png}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Navbar Start -->
+                        <div class="classynav">
+                            <ul>
+                                <li><a th:href="@{/}">Home</a></li>
+                                <li><a th:href="@{/about}">About</a></li>
+                                <li><a th:href="@{/}">Pages</a>
+                                    <ul class="dropdown">
+                                        <li><a th:href="@{/}">Home</a></li>
+                                        <li><a th:href="@{/about}">About</a></li>
+                                        <li><a th:href="@{/shop}">Shop</a>
+                                            <ul class="dropdown">
+                                                <li><a th:href="@{/shop}">Shop</a></li>
+                                                <li><a th:href="@{/}">Shop Details</a></li>
+                                                <li><a th:href="@{/cart}">Shopping Cart</a></li>
+                                                <li><a th:href="@{/pay}">Checkout</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a th:href="@{/portfolio}">Portfolio</a>
+                                            <ul class="dropdown">
+                                                <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                                                <li><a th:href="@{/}">Portfolio Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a th:href="@{/blog}">Blog</a>
+                                            <ul class="dropdown">
+                                                <li><a th:href="@{/blog}">Blog</a></li>
+                                                <li><a th:href="@{/}">Blog Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a th:href="@{/contact}">Contact</a></li>
+                                    </ul>
+                                </li>
+                                <li><a th:href="@{/shop}">Shop</a></li>
+                                <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                                <li><a th:href="@{/contact}">Contact</a></li>
+                            </ul>
+
+                            <!-- Search Icon -->
+                            <div id="searchIcon">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </div>
+
+                        </div>
+                        <!-- Navbar End -->
+                    </div>
+                </nav>
+
+                <!-- Search Form -->
+                <div class="search-form">
+                    <form action="#" method="get">
+                        <label for="search"></label>
+                        <input type="search" name="search" id="search" placeholder="Type keywords &amp; press enter...">
+                        <button type="submit" class="d-none"></button>
+                    </form>
+                    <!-- Close Icon -->
+                    <div class="closeIcon"><i class="fa fa-times" aria-hidden="true"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcrumb-area">
+    <!-- Top Breadcrumb Area -->
+    <div class="top-breadcrumb-area bg-img bg-overlay d-flex align-items-center justify-content-center"
+         style="background-image: url(/img/bg-img/24.jpg);">
+        <h2>Login</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}"><i class="fa fa-home"></i> Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Login</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Breadcrumb Area End ##### -->
+
+<!-- ##### Contact Area Info Start ##### -->
+<!--<div class="contact-area-info section-padding-0-100">-->
+<!--    <div class="container">-->
+<!--        <div class="row align-items-center justify-content-between">-->
+<!--            &lt;!&ndash; Contact Thumbnail &ndash;&gt;-->
+<!--            <div class="col-12 col-md-6">-->
+<!--                <div class="contact&#45;&#45;thumbnail">-->
+<!--                    <img th:src="@{/img/bg-img/25.jpg}" alt="">-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="col-12 col-md-5">-->
+<!--                &lt;!&ndash; Section Heading &ndash;&gt;-->
+<!--                <div class="section-heading">-->
+<!--                    <h2>CONTACT US</h2>-->
+<!--                    <p>We are improving our services to serve you better.</p>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Contact Information &ndash;&gt;-->
+<!--                <div class="contact-information">-->
+<!--                    <p><span>Address:</span> 505 Silk Rd, New York</p>-->
+<!--                    <p><span>Phone:</span> +1 234 122 122</p>-->
+<!--                    <p><span>Email:</span> info.deercreative@gmail.com</p>-->
+<!--                    <p><span>Open hours:</span> Mon - Sun: 8 AM to 9 PM</p>-->
+<!--                    <p><span>Happy hours:</span> Sat: 2 PM to 4 PM</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- ##### Contact Area Info End ##### -->
+
+<!-- ##### Contact Area Start ##### -->
+<section class="contact-area">
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-12 col-lg-5">
+                <!-- Section Heading -->
+                <div class="section-heading">
+                    <h2>LOGIN</h2>
+                </div>
+                <!-- Contact Form Area -->
+                <div class="contact-form-area mb-100">
+                    <form th:action="@{/account/login}" th:method="post">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="contact-email"></label>
+                                    <input type="text" name="email" class="form-control" id="contact-email"
+                                           placeholder="Email" onkeyup="validateEmail()">
+                                    <span id="email-error"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="contact-password"></label>
+                                    <input type="password" name="password" class="form-control" id="contact-password"
+                                           placeholder="Password" onkeyup="validatePassword()">
+                                    <span id="password-error"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn alazea-btn mt-15">Login</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <!-- Google Maps -->
+                <div class="map-area mb-100">
+                    <!--                    <iframe th:src="@{'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22236.40558254599!2d-118.25292394686001!3d34.057682914027104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2z4Kay4Ka4IOCmj-CmnuCnjeCmnOCnh-CmsuCnh-CmuCwg4KaV4KeN4Kav4Ka-4Kay4Ka_4Kar4KeL4Kaw4KeN4Kao4Ka_4Kav4Ka84Ka-LCDgpq7gpr7gprDgp43gppXgpr_gpqgg4Kav4KeB4KaV4KeN4Kak4Kaw4Ka-4Ka34KeN4Kaf4KeN4Kaw!5e0!3m2!1sbn!2sbd!4v1532328708137'}"-->
+                    <!--                            allowfullscreen></iframe>-->
+                    <img th:src="@{/img/bg-img/25.jpg}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:if="${err}" id="toastData" th:text="${err.message}"></div>
+<div th:if="${err}" id="toastError"></div>
+<!-- ##### Contact Area End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<footer class="footer-area bg-img" style="background-image: url(/img/bg-img/3.jpg);">
+    <!-- Main Footer Area -->
+    <div class="main-footer-area">
+        <div class="container">
+            <div class="row">
+
+                <!-- Single Footer Widget -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-footer-widget">
+                        <div class="footer-logo mb-30">
+                            <a th:href="@{/}"><img th:src="@{/img/core-img/logo.png}" alt=""></a>
+                        </div>
+                        <p>Lorem ipsum dolor sit samet, consectetur adipiscing elit. India situs atione mantor</p>
+                        <div class="social-info">
+                            <a th:href="@{/}"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a th:href="@{/}"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                            <a th:href="@{/}"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+                            <a th:href="@{/}"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                            <a th:href="@{/}"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Footer Widget -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-footer-widget">
+                        <div class="widget-title">
+                            <h5>QUICK LINK</h5>
+                        </div>
+                        <nav class="widget-nav">
+                            <ul>
+                                <li><a th:href="@{/}">Purchase</a></li>
+                                <li><a th:href="@{/}">FAQs</a></li>
+                                <li><a th:href="@{/}">Payment</a></li>
+                                <li><a th:href="@{/}">News</a></li>
+                                <li><a th:href="@{/}">Return</a></li>
+                                <li><a th:href="@{/}">Advertise</a></li>
+                                <li><a th:href="@{/}">Shipping</a></li>
+                                <li><a th:href="@{/}">Career</a></li>
+                                <li><a th:href="@{/}">Orders</a></li>
+                                <li><a th:href="@{/}">Policies</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Single Footer Widget -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-footer-widget">
+                        <div class="widget-title">
+                            <h5>BEST SELLER</h5>
+                        </div>
+
+                        <!-- Single Best Seller Products -->
+                        <div class="single-best-seller-product d-flex align-items-center">
+                            <div class="product-thumbnail">
+                                <a th:href="@{/}"><img th:src="@{/img/bg-img/4.jpg}" alt=""></a>
+                            </div>
+                            <div class="product-info">
+                                <a th:href="@{/}">Cactus Flower</a>
+                                <p>$10.99</p>
+                            </div>
+                        </div>
+
+                        <!-- Single Best Seller Products -->
+                        <div class="single-best-seller-product d-flex align-items-center">
+                            <div class="product-thumbnail">
+                                <a th:href="@{/}"><img th:src="@{/img/bg-img/5.jpg}" alt=""></a>
+                            </div>
+                            <div class="product-info">
+                                <a th:href="@{/}">Tulip Flower</a>
+                                <p>$11.99</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Footer Widget -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-footer-widget">
+                        <div class="widget-title">
+                            <h5>CONTACT</h5>
+                        </div>
+
+                        <div class="contact-information">
+                            <p><span>Address:</span> 505 Silk Rd, New York</p>
+                            <p><span>Phone:</span> +1 234 122 122</p>
+                            <p><span>Email:</span> info.deercreative@gmail.com</p>
+                            <p><span>Open hours:</span> Mon - Sun: 8 AM to 9 PM</p>
+                            <p><span>Happy hours:</span> Sat: 2 PM to 4 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom Area -->
+    <div class="footer-bottom-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="border-line"></div>
+                </div>
+                <!-- Copywrite Text -->
+                <div class="col-12 col-md-6">
+                    <div class="copywrite-text">
+                        <p>&copy; <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                                                                aria-hidden="true"></i> by <a
+                                    th:href="@{'https://colorlib.com'}" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
+                <!-- Footer Nav -->
+                <div class="col-12 col-md-6">
+                    <div class="footer-nav">
+                        <nav>
+                            <ul>
+                                <li><a th:href="@{/}">Home</a></li>
+                                <li><a th:href="@{/about}">About</a></li>
+                                <li><a th:href="@{/}">Service</a></li>
+                                <li><a th:href="@{/portfolio}">Portfolio</a></li>
+                                <li><a th:href="@{/blog}">Blog</a></li>
+                                <li><a th:href="@{/contact}">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### All Javascript Files ##### -->
+<!-- jQuery-2.2.4 js -->
+<script th:src="@{/js/jquery/jquery-2.2.4.min.js}"></script>
+<!-- Popper js -->
+<script th:src="@{/js/bootstrap/popper.min.js}"></script>
+<!-- Bootstrap js -->
+<script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+<!-- All Plugins js -->
+<script th:src="@{/js/plugins/plugins.js}"></script>
+<!-- Active js -->
+<script th:src="@{/js/active.js}"></script>
+<!-- Toast js -->
+<script th:src="@{/js/toast.js}"></script>
+<!-- Fontawesome -->
+<script th:src="@{'https://kit.fontawesome.com/a5ac115809.js'}" crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -6,8 +6,8 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GetFlowerListForShopResponse {

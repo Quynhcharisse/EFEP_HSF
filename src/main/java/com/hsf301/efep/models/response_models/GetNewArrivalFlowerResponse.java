@@ -16,11 +16,11 @@ public class GetNewArrivalFlowerResponse {
     List<Flower> flowers;
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
-    public static class Flower {
+    public static class Flower{
         int id;
         String name;
         float price;

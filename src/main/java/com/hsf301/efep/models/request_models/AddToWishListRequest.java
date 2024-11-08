@@ -10,5 +10,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AddToWishListRequest {
     int flowerId;
-    int qty;
+    int quantity;
 }

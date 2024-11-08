@@ -1,22 +1,22 @@
 package com.hsf301.efep.service_implementors;
 
 import com.hsf301.efep.configurations.ReturnPageConfig;
+import com.hsf301.efep.enums.ActionCaseValues;
 import com.hsf301.efep.enums.Roles;
 import com.hsf301.efep.enums.Status;
 import com.hsf301.efep.models.entity_models.Account;
+import com.hsf301.efep.models.entity_models.Category;
 import com.hsf301.efep.models.entity_models.Flower;
 import com.hsf301.efep.models.entity_models.Order;
 import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import com.hsf301.efep.models.response_models.*;
-import com.hsf301.efep.repositories.AccountRepo;
-import com.hsf301.efep.enums.ActionCaseValues;
-import com.hsf301.efep.repositories.CategoryRepo;
-import com.hsf301.efep.repositories.FlowerRepo;
-import com.hsf301.efep.repositories.OrderRepo;
+import com.hsf301.efep.repositories.*;
 import com.hsf301.efep.services.SystemService;
 import com.hsf301.efep.validations.GetFlowerDetailValidation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,17 +33,23 @@ public class SystemServiceImpl implements SystemService {
     private final AccountRepo accountRepo;
     private final OrderRepo orderRepo;
     private final CategoryRepo categoryRepo;
+    private final WishlistItemRepo wishlistItemRepo;
 
-    //-----------------Get Top Sold Flower----------------------//
+    //-----------------Get Top 10 Sold Flower----------------------//
     @Override
-    public GetTopSoldFlowerResponse getTop10SoldFlower() {
-        return getTop10SoldFlowerLogic();
+    public GetTopSoldFlowerResponse getTop8SoldFlower() {
+        return getTop8SoldFlowerLogic();
     }
 
-    private GetTopSoldFlowerResponse getTop10SoldFlowerLogic() {
+    private GetTopSoldFlowerResponse getTop8SoldFlowerLogic() {
         List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
-        flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
-        flowers = flowers.stream().limit(10).toList();
+        flowers = flowers.stream()
+                .sorted(
+                        Comparator.comparing(Flower::getSoldQuantity)
+                                .reversed()
+                )
+                .limit(8)
+                .toList();
 
         return GetTopSoldFlowerResponse.builder()
                 .status("200")
@@ -63,11 +69,18 @@ public class SystemServiceImpl implements SystemService {
                 .build();
     }
 
-    //=-------------------------Test--------------------------//
-    public GetTopSoldFlowerResponse getTop10SoldFlowerLogicTest() {
+    //--------------------TEST--------------------//
+
+    public GetTopSoldFlowerResponse getTop8SoldFlowerLogicTest() {
         List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
-        flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
-        flowers = flowers.stream().limit(10).toList();
+        flowers = flowers.stream()
+                .sorted(
+                        Comparator.comparing(Flower::getSoldQuantity)
+                        .reversed()
+                )
+                .limit(8)
+                .toList();
+
         return GetTopSoldFlowerResponse.builder()
                 .status("200")
                 .message("")
@@ -140,14 +153,19 @@ public class SystemServiceImpl implements SystemService {
                 .build();
     }
 
+
     //-----------------Get Customer Amount----------------------//
     @Override
     public GetCustomerAmountResponse getCustomerAmount() {
-        return null;
+        return getCustomerAmountLogic();
     }
 
-    public GetCustomerAmountResponse getCustomerAmountLogic() {
-        return null;
+    private GetCustomerAmountResponse getCustomerAmountLogic() {
+        return GetCustomerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(accountRepo.countByRole(Roles.CUSTOMER))
+                .build();
     }
 
     //--------------------TEST--------------------//
@@ -163,11 +181,15 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Flower Amount----------------------//
     @Override
     public GetFlowerAmountResponse getFlowerAmount() {
-        return null;
+        return getFlowerAmountLogic();
     }
 
     private GetFlowerAmountResponse getFlowerAmountLogic() {
-        return null;
+        return GetFlowerAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount(flowerRepo.countByStatus(Status.FLOWER_AVAILABLE))
+                .build();
     }
 
     //--------------------TEST--------------------//
@@ -179,7 +201,6 @@ public class SystemServiceImpl implements SystemService {
                 .amount(flowerRepo.countByStatus(Status.FLOWER_AVAILABLE))
                 .build();
     }
-
 
     //-----------------Get Working Year Amount----------------------//
     @Override
@@ -213,6 +234,82 @@ public class SystemServiceImpl implements SystemService {
                         ).getYears()
                 )
                 .build();
+    }
+
+    //-----------------Get Order Amount----------------------//
+    @Override
+    public GetOrderAmountResponse getOrderAmount() {
+        return getOrderAmountLogic();
+    }
+
+    private GetOrderAmountResponse getOrderAmountLogic() {
+        return GetOrderAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount((int) orderRepo.findAll().stream().filter(o -> o.getStatus().equals(Status.ORDER_COMPLETE)).count())
+                .build();
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetOrderAmountResponse getOrderAmountLogicTest() {
+        return GetOrderAmountResponse.builder()
+                .status("200")
+                .message("")
+                .amount((int) orderRepo.findAll().stream().filter(o -> o.getStatus().equals(Status.ORDER_COMPLETE)).count())
+                .build();
+    }
+
+    //-----------------Get Order Amount----------------------//
+    @Override
+    public GetFlowerNumberPerCategoryResponse getFlowerNumberPerCategory(int top) {
+        return getFlowerNumberPerCategoryLogic(top);
+    }
+
+    private GetFlowerNumberPerCategoryResponse getFlowerNumberPerCategoryLogic(int top) {
+        List<Category> categories = new ArrayList<>(categoryRepo.findAll());
+        categories.sort(Comparator.comparing((Category c) -> c.getFlowerList().size()).reversed());
+        if(top > 0){
+            return GetFlowerNumberPerCategoryResponse.builder()
+                    .status("200")
+                    .message("")
+                    .categories(
+                            categories.stream()
+                                    .limit(top)
+                                    .map(
+                                            category -> GetFlowerNumberPerCategoryResponse.Category.builder()
+                                                    .id(category.getId())
+                                                    .name(category.getName())
+                                                    .flowerNumber(flowerRepo.findAllByCategory_IdAndStatus(category.getId(), Status.FLOWER_AVAILABLE).size())
+                                                    .percentage(getPercentage(category))
+                                                    .build()
+                                    )
+                                    .toList()
+                    )
+                    .build();
+        }
+        return GetFlowerNumberPerCategoryResponse.builder()
+                .status("200")
+                .message("")
+                .categories(
+                        categories.stream()
+                                .map(
+                                        category -> GetFlowerNumberPerCategoryResponse.Category.builder()
+                                                .id(category.getId())
+                                                .name(category.getName())
+                                                .flowerNumber(flowerRepo.findAllByCategory_IdAndStatus(category.getId(), Status.FLOWER_AVAILABLE).size())
+                                                .percentage(getPercentage(category))
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+    private float getPercentage(Category category) {
+        float flowerAmount = flowerRepo.findAllByCategory_IdAndStatus(category.getId(), Status.FLOWER_AVAILABLE).size();
+        float flowerTotal = flowerRepo.findAll().stream().filter(f -> f.getStatus().equals(Status.FLOWER_AVAILABLE)).toList().size();
+        return (float) (Math.round((flowerAmount / flowerTotal) * 100) / 1.00);
     }
 
     //-----------------Get New Arrival Flower----------------------//
@@ -268,7 +365,6 @@ public class SystemServiceImpl implements SystemService {
                 )
                 .build();
     }
-
 
     //-----------------Get Teammate----------------------//
     @Override
@@ -358,12 +454,11 @@ public class SystemServiceImpl implements SystemService {
                 .build();
     }
 
-
     //-----------------Get Flower Detail----------------------//
     @Override
     public String getFlowerDetail(GetFlowerDetailRequest request, RedirectAttributes attributes) {
         GetFlowerDetailResponse response = getFlowerDetailLogic(request);
-        attributes.addFlashAttribute("msg", response);
+        attributes.addFlashAttribute("flowerDetail", response);
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.FLOWER_DETAIL);
     }
 
@@ -384,6 +479,7 @@ public class SystemServiceImpl implements SystemService {
                 .message("")
                 .flowerDetail(
                         GetFlowerDetailResponse.FlowerDetail.builder()
+                                .id(flower.getId())
                                 .name(flower.getName())
                                 .price(flower.getPrice())
                                 .description(flower.getDescription())
@@ -417,6 +513,7 @@ public class SystemServiceImpl implements SystemService {
                 .message("")
                 .flowerDetail(
                         GetFlowerDetailResponse.FlowerDetail.builder()
+                                .id(flower.getId())
                                 .name(flower.getName())
                                 .price(flower.getPrice())
                                 .description(flower.getDescription())
@@ -559,6 +656,143 @@ public class SystemServiceImpl implements SystemService {
                                                 .img(f.getImg())
                                                 .status(f.getStatus())
                                                 .qty(f.getQuantity())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+    //-----------------Get Flower List----------------------//
+
+    @Override
+    public GetFlowerListResponse getFlowerList(int page, int size) {
+        return getFlowerListLogic(page, size);
+    }
+
+    private GetFlowerListResponse getFlowerListLogic(int page, int size) {
+        Page<Flower> flowers = flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE, PageRequest.of(page, size));
+        return GetFlowerListResponse.builder()
+                .status("200")
+                .message("")
+                .currentPage(page + 1)
+                .totalPages(flowers.getTotalPages())
+                .totalElements(flowers.getTotalElements())
+                .maxPrice(calculateMaxPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .minPrice(calculateMinPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .keyword("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetFlowerListResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+    private int calculateMinPrice(List<Flower> flowers) {
+        return (int) Math.floor(flowers.stream().sorted(Comparator.comparing(Flower::getPrice)).toList().get(0).getPrice());
+    }
+
+    private int calculateMaxPrice(List<Flower> flowers){
+        return (int) Math.ceil(flowers.stream().sorted(Comparator.comparing(Flower::getPrice).reversed()).toList().get(0).getPrice());
+    }
+
+    //--------------------TEST--------------------//
+    public GetFlowerListResponse getFlowerListLogicTest(int page, int size) {
+        Page<Flower> flowers = flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE, PageRequest.of(page, size));
+        return GetFlowerListResponse.builder()
+                .status("200")
+                .message("")
+                .currentPage(page + 1)
+                .totalPages(flowers.getTotalPages())
+                .totalElements(flowers.getTotalElements())
+                .maxPrice(calculateMaxPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .minPrice(calculateMinPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .keyword("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetFlowerListResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+
+    //-----------------Get Flower List V2----------------------//
+
+    @Override
+    public GetFlowerListResponse getFlowerList(Page<Flower> flowers, int page, String keyword) {
+        return getFlowerListLogic(flowers, page, keyword);
+    }
+
+    private GetFlowerListResponse getFlowerListLogic(Page<Flower> flowers, int page, String keyword) {
+        return GetFlowerListResponse.builder()
+                .status("200")
+                .message("")
+                .currentPage(page + 1)
+                .totalPages(flowers.getTotalPages())
+                .totalElements(flowers.getTotalElements())
+                .maxPrice(calculateMaxPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .minPrice(calculateMinPrice(flowerRepo.findAllByStatus(Status.FLOWER_AVAILABLE)))
+                .keyword(keyword)
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetFlowerListResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+
+    @Override
+    public String getWishListItem(HttpSession session, RedirectAttributes attributes){
+        GetWishListItemResponse response = getWishListItemLogic(Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "items" : "error", response);
+        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ADD_TO_WISHLIST);
+    }
+
+    private GetWishListItemResponse getWishListItemLogic(Account account){
+        if(account == null || !Roles.checkIfThisAccountIsCustomer(account)){
+            return GetWishListItemResponse.builder()
+                    .status("403")
+                    .message("Please login a customer account first")
+                    .items(new ArrayList<>())
+                    .build();
+        }
+        return GetWishListItemResponse.builder()
+                .status("200")
+                .message("")
+                .items(
+                        wishlistItemRepo.findAllByWishlist_User_Account_Id(account.getId()).stream()
+                                .map(
+                                        item -> GetWishListItemResponse.Item.builder()
+                                                .id(item.getId())
+                                                .name(item.getFlower().getName())
+                                                .quantity(item.getQuantity())
+                                                .price(item.getFlower().getPrice())
+                                                .flower(item.getFlower())
                                                 .build()
                                 )
                                 .toList()

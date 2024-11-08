@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{header :: head}"></head>
+
+<body>
+<!-- ##### Header Area Start ##### -->
+<div th:replace="~{header :: header}"></div>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Hero Area Start ##### -->
+<section class="hero-area">
+    <div class="hero-post-slides owl-carousel">
+
+        <!-- Single Hero Post -->
+        <div class="single-hero-post bg-overlay">
+            <!-- Post Image -->
+            <div class="slide-img bg-img" style="background-image: url(/img/bg-img/1.jpg);"></div>
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Post Content -->
+                        <div class="hero-slides-content text-center">
+                            <h2>Bloom with grace, petal by petal, spreading joy in every bouquet</h2>
+                            <p></p>
+                            <div class="welcome-btn-group">
+                                <a class="btn alazea-btn mr-30" th:href="@{/}">GET STARTED</a>
+                                <a class="btn alazea-btn active" th:href="@{/}">CONTACT US</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Hero Post -->
+        <div class="single-hero-post bg-overlay">
+            <!-- Post Image -->
+            <div class="slide-img bg-img" style="background-image: url(/img/bg-img/2.jpg);"></div>
+            <div class="container h-100">
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <!-- Post Content -->
+                        <div class="hero-slides-content text-center">
+                            <h2>Bloom with grace, petal by petal, spreading joy in every bouquet</h2>
+                            <p></p>
+                            <div class="welcome-btn-group">
+                                <a class="btn alazea-btn mr-30" th:href="@{/}">GET STARTED</a>
+                                <a class="btn alazea-btn active" th:href="@{/}">CONTACT US</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- ##### Hero Area End ##### -->
+
+<!-- ##### Service Area Start ##### -->
+<section class="our-services-area bg-gray section-padding-100-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>OUR SERVICES</h2>
+                    <p>We provide the perfect service for you.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-between">
+            <div class="col-12 col-lg-5">
+                <div class="alazea-service-area mb-100">
+
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="100ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img alt="" th:src="@{/img/core-img/s1.png}">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Flower shop</h5>
+                            <p>We are here to give you sweet flowers</p>
+                        </div>
+                    </div>
+
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="300ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img alt="" th:src="@{/img/core-img/s2.png}">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Flower consultant</h5>
+                            <p>There's nowhere to find flower advice, rest assured, we're here</p>
+                        </div>
+                    </div>
+
+                    <!-- Single Service Area -->
+                    <div class="single-service-area d-flex align-items-center wow fadeInUp" data-wow-delay="500ms">
+                        <!-- Icon -->
+                        <div class="service-icon mr-30">
+                            <img alt="" th:src="@{/img/core-img/s3.png}">
+                        </div>
+                        <!-- Content -->
+                        <div class="service-content">
+                            <h5>Fast response</h5>
+                            <p>Don't mind waiting, we always respond as soon as possible</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="alazea-video-area bg-overlay mb-100">
+                    <img alt="" th:src="@{/img/bg-img/23.jpg}">
+                    <a class="video-icon" th:href="@{'https://www.youtube.com/watch?v=A6O2aIYxByE'}">
+                        <i aria-hidden="true" class="fa fa-play"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Service Area End ##### -->
+
+<!-- ##### Testimonial Area Start ##### -->
+<section class="testimonial-area section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="testimonials-slides owl-carousel">
+
+                    <!-- Single Testimonial Slide -->
+                    <div class="single-testimonial-slide">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-thumb">
+                                    <img alt="" th:src="@{/img/bg-img/13.jpg}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-content">
+                                    <!-- Section Heading -->
+                                    <div class="section-heading">
+                                        <h2>TESTIMONIAL</h2>
+                                        <p>Some kind words from clients about us</p>
+                                    </div>
+                                    <p>“Alazea is a floral paradise where every bloom tells a story. The exquisite
+                                        bouquets and expert staff turn visits into enchanting experiences, each petal a
+                                        masterpiece of beauty and care.”</p>
+                                    <div class="testimonial-author-info">
+                                        <h6>Donald Trump</h6>
+                                        <p>President of USA</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Testimonial Slide -->
+                    <div class="single-testimonial-slide">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-thumb">
+                                    <img alt="" th:src="@{/img/bg-img/14.jpg}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-content">
+                                    <!-- Section Heading -->
+                                    <div class="section-heading">
+                                        <h2>TESTIMONIAL</h2>
+                                        <p>Some kind words from clients about us</p>
+                                    </div>
+                                    <p>“Alazea is a fragrant oasis of floral elegance. Each visit feels like stepping
+                                        into a living gallery of natural beauty. The skilled staff curate stunning
+                                        arrangements that are more than just bouquets—they are works of art. This shop
+                                        is a haven where every flower tells a story of botanical perfection.
+                                        ”</p>
+                                    <div class="testimonial-author-info">
+                                        <h6>Mark Zuckerberg</h6>
+                                        <p>Co-founded of Facebook</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Testimonial Slide -->
+                    <div class="single-testimonial-slide">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-thumb">
+                                    <img alt="" th:src="@{/img/bg-img/15.jpg}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="testimonial-content">
+                                    <!-- Section Heading -->
+                                    <div class="section-heading">
+                                        <h2>TESTIMONIAL</h2>
+                                        <p>Some kind words from clients about us</p>
+                                    </div>
+                                    <p>“Alazea is a floral gem where beauty blossoms. Walking in feels like entering a
+                                        fragrant art exhibit—each arrangement is a masterpiece. The staff's expertise
+                                        and passion create a haven of botanical delight, where every bloom whispers
+                                        tales of nature's elegance.”</p>
+                                    <div class="testimonial-author-info">
+                                        <h6>Mr.Pham Nhat Vuong</h6>
+                                        <p>CEO of VinFast LLC</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### Testimonial Area End ##### -->
+
+<!-- ##### Product Area Start ##### -->
+<section class="new-arrivals-products-area bg-gray section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Section Heading -->
+                <div class="section-heading text-center">
+                    <h2>NEW ARRIVALS</h2>
+                    <p>We have the latest products, it must be exciting for you</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Single Product Area -->
+            <div class="col-12 col-sm-6 col-lg-3" th:each="flower : ${top8Flower.flowers}">
+                <div class="single-product-area mb-50">
+                    <!-- Product Image -->
+                    <div class="product-img">
+                        <a th:href="@{/customer/flower/detail(id=${flower.id})}"><img alt="" th:src="@{/img/bg-img/9.jpg}"></a>
+                        <div class="product-meta d-flex">
+                            <a class="add-to-cart-btn" th:href="@{/customer/flower/detail(id=${flower.id})}">View Detail</a>
+                        </div>
+                    </div>
+                    <!-- Product Info -->
+                    <div class="product-info mt-15 text-center">
+                        <a th:href="@{/customer/flower/detail(id=${flower.id})}">
+                            <p th:text="${flower.name}"></p>
+                        </a>
+                        <h6 th:text="'$' + ${flower.price}"></h6>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <a class="btn alazea-btn" th:href="@{/shop}">View All</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ##### Product Area End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="~{footer :: footer}"></div>
+<!-- ##### Footer Area End ##### -->
+</body>
+
+</html>

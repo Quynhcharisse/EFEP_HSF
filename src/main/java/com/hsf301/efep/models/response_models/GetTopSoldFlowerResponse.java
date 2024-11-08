@@ -6,19 +6,18 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GetTopSoldFlowerResponse {
-
     String status;
     String message;
     List<Flower> flowers;
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Flower{
