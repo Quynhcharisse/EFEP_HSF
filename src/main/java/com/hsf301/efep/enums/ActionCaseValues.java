@@ -16,9 +16,10 @@ public enum ActionCaseValues {
     CHECK_OUT,
     CREATE_FLOWER,
     UPDATE_FLOWER,
+    DELETE_FLOWER,
     FLOWER_DETAIL,
     ORDER_HISTORY,
-    DELETE_FLOWER;
+    SHOP_FLOWER;
 
     ActionCaseValues(){}
 }

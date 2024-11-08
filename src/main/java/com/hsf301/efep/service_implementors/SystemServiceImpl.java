@@ -10,7 +10,9 @@ import com.hsf301.efep.models.request_models.GetFlowerDetailRequest;
 import com.hsf301.efep.models.response_models.*;
 import com.hsf301.efep.repositories.AccountRepo;
 import com.hsf301.efep.enums.ActionCaseValues;
+import com.hsf301.efep.repositories.CategoryRepo;
 import com.hsf301.efep.repositories.FlowerRepo;
+import com.hsf301.efep.repositories.OrderRepo;
 import com.hsf301.efep.services.SystemService;
 import com.hsf301.efep.validations.GetFlowerDetailValidation;
 import jakarta.servlet.http.HttpSession;
@@ -29,38 +31,16 @@ import java.util.List;
 public class SystemServiceImpl implements SystemService {
     private final FlowerRepo flowerRepo;
     private final AccountRepo accountRepo;
+    private final OrderRepo orderRepo;
+    private final CategoryRepo categoryRepo;
 
-    //-----------------Get Slide Bar Image----------------------//
-    @Override
-    public GetSlideBarImageResponse getSlideBarImage(RedirectAttributes attributes) {
-        return getSlideBarImageLogic();
-    }
-
-    private GetSlideBarImageResponse getSlideBarImageLogic() {
-        return GetSlideBarImageResponse.builder()
-                .status("200")
-                .message("")
-                .link1("https://www.frankstonflorist.com.au/wp-content/uploads/slider/cache/47326b2292695347818ef2497f3fef9e/slider-flowers.jpg")
-                .link2("https://www.lgflowers.nl/templates/yootheme/cache/9a/lg-flowers-slider-6-9a1be667.jpeg")
-                .build();
-    }
-
-    //=-------------------------Test--------------------------//
-    public GetSlideBarImageResponse getSlideBarImageLogicTest() {
-        return GetSlideBarImageResponse.builder()
-                .status("200")
-                .message("")
-                .link1("https://www.frankstonflorist.com.au/wp-content/uploads/slider/cache/47326b2292695347818ef2497f3fef9e/slider-flowers.jpg")
-                .link2("https://www.lgflowers.nl/templates/yootheme/cache/9a/lg-flowers-slider-6-9a1be667.jpeg")
-                .build();
-    }
     //-----------------Get Top Sold Flower----------------------//
     @Override
-    public GetTopSoldFlowerResponse getTopSoldFlower(RedirectAttributes attributes) {
-        return getTopSoldFlowerLogic();
+    public GetTopSoldFlowerResponse getTop10SoldFlower() {
+        return getTop10SoldFlowerLogic();
     }
 
-    private GetTopSoldFlowerResponse getTopSoldFlowerLogic() {
+    private GetTopSoldFlowerResponse getTop10SoldFlowerLogic() {
         List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
         flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
         flowers = flowers.stream().limit(10).toList();
@@ -84,10 +64,64 @@ public class SystemServiceImpl implements SystemService {
     }
 
     //=-------------------------Test--------------------------//
-    public GetTopSoldFlowerResponse getTopSoldFlowerLogicTest() {
+    public GetTopSoldFlowerResponse getTop10SoldFlowerLogicTest() {
         List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
         flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
         flowers = flowers.stream().limit(10).toList();
+        return GetTopSoldFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetTopSoldFlowerResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+    //-----------------Get Top 2 Sold Flower----------------------//
+    @Override
+    public GetTopSoldFlowerResponse getTop2SoldFlower() {
+        return getTop2SoldFlowerLogic();
+    }
+
+    private GetTopSoldFlowerResponse getTop2SoldFlowerLogic() {
+        List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
+        flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
+        flowers = flowers.stream().limit(2).toList();
+
+        return GetTopSoldFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetTopSoldFlowerResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
+    }
+
+    //--------------------TEST--------------------//
+
+    public GetTopSoldFlowerResponse getTop2SoldFlowerLogicTest() {
+        List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
+        flowers.sort(Comparator.comparing(Flower::getSoldQuantity).reversed());
+        flowers = flowers.stream().limit(10).toList();
+
         return GetTopSoldFlowerResponse.builder()
                 .status("200")
                 .message("")
@@ -108,7 +142,7 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Customer Amount----------------------//
     @Override
-    public GetCustomerAmountResponse getCustomerAmount(RedirectAttributes attributes) {
+    public GetCustomerAmountResponse getCustomerAmount() {
         return null;
     }
 
@@ -128,7 +162,7 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Flower Amount----------------------//
     @Override
-    public GetFlowerAmountResponse getFlowerAmount(RedirectAttributes attributes) {
+    public GetFlowerAmountResponse getFlowerAmount() {
         return null;
     }
 
@@ -149,7 +183,7 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Working Year Amount----------------------//
     @Override
-    public GetWorkingYearAmountResponse getWorkingYearAmount(RedirectAttributes attributes) {
+    public GetWorkingYearAmountResponse getWorkingYearAmount() {
         return getWorkingYearAmountLogic();
     }
 
@@ -183,7 +217,7 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get New Arrival Flower----------------------//
     @Override
-    public GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes) {
+    public GetNewArrivalFlowerResponse getNewArrivalFlower() {
         return getNewArrivalFlowerLogic();
     }
 
@@ -238,7 +272,7 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Teammate----------------------//
     @Override
-    public GetTeammateResponse getTeammate(RedirectAttributes attributes) {
+    public GetTeammateResponse getTeammate() {
         return getTeammateLogic();
     }
 
@@ -248,9 +282,27 @@ public class SystemServiceImpl implements SystemService {
         String member = "CTO";
 
         List<GetTeammateResponse.Teammate> teammates = new ArrayList<>();
-        teammates.add(createTeammate("", "Pham Van Nhu Quynh", leader));
-        teammates.add(createTeammate("", "", member));
-        teammates.add(createTeammate("", "", member));
+        teammates.add(createTeammate(
+                "/img/team-img/quynh.jpg",
+                "Pham Van Nhu Quynh",
+                leader,
+                "https://github.com/Quynhcharisse",
+                "https://www.facebook.com/profile.php?id=100086284622452")
+        );
+        teammates.add(createTeammate(
+                "/img/team-img/tri.jpg",
+                "Dong Thanh Minh Tri",
+                member,
+                "",
+                "")
+        );
+        teammates.add(createTeammate(
+                "/img/team-img/hai.jpg",
+                "Le Quang Hai",
+                member,
+                "https://github.com/hai65",
+                "https://www.facebook.com/hai.lequang.52459/")
+        );
 
         return GetTeammateResponse.builder()
                 .status("200")
@@ -259,26 +311,53 @@ public class SystemServiceImpl implements SystemService {
                 .build();
     }
 
-    private GetTeammateResponse.Teammate createTeammate(String img, String name, String role) {
-        return GetTeammateResponse.Teammate.builder().image(img).name(name).role(role).build();
+    private GetTeammateResponse.Teammate createTeammate(String img, String name, String role, String github, String facebook) {
+        return GetTeammateResponse.Teammate.builder()
+                .image(img)
+                .name(name)
+                .role(role)
+                .github(github)
+                .facebook(facebook)
+                .build();
     }
 
     //--------------------TEST--------------------//
+
     public GetTeammateResponse getTeammateLogicTest() {
 
         String leader = "CEO & Founder & CTO";
         String member = "CTO";
 
         List<GetTeammateResponse.Teammate> teammates = new ArrayList<>();
-        teammates.add(createTeammate("", "Pham Van Nhu Quynh", leader));
-        teammates.add(createTeammate("", "", member));
-        teammates.add(createTeammate("", "", member));
+        teammates.add(createTeammate(
+                "https://lh3.google.com/u/4/d/1dyCFcuRNbyFtnFRaJ0Bd76Jcm2Vk_16U=w1832-h928-iv1",
+                "Pham Van Nhu Quynh",
+                leader,
+                "https://github.com/Quynhcharisse",
+                "https://www.facebook.com/profile.php?id=100086284622452")
+        );
+        teammates.add(createTeammate(
+                "https://lh3.google.com/u/4/d/1R3VaeupvHAZ1lXKPF8bEV-rIwMifKeEM=w1832-h928-iv1",
+                "Dong Thanh Minh Tri",
+                member,
+                "",
+                "")
+        );
+        teammates.add(createTeammate(
+                "https://lh3.google.com/u/4/d/1cQtfLc5Vj6EGBlVK-zf5d6CE3CKZOlC6=w1832-h928-iv1",
+                "Le Quang Hai",
+                member,
+                "https://github.com/hai65",
+                "https://www.facebook.com/hai.lequang.52459/")
+        );
+
         return GetTeammateResponse.builder()
                 .status("200")
                 .message("")
                 .teammates(teammates)
                 .build();
     }
+
 
     //-----------------Get Flower Detail----------------------//
     @Override
@@ -352,13 +431,13 @@ public class SystemServiceImpl implements SystemService {
                 .build();
     }
 
-
     //-----------------Get Customer Order History----------------------//
     @Override
     public String getCustomerOrderHistory(RedirectAttributes attributes, HttpSession session) {
         GetCustomerOrderHistoryResponse response = getCustomerOrderHistoryLogic(Roles.getCurrentLoggedAccount(session));
         attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
-        if(response.getStatus().equals("403")) return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        if (response.getStatus().equals("403"))
+            return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
         return ReturnPageConfig.generateReturnMapping(ActionCaseValues.ORDER_HISTORY);
     }
 
@@ -390,6 +469,7 @@ public class SystemServiceImpl implements SystemService {
                 )
                 .build();
     }
+
     //--------------------TEST--------------------//
 
     public GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogicTest(Account account) {
@@ -423,14 +503,18 @@ public class SystemServiceImpl implements SystemService {
 
     //-----------------Get Flower List For Shop----------------------//
     @Override
-    public String getFlowerListForShop(RedirectAttributes attributes) {
-        return "";
+    public String getFlowerListForShop(RedirectAttributes attributes, HttpSession session) {
+        GetFlowerListForShopResponse response = getFlowerListForShopLogic(Roles.getCurrentLoggedAccount(session));
+        attributes.addFlashAttribute(response.getStatus().equals("200") ? "msg" : "error", response);
+        if (response.getStatus().equals("403"))
+            return ReturnPageConfig.generateReturnMapping(ActionCaseValues.AUTHED_FAIL);
+        return ReturnPageConfig.generateReturnMapping(ActionCaseValues.SHOP_FLOWER);
     }
 
     private GetFlowerListForShopResponse getFlowerListForShopLogic(Account account) {
-        if(account == null || !Roles.checkIfThisAccountIsShop(account)) {
+        if (account == null || !Roles.checkIfThisAccountIsShop(account)) {
             return GetFlowerListForShopResponse.builder()
-                    .status("200")
+                    .status("403")
                     .message("Please login the shop account first")
                     .flowers(null)
                     .build();
@@ -481,5 +565,4 @@ public class SystemServiceImpl implements SystemService {
                 )
                 .build();
     }
-
 }

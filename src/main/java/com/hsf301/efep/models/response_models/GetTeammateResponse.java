@@ -24,5 +24,7 @@ public class GetTeammateResponse {
         String image;
         String name;
         String role;
+        String github;
+        String facebook;
     }
 }
