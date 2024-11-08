@@ -16,6 +16,7 @@ public enum ActionCaseValues {
     CHECK_OUT,
     CREATE_FLOWER,
     UPDATE_FLOWER,
+    FLOWER_DETAIL,
     DELETE_FLOWER;
 
     ActionCaseValues(){}
