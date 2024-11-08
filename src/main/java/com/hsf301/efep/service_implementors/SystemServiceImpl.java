@@ -145,11 +145,20 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get Working Year Amount----------------------//
     @Override
     public GetWorkingYearAmountResponse getWorkingYearAmount(RedirectAttributes attributes) {
-        return null;
+        return getWorkingYearAmountLogic();
     }
 
-    public GetWorkingYearAmountResponse getWorkingYearAmountLogic() {
-        return null;
+    private GetWorkingYearAmountResponse getWorkingYearAmountLogic() {
+        return GetWorkingYearAmountResponse.builder()
+                .status("200")
+                .message("")
+                .duration(
+                        Period.between(
+                                LocalDate.of(2022, 1, 1),
+                                LocalDate.now()
+                        ).getYears()
+                )
+                .build();
     }
 
     //--------------------TEST--------------------//
@@ -161,11 +170,30 @@ public class SystemServiceImpl implements SystemService {
     //-----------------Get New Arrival Flower----------------------//
     @Override
     public GetNewArrivalFlowerResponse getNewArrivalFlower(RedirectAttributes attributes) {
-        return null;
+        return getNewArrivalFlowerLogic();
     }
 
     private GetNewArrivalFlowerResponse getNewArrivalFlowerLogic() {
-        return null;
+        List<Flower> flowers = new ArrayList<>(flowerRepo.findAll());
+        flowers.sort(Comparator.comparing(Flower::getId).reversed());
+        flowers = flowers.stream().limit(10).toList();
+
+        return GetNewArrivalFlowerResponse.builder()
+                .status("200")
+                .message("")
+                .flowers(
+                        flowers.stream()
+                                .map(
+                                        f -> GetNewArrivalFlowerResponse.Flower.builder()
+                                                .id(f.getId())
+                                                .name(f.getName())
+                                                .price(f.getPrice())
+                                                .img(f.getImg())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //--------------------TEST--------------------//
