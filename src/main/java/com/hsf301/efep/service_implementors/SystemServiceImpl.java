@@ -266,7 +266,18 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
     public GetTeammateResponse getTeammateLogicTest() {
 
-        return null;
+        String leader = "CEO & Founder & CTO";
+        String member = "CTO";
+
+        List<GetTeammateResponse.Teammate> teammates = new ArrayList<>();
+        teammates.add(createTeammate("", "Pham Van Nhu Quynh", leader));
+        teammates.add(createTeammate("", "", member));
+        teammates.add(createTeammate("", "", member));
+        return GetTeammateResponse.builder()
+                .status("200")
+                .message("")
+                .teammates(teammates)
+                .build();
     }
 
     //-----------------Get Flower Detail----------------------//
@@ -311,7 +322,34 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetFlowerDetailResponse getFlowerDetailLogicTest(GetFlowerDetailRequest request) {
-        return null;
+        String error = GetFlowerDetailValidation.validate(request, flowerRepo);
+        if (!error.isEmpty()) {
+            return GetFlowerDetailResponse.builder()
+                    .status("400")
+                    .message(error)
+                    .flowerDetail(null)
+                    .build();
+        }
+
+        Flower flower = flowerRepo.findById(request.getId()).get();
+
+        return GetFlowerDetailResponse.builder()
+                .status("200")
+                .message("")
+                .flowerDetail(
+                        GetFlowerDetailResponse.FlowerDetail.builder()
+                                .name(flower.getName())
+                                .price(flower.getPrice())
+                                .description(flower.getDescription())
+                                .flowerAmount(flower.getFlowerAmount())
+                                .img(flower.getImg())
+                                .qty(flower.getQuantity())
+                                .soldQty(flower.getSoldQuantity())
+                                .status(flower.getStatus())
+                                .category(flower.getCategory())
+                                .build()
+                )
+                .build();
     }
 
 
@@ -355,7 +393,32 @@ public class SystemServiceImpl implements SystemService {
     //--------------------TEST--------------------//
 
     public GetCustomerOrderHistoryResponse getCustomerOrderHistoryLogicTest(Account account) {
-        return null;
+        if (account == null || !Roles.checkIfThisAccountIsCustomer(account)) {
+            return GetCustomerOrderHistoryResponse.builder()
+                    .status("400")
+                    .message("Please login a customer account first")
+                    .order(null)
+                    .build();
+        }
+
+        List<Order> order = account.getUser().getOrderList();
+
+        return GetCustomerOrderHistoryResponse.builder()
+                .status("200")
+                .message("")
+                .order(
+                        order.stream()
+                                .map(
+                                        o -> GetCustomerOrderHistoryResponse.Order.builder()
+                                                .id(o.getId())
+                                                .createdDate(o.getCreatedDate())
+                                                .status(o.getStatus())
+                                                .totalPrice(o.getTotalPrice())
+                                                .build()
+                                )
+                                .toList()
+                )
+                .build();
     }
 
     //-----------------Get Flower List For Shop----------------------//
